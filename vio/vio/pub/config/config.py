@@ -25,11 +25,11 @@ REDIS_PORT = '6379'
 REDIS_PASSWD = ''
 
 # [mysql]
-DB_IP = "127.0.0.1"
+DB_IP = '127.0.0.1'
 DB_PORT = 3306
-DB_NAME = "multivimvio"
-DB_USER = "root"
-DB_PASSWD = "password"
+DB_NAME = 'multivimvio'
+DB_USER = 'root'
+DB_PASSWD = 'password'
 
 # [register]
 REG_TO_MSB_WHEN_START = True
