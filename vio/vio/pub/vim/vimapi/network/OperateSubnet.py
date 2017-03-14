@@ -27,7 +27,8 @@ class OperateSubnet(BaseNet):
                     "gaetwayIp": "gateway_ip",
                     "dnsNameservers": "dns_nameservers",
                     "hostRoutes": "host_routes",
-                    "allocationPools": "allocation_pools"
+                    "allocationPools": "allocation_pools",
+                    "enableDhcp": "is_dhcp_enabled"
                     }
 
     def ___init__(self, params):
@@ -53,7 +54,7 @@ class OperateSubnet(BaseNet):
         network = self.auth(vim_info)
         body = translate(self.keys_mapping, body)
         subnet = network.subnet_create(**body)
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId'], "tenantId": tenantid}
         resp = self._convert(subnet)
         resp.update(vim_dict)
         return resp
@@ -64,7 +65,7 @@ class OperateSubnet(BaseNet):
         subnet = network.subnet_get(subnetid)
         if subnet is None:
             return subnet
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId'], "tenantId": tenantid}
         resp = self._convert(subnet)
         resp.update(vim_dict)
         return resp
@@ -79,7 +80,7 @@ class OperateSubnet(BaseNet):
         network = self.auth(vim_info)
         tenant = {"project_id": tenantid}
         resp = network.subnets_get(**tenant)
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId'], "tenantId": tenantid}
         subnets = {'subnets': []}
         if resp:
             for subnet in resp:
