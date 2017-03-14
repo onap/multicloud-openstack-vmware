@@ -3,7 +3,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at:
-#
+
 #       http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
@@ -34,9 +34,18 @@ class OperateFlavors(OperateNova):
             "swap": create_req.get('swap', 0),
             "is_public": create_req.get('isPublic', True)
         }
-        # TODO: support extraSpecs
-        return self.request('create_flavor', data,
-                            project_id=project_id, **req), None
+
+        flavor = self.request('create_flavor', data,
+                              project_id=project_id, **req)
+        extra_specs_spec = {l['keyName']: l['value']
+                            for l in create_req.get('extraSpecs', [])}
+        extra_specs = {}
+        if extra_specs_spec:
+            extra_specs = self.request('create_flavor_extra_specs', data,
+                                       project_id=project_id,
+                                       flavor_id=flavor.id,
+                                       extra_specs=extra_specs_spec)
+        return flavor, extra_specs
 
     def list_flavors(self, data, project_id):
         flavors = self.request('list_flavors', data, project_id=project_id)
@@ -58,6 +67,17 @@ class OperateFlavors(OperateNova):
 
         except exceptions.ResourceNotFound:
             return None, None
+
+    def find_flavor(self, data, project_id, flavor_id):
+        param = {'username': data['username'],
+                 'user_domain_name': 'default',
+                 'project_domain_name': 'default',
+                 'password': data['password'],
+                 'auth_url': data['url'],
+                 'project_id': project_id}
+        cc = self.compute(param)
+        flavor = cc.find_flavor(flavor_id, ignore_missing=True)
+        return flavor
 
     def delete_flavor(self, data, project_id, flavor_id):
         return self.request('delete_flavor', data, project_id=project_id,

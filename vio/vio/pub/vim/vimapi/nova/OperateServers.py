@@ -3,7 +3,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at:
-#
+
 #       http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
@@ -97,6 +97,17 @@ class OperateServers(OperateNova):
             return project
         except exceptions.ResourceNotFound:
             return None
+
+    def find_server(self, data, project_id, server_id):
+        param = {'username': data['username'],
+                 'user_domain_name': 'default',
+                 'project_domain_name': 'default',
+                 'password': data['password'],
+                 'auth_url': data['url'],
+                 'project_id': project_id}
+        server = self.compute(param).find_server(
+            server_id, ignore_missing=True)
+        return server
 
     def delete_server(self, data, project_id, server_id):
         param = {'username': data['username'],

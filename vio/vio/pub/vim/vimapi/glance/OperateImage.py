@@ -91,6 +91,8 @@ class OperateImage(baseclient):
         running_thread_lock.acquire()
         running_threads[image.id] = image.id
         running_thread_lock.release()
-
-        upload_image_thread.start()
+        try:
+            upload_image_thread.start()
+        except Exception as ex:
+            pass
         return image

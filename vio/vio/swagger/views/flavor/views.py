@@ -9,7 +9,6 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
 import json
 
 from rest_framework import status
@@ -24,7 +23,11 @@ from vio.swagger import nova_utils
 class FlavorsView(APIView):
 
     def post(self, request, vimid, tenantid):
-        create_req = json.loads(request.body)
+        try:
+            create_req = json.loads(request.body)
+        except Exception as e:
+            return Response(data={'error': 'Fail to decode request body.'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         vim_info = extsys.get_vim_by_id(vimid)
         data = {'vimid': vim_info['vimId'],
@@ -33,15 +36,27 @@ class FlavorsView(APIView):
                 'password': vim_info['password'],
                 'url': vim_info['url'],
                 'project_name': vim_info['tenant']}
-
-        flavors_op = OperateFlavors.OperateFlavors()
-        flavor, extra_specs = flavors_op.create_flavor(data, tenantid, create_req)
-        flavor_dict = nova_utils.flavor_formatter(flavor, extra_specs)
-
         rsp = {'vimid': vim_info['vimId'],
                'vimName': vim_info['name'],
-               'tenantId': tenantid,
-               'returnCode': 1}
+               'tenantId': tenantid}
+        flavor_name = create_req.get('name', None)
+        flavor_id = create_req.get('id', None)
+        flavors_op = OperateFlavors.OperateFlavors()
+        try:
+            target = flavor_id or flavor_name
+            flavor = flavors_op.find_flavor(data, tenantid, target)
+            if flavor:
+                flavor, extra_specs = flavors_op.get_flavor(
+                    data, tenantid, flavor.id)
+                rsp['returnCode'] = 0
+            else:
+                rsp['returnCode'] = 1
+                flavor, extra_specs = flavors_op.create_flavor(
+                    data, tenantid, create_req)
+            flavor_dict = nova_utils.flavor_formatter(flavor, extra_specs)
+        except Exception as e:
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         rsp.update(flavor_dict)
         return Response(data=rsp, status=status.HTTP_200_OK)
 
@@ -55,9 +70,13 @@ class FlavorsView(APIView):
                 'project_name': vim_info['tenant']}
 
         flavors_op = OperateFlavors.OperateFlavors()
-        flavors_result = flavors_op.list_flavors(data, tenantid)
-        flavors_dict = [nova_utils.flavor_formatter(flavor, extra)
-                        for flavor, extra in flavors_result]
+        try:
+            flavors_result = flavors_op.list_flavors(data, tenantid)
+            flavors_dict = [nova_utils.flavor_formatter(flavor, extra)
+                            for flavor, extra in flavors_result]
+        except Exception as e:
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         rsp = {'vimid': vim_info['vimId'],
                'vimName': vim_info['name'],
@@ -78,8 +97,12 @@ class FlavorView(APIView):
                 'project_name': vim_info['tenant']}
 
         flavors_op = OperateFlavors.OperateFlavors()
-        flavor, extra_specs = flavors_op.get_flavor(data, tenantid, flavorid)
-        flavor_dict = nova_utils.flavor_formatter(flavor, extra_specs)
+        try:
+            flavor, extra_specs = flavors_op.get_flavor(data, tenantid, flavorid)
+            flavor_dict = nova_utils.flavor_formatter(flavor, extra_specs)
+        except Exception as e:
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         rsp = {'vimid': vim_info['vimId'],
                'vimName': vim_info['name'],
@@ -96,5 +119,9 @@ class FlavorView(APIView):
                 'url': vim_info['url'],
                 'project_name': vim_info['tenant']}
         flavors_op = OperateFlavors.OperateFlavors()
-        flavors_op.delete_flavor(data, tenantid, flavorid)
+        try:
+            flavors_op.delete_flavor(data, tenantid, flavorid)
+        except Exception as e:
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(status=status.HTTP_204_NO_CONTENT)

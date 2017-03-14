@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
-
 VIM_OPENSTACK = "vmware"
 RES_TYPE_KEY = "res_type"
 RES_TYPE_NEW = 1

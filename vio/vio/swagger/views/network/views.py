@@ -28,9 +28,21 @@ class CreateNetworkView(APIView):
         logger.info("Enter %s, method is %s, vim_id is %s",
                     syscomm.fun_name(), request.method, vimid)
         net = OperateNetwork.OperateNetwork()
-        body = json.loads(request.body)
         try:
-            resp = net.create_network(vimid, tenantid, body)
+            body = json.loads(request.body)
+        except Exception as e:
+            return Response(data={'error': 'Fail to decode request body.'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            network_name = body.get('name')
+            network_id = body.get('id', None)
+            target = network_id or network_name
+            resp = net.list_network(vimid, tenantid, target)
+            if resp:
+                resp['returnCode'] = 0
+            else:
+                resp = net.create_network(vimid, tenantid, body)
+                resp['returnCode'] = 1
             return Response(data=resp, status=status.HTTP_202_ACCEPTED)
         except Exception as e:
             return Response(data={'error': str(e)},

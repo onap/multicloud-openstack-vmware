@@ -9,7 +9,6 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
 import json
 import logging
 
@@ -27,7 +26,11 @@ logger = logging.getLogger(__name__)
 class ListServersView(APIView):
 
     def post(self, request, vimid, tenantid):
-        create_req = json.loads(request.body)
+        try:
+            create_req = json.loads(request.body)
+        except Exception as e:
+            return Response(data={'error': 'Fail to decode request body.'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         vim_info = extsys.get_vim_by_id(vimid)
         data = {'vimid': vim_info['vimId'],
@@ -36,18 +39,26 @@ class ListServersView(APIView):
                 'password': vim_info['password'],
                 'url': vim_info['url'],
                 'project_name': vim_info['tenant']}
-
+        rsp = {'vimId': vim_info['vimId'],
+               'vimName': vim_info['name'],
+               'tenantId': tenantid}
         servers_op = OperateServers.OperateServers()
+        server_name = create_req.get('name', None)
+        server_id = create_req.get('id', None)
         try:
-            server = servers_op.create_server(data, tenantid, create_req)
+            target = server_id or server_name
+            server = servers_op.find_server(data, tenantid, target)
+            # Find server only returns id and name, fetch all attributes again
+            if server:
+                server = servers_op.get_server(data, tenantid, server.id)
+                rsp['returnCode'] = 0
+            else:
+                rsp['returnCode'] = 1
+                server = servers_op.create_server(data, tenantid, create_req)
         except Exception as ex:
             return Response(data=str(ex),
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         server_dict = nova_utils.server_formatter(server)
-
-        rsp = {'vimId': vim_info['vimId'],
-               'vimName': vim_info['name'],
-               'tenantId': tenantid}
         rsp.update(server_dict)
         return Response(data=rsp, status=status.HTTP_200_OK)
 
@@ -61,7 +72,11 @@ class ListServersView(APIView):
                 'project_name': vim_info['tenant']}
 
         servers_op = OperateServers.OperateServers()
-        servers = servers_op.list_servers(data, tenantid)
+        try:
+            servers = servers_op.list_servers(data, tenantid)
+        except Exception as e:
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         servers_resp = []
         for server in servers:
@@ -88,9 +103,13 @@ class GetServerView(APIView):
                 'project_name': vim_info['tenant']}
 
         servers_op = OperateServers.OperateServers()
-        server = servers_op.get_server(data, tenantid, serverid)
-        intfs = servers_op.list_server_interfaces(data, tenantid, server)
-        server_dict = nova_utils.server_formatter(server, interfaces=intfs)
+        try:
+            server = servers_op.get_server(data, tenantid, serverid)
+            intfs = servers_op.list_server_interfaces(data, tenantid, server)
+            server_dict = nova_utils.server_formatter(server, interfaces=intfs)
+        except Exception as e:
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         rsp = {'vimid': vim_info['vimId'],
                'vimName': vim_info['name'],
@@ -108,5 +127,9 @@ class GetServerView(APIView):
                 'password': vim_info['password'],
                 'url': vim_info['url'],
                 'project_name': vim_info['tenant']}
-        servers_op.delete_server(data, tenantid, serverid)
+        try:
+            servers_op.delete_server(data, tenantid, serverid)
+        except Exception as e:
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(status=status.HTTP_204_NO_CONTENT)
