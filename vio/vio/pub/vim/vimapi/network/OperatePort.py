@@ -55,10 +55,10 @@ class OperatePort(BaseNet):
         resp.update(vim_dict)
         return resp
 
-    def list_port(self, vimid, tenantid, portid):
+    def list_port(self, vimid, tenantid, portid, ignore_missing=False):
         vim_info = self.get_vim_info(vimid)
         network = self.auth(vim_info)
-        port = network.port_find(portid)
+        port = network.port_find(portid, ignore_missing=ignore_missing)
         if port is None:
             return port
         vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
@@ -71,11 +71,11 @@ class OperatePort(BaseNet):
         network = self.auth(vim_info)
         return network.port_delete(portid)
 
-    def list_ports(self, vimid, tenantid):
+    def list_ports(self, vimid, tenantid, **query):
         vim_info = self.get_vim_info(vimid)
         network = self.auth(vim_info)
-        tenant = {"project_id": tenantid}
-        resp = network.ports_get(**tenant)
+        query.update({"project_id": tenantid})
+        resp = network.ports_get(**query)
         vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
         ports = {'ports': []}
         if resp:

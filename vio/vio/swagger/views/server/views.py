@@ -19,6 +19,7 @@ from rest_framework.views import APIView
 from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.nova import OperateServers
 from vio.swagger import nova_utils
+from vio.pub.exceptions import VimDriverVioException
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,11 @@ class ListServersView(APIView):
             return Response(data={'error': 'Fail to decode request body.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
         data = {'vimid': vim_info['vimId'],
                 'vimName': vim_info['name'],
                 'username': vim_info['userName'],
@@ -63,17 +68,21 @@ class ListServersView(APIView):
         return Response(data=rsp, status=status.HTTP_200_OK)
 
     def get(self, request, vimid, tenantid):
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
         data = {'vimid': vim_info['vimId'],
                 'vimName': vim_info['name'],
                 'username': vim_info['userName'],
                 'password': vim_info['password'],
                 'url': vim_info['url'],
                 'project_name': vim_info['tenant']}
-
+        query = dict(request.query_params)
         servers_op = OperateServers.OperateServers()
         try:
-            servers = servers_op.list_servers(data, tenantid)
+            servers = servers_op.list_servers(data, tenantid, **query)
         except Exception as e:
             return Response(data={'error': str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -84,7 +93,7 @@ class ListServersView(APIView):
             servers_resp.append(nova_utils.server_formatter(
                 server, interfaces=intfs))
 
-        rsp = {'vimid': vim_info['vimId'],
+        rsp = {'vimId': vim_info['vimId'],
                'vimName': vim_info['name'],
                'servers': servers_resp}
 
@@ -94,7 +103,11 @@ class ListServersView(APIView):
 class GetServerView(APIView):
 
     def get(self, request, vimid, tenantid, serverid):
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
         data = {'vimid': vim_info['vimId'],
                 'vimName': vim_info['name'],
                 'username': vim_info['userName'],
@@ -111,7 +124,7 @@ class GetServerView(APIView):
             return Response(data={'error': str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        rsp = {'vimid': vim_info['vimId'],
+        rsp = {'vimId': vim_info['vimId'],
                'vimName': vim_info['name'],
                'tenantId': tenantid}
         rsp.update(server_dict)
@@ -120,7 +133,11 @@ class GetServerView(APIView):
 
     def delete(self, request, vimid, tenantid, serverid):
         servers_op = OperateServers.OperateServers()
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
         data = {'vimid': vim_info['vimId'],
                 'vimName': vim_info['name'],
                 'username': vim_info['userName'],

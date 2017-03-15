@@ -19,13 +19,16 @@ from rest_framework.views import APIView
 
 from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.keystone import OperateTenant
-
+from vio.pub.exceptions import VimDriverVioException
 logger = logging.getLogger(__name__)
 
 
 class ListTenantsView(APIView):
     def get(self, request, vimid):
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
 
         data = {}
         data['vimId'] = vim_info['vimId']
@@ -35,9 +38,10 @@ class ListTenantsView(APIView):
         data['url'] = vim_info['url']
         data['project_name'] = vim_info['tenant']
 
+        query = dict(request.query_params)
         tenant_instance = OperateTenant.OperateTenant()
         try:
-            projects = tenant_instance.get_projects(data)
+            projects = tenant_instance.get_projects(data, **query)
         except Exception as e:
             return Response(data={'error': str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)

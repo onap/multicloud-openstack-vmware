@@ -20,7 +20,8 @@ from rest_framework.views import APIView
 
 from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.cinder import OperateVolume
-
+from vio.pub.vim.vimapi.glance import OperateImage
+from vio.pub.exceptions import VimDriverVioException
 from vio.swagger import volume_utils
 
 logger = logging.getLogger(__name__)
@@ -29,7 +30,11 @@ logger = logging.getLogger(__name__)
 class GetDeleteVolumeView(APIView):
 
     def get(self, request, vimid, tenantid, volumeid):
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
         volume_op = OperateVolume.OperateVolume(vim_info)
 
         try:
@@ -43,7 +48,11 @@ class GetDeleteVolumeView(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request, vimid, tenantid, volumeid):
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
         volume_op = OperateVolume.OperateVolume(vim_info)
 
         try:
@@ -57,7 +66,11 @@ class GetDeleteVolumeView(APIView):
 class CreateListVolumeView(APIView):
 
     def get(self, request, vimid, tenantid):
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
         query_data = dict(request.query_params)
         volume_op = OperateVolume.OperateVolume(vim_info)
 
@@ -79,10 +92,14 @@ class CreateListVolumeView(APIView):
 
 
     def post(self, request, vimid, tenantid):
-        vim_info = extsys.get_vim_by_id(vimid)
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
         volume_op = OperateVolume.OperateVolume(vim_info)
         try:
-            json_body = json.loads(request.body)
+            body = json.loads(request.body)
         except Exception as e:
             return Response(data={'error': 'Fail to decode request body.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -90,14 +107,15 @@ class CreateListVolumeView(APIView):
             volumes_detail = volume_op.get_vim_volumes()
             vim_rsp = volume_utils.vim_formatter(vim_info, tenantid)
             for volume in volumes_detail:
-                if volume.name == json_body.get('name'):
+                if volume.name == body.get('name'):
                     volume_info = volume_op.get_vim_volume(volume.id)
                     rsp  = volume_utils.volume_formatter(volume_info)
                     rsp['returnCode'] = 0
                     rsp.update(vim_rsp)
                     return Response(data=rsp, status=status.HTTP_200_OK)
 
-            param = volume_utils.req_body_formatter(json_body)
+            param = volume_utils.req_body_formatter(body)
+
             volume_info = volume_op.create_vim_volume(**param)
             rsp  = volume_utils.volume_formatter(volume_info)
             rsp['returnCode'] = 1
