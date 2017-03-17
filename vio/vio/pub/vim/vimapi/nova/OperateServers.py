@@ -38,12 +38,13 @@ class OperateServers(OperateNova):
         boot_type = boot.get('type')
         if boot_type == 1:
             # boot from vol
-            req['block_device_mapping_v2'] = {
+            req['block_device_mapping_v2'] = [{
+                'boot_index': "0",
                 'uuid': boot["volumeId"],
                 'source_type': 'volume',
                 'destination_type': 'volume',
                 'delete_on_termination': False
-            }
+            }]
         elif boot_type == 2:
             req['imageRef'] = cc.find_image(boot.get('imageId')).id
         networks = create_req.get('nicArray', [])
@@ -54,13 +55,15 @@ class OperateServers(OperateNova):
             req['availability_zone'] = az
         md = create_req.get('metadata', [])
         if md:
-            req['metadata'] = [{n['keyName']: n['Value']} for n in md]
+            req['metadata'] = {n['keyName']: n['value'] for n in md}
         userdata = create_req.get('userdata', None)
         if userdata:
             req['user_data'] = base64.encodestring(userdata)
         sg = create_req.get('securityGroups', [])
         if sg:
-            req['security_groups'] = sg
+            req['security_groups'] = []
+            for v in sg:
+                req['security_groups'].append({'name':v})
         # todo attach volumes after server created
         volumes = create_req.get('volumeArray', [])
         return cc.create_server(**req)
