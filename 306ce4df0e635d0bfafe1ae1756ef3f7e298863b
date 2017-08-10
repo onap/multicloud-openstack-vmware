@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_856e64c8",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 845
+      },
+      "writtenOn": "2017-08-10T14:28:27Z",
+      "side": 1,
+      "message": "Can we remove those trailing white spaces?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 4
+      },
+      "revId": "306ce4df0e635d0bfafe1ae1756ef3f7e298863b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
