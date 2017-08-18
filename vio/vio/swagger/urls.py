@@ -28,6 +28,14 @@ from vio.swagger.views.network.views import CreateNetworkView, DeleteNetworkView
 from vio.swagger.views.subnet.views import CreateSubnetView, DeleteSubnetView
 from vio.swagger.views.port.views import CreatePortView, DeletePortView
 
+#proxy
+from vio.swagger.views.proxyplugin.identity.views import TokenView,IdentityServer
+from vio.swagger.views.proxyplugin.nova.views import ComputeServer
+from vio.swagger.views.proxyplugin.image.views import ImageServer
+from vio.swagger.views.proxyplugin.neutron.views import NetWorkServer
+from vio.swagger.views.proxyplugin.volumn.views import VolumeServer
+from vio.swagger.views.proxyplugin.heat.views import HeatServer
+
 urlpatterns = [
     url(r'^openoapi/multivim-vio/v1/swagger.json$', SwaggerJsonView.as_view()),
     url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
@@ -79,6 +87,45 @@ urlpatterns = [
     url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
         r'(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortView.as_view()),
+
+    #   proxy
+    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',
+        TokenView.as_view()),
+
+    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity$',
+        IdentityServer.as_view()),
+    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/(?P<other>(.*))$',
+        IdentityServer.as_view()),
+
+    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/image/(?P<other>(.*))$',
+        ImageServer.as_view()),
+
+    url(
+        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/volume/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        VolumeServer.as_view()),
+
+    url(
+        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/volumev2/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        VolumeServer.as_view()),
+
+    url(
+        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/volumev3/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        VolumeServer.as_view()),
+
+    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/network$',
+        NetWorkServer.as_view()),
+
+    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/network/(?P<other>(.*))$',
+        NetWorkServer.as_view()),
+
+    url(
+        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/orchestration/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        HeatServer.as_view()),
+
+    url(
+        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/compute/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        ComputeServer.as_view()),
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
