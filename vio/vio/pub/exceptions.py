@@ -11,9 +11,67 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
-class VimDriverVioException(Exception):
-    def __init__(self, message, status_code="", content=""):
-        super(VimDriverVioException, self).__init__(message)
+__all__ = ('ConnectionError',
+           'ConnectTimeout',
+           'ConnectFailure',
+           'SSLError',
+           'RetriableConnectionFailure',
+           'UnknownConnectionError',
+           'VimDriverVioException')
+
+
+class ClientException(Exception):
+
+    message = "ClientException"
+
+    def __init__(self, message=None):
+        self.message = message or self.message
+        super(ClientException, self).__init__(self.message)
+
+class ServerException(Exception):
+
+    message = "ServerException"
+
+    def __init__(self, message=None, status_code="", content=""):
+        super(ServerException, self).__init__(message)
+        self.message = message or self.message
         self.status_code = status_code
         self.content = content
-        pass
+
+class RetriableConnectionFailure(Exception):
+
+    pass
+
+
+class ConnectionError(ClientException):
+    message = "Cannot connect to API service."
+
+
+class ConnectTimeout(ConnectionError, RetriableConnectionFailure):
+    message = "Timed out connecting to service."
+
+
+class ConnectFailure(ConnectionError, RetriableConnectionFailure):
+    message = "Connection failure that may be retried."
+
+
+class SSLError(ConnectionError):
+    message = "An SSL error occurred."
+
+
+
+
+class UnknownConnectionError(ConnectionError):
+
+    def __init__(self, msg, original):
+        super(UnknownConnectionError, self).__init__(msg)
+        self.original = original
+
+
+
+class NotFoundError(ServerException):
+    message = "Cannot find value"
+
+class VimDriverVioException(ServerException):
+    message = "Cannot find  vim driver"
+
