@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_82651f47",
+        "filename": "vio/vio/pub/exceptions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-08-21T09:33:00Z",
+      "side": 1,
+      "message": "why do you need this?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 35
+      },
+      "revId": "ea2093602b9a2e4b044fd6e0400296d3469eb04a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_a2c70312",
+        "filename": "vio/vio/swagger/views/proxyplugin/__init__.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-08-21T09:33:00Z",
+      "side": 1,
+      "message": "This should not exist, as there is nothing to copyright here.",
+      "range": {
+        "startLine": 2,
+        "startChar": 1,
+        "endLine": 11,
+        "endChar": 74
+      },
+      "revId": "ea2093602b9a2e4b044fd6e0400296d3469eb04a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_a2eee389",
+        "filename": "vio/vio/swagger/views/proxyplugin/httpclient.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-08-21T09:33:00Z",
+      "side": 1,
+      "message": "\"if tail\" should be sufficient",
+      "range": {
+        "startLine": 71,
+        "startChar": 26,
+        "endLine": 71,
+        "endChar": 48
+      },
+      "revId": "ea2093602b9a2e4b044fd6e0400296d3469eb04a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_62e8fb7c",
+        "filename": "vio/vio/swagger/views/proxyplugin/httpclient.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-08-21T09:33:00Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 72,
+        "startChar": 34,
+        "endLine": 72,
+        "endChar": 65
+      },
+      "revId": "ea2093602b9a2e4b044fd6e0400296d3469eb04a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_2202f33e",
+        "filename": "vio/vio/swagger/views/proxyplugin/httpclient.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-08-21T09:33:00Z",
+      "side": 1,
+      "message": "This could be in the same tier as other try/except",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 43
+      },
+      "revId": "ea2093602b9a2e4b044fd6e0400296d3469eb04a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_829abf12",
+        "filename": "vio/vio/swagger/views/proxyplugin/httpclient.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-08-21T09:33:00Z",
+      "side": 1,
+      "message": "why not inherit from multivimbroker.forwarder.views.BaseServer? so you don\u0027t need to write these lines.",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 35
+      },
+      "revId": "ea2093602b9a2e4b044fd6e0400296d3469eb04a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
