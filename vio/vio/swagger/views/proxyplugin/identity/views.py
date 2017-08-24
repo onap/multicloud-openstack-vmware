@@ -90,7 +90,7 @@ class TokenView(BaseClient):
         logger.info("vimid(%(vimid)s) get keystone url %(url)s ", {"vimid": vimid, "url": keystoneURL})
         try:
             res = requests.get(url=keystoneURL).json()
-            res['version']['links'][0]['href']="http://"+MSB_ADDRESS+"/multivim-vio/v1/"+vimid +"/identity/v3"
+            res['version']['links'][0]['href']="http://"+MSB_ADDRESS+"/multicloud-vio/v0/"+vimid +"/identity/v3"
 
 
         except Exception as e:
@@ -163,12 +163,12 @@ class TokenView(BaseClient):
                     res=tmp.split("/")
                     if i['type'] in ['image','network','cloudformation','identity']:
                         if i['type'] != 'identity':
-                            res[2] = MSB_ADDRESS+"/multivim-vio/v1/" + vimid + "/" + i['name']
+                            res[2] = MSB_ADDRESS+"/multicloud-vio/v0/" + vimid + "/" + i['name']
                         else:
                             #  use identity instead of keystone
-                            res[2] = MSB_ADDRESS + "/multivim-vio/v1/" + vimid + "/" + i['type']
+                            res[2] = MSB_ADDRESS + "/multicloud-vio/v0/" + vimid + "/" + i['type']
                     else:
-                        res[2]= MSB_ADDRESS+"/multivim-vio/v1/"+vimid+"/"+i['name']+"/"+tenantid
+                        res[2]= MSB_ADDRESS+"/multicloud-vio/v0/"+vimid+"/"+i['name']+"/"+tenantid
                     j['url']="http:"+"//"+res[2]
         except Exception as e:
             logging.exception("error %s" % e)
