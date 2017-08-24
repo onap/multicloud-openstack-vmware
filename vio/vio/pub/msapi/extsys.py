@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_vims():
-    ret = req_by_msb("/openoapi/extsys/v1/vims", "GET")
+    ret = req_by_msb("/api/extsys/v1/vims", "GET")
     if ret[0] != 0:
         logger.error("Status code is %s, detail is %s.", ret[2], ret[1])
         raise VimDriverVioException("Failed to query VIMs from extsys.")
