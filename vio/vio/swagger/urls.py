@@ -37,93 +37,93 @@ from vio.swagger.views.proxyplugin.volumn.views import VolumeServer
 from vio.swagger.views.proxyplugin.heat.views import HeatServer
 
 urlpatterns = [
-    url(r'^openoapi/multivim-vio/v1/swagger.json$', SwaggerJsonView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/swagger.json$', SwaggerJsonView.as_view()),
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'tenants$', ListTenantsView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z_-]+)/images$',
          CreateListImagesView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z_-]+)/images/(?P<imageid>[0-9a-zA-Z_-]+)$',
         GetDeleteImageView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z_-]+)/volumes$',
         CreateListVolumeView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z_-]+)/volumes/(?P<volumeid>[0-9a-zA-Z_-]+)$',
         GetDeleteVolumeView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/servers$', ListServersView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/servers/(?P<serverid>[0-9a-zA-Z_-]+)$',
         GetServerView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/flavors$',
         FlavorsView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/flavors/(?P<flavorid>[0-9a-zA-Z_-]+)$',
         FlavorView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/limits$',
         LimitsView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/hosts$',
         HostsView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z_-]+)/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/hosts/(?P<hostname>[0-9a-zA-Z_-]+)$',
         HostView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/networks$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/networks$',
         CreateNetworkView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/networks/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/networks/'
         r'(?P<networkid>[0-9a-zA-Z\-\_]+)$',
         DeleteNetworkView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/subnets$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/subnets$',
         CreateSubnetView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/subnets/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/subnets/'
         r'(?P<subnetid>[0-9a-zA-Z\-\_]+)$',
         DeleteSubnetView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports$',
         CreatePortView.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
         r'(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortView.as_view()),
 
     #   proxy
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',
         TokenView.as_view()),
 
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity$',
         IdentityServer.as_view()),
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/(?P<other>(.*))$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/(?P<other>(.*))$',
         IdentityServer.as_view()),
 
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/glance/(?P<other>(.*))$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/glance/(?P<other>(.*))$',
         ImageServer.as_view()),
 
     url(
-        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinder/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinder/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         VolumeServer.as_view()),
 
     url(
-        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinderv2/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinderv2/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         VolumeServer.as_view()),
 
     url(
-        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinderv3/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinderv3/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         VolumeServer.as_view()),
 
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/neutron$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/neutron$',
         NetWorkServer.as_view()),
 
-    url(r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/neutron/(?P<other>(.*))$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/neutron/(?P<other>(.*))$',
         NetWorkServer.as_view()),
 
     url(
-        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/heat/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/heat/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         HeatServer.as_view()),
 
     url(
-        r'^openoapi/multivim-vio/v1/(?P<vimid>[0-9a-z-A-Z\-\_]+)/nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         ComputeServer.as_view()),
 
 ]
