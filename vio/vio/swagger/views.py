@@ -84,7 +84,7 @@ class SwaggerJsonView(APIView):
         f.close()
         json_data["paths"].update(json_data_temp["paths"])
         json_data["definitions"].update(json_data_temp["definitions"])
-        json_data["basePath"] = "/openoapi/multivim-vio/v1/"
+        json_data["basePath"] = "/api/multicloud-vio/v0/"
         json_data["info"]["title"] = "MultiVIM driver of OpenStack VIO Service NBI"
         return Response(json_data)
 
