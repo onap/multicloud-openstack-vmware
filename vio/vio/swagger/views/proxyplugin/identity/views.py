@@ -93,9 +93,14 @@ class TokenView(BaseClient):
         logger.info("vimid(%(vimid)s) get keystone url %(url)s ",
                     {"vimid": vimid, "url": keystoneURL})
         try:
-            res = requests.get(url=keystoneURL).json()
-            res['version']['links'][0]['href'] = "http://" + \
-                MSB_ADDRESS + "/multicloud-vio/v0/" + vimid + "/identity/v3"
+            res = requests.get(url=keystoneURL)
+            if res.status_code != status.HTTP_200_OK:
+                return Response(data={"error": res.content},
+                                status=res.status_code)
+            res = res.json()
+            res['version']['links'][0]['href'] = \
+                "http://" + MSB_ADDRESS + "/multicloud-vio/v0/" \
+                + vimid + "/identity/v3"
 
         except Exception as e:
             logging.exception("error %s" % e)
@@ -145,6 +150,9 @@ class TokenView(BaseClient):
         try:
             res = requests.post(url=url, data=json.dumps(
                 create_req), headers=headers)
+            if res.status_code != status.HTTP_201_CREATED:
+                return Response(data={"error": res.content},
+                                status=res.status_code)
             tokenInfo = res.json()
             resHeader = dict(res.headers)
         except Exception as e:
