@@ -93,7 +93,7 @@ class TokenView(BaseClient):
         logger.info("vimid(%(vimid)s) get keystone url %(url)s ",
                     {"vimid": vimid, "url": keystoneURL})
         try:
-            res = requests.get(url=keystoneURL)
+            res = requests.get(url=keystoneURL,verify=False)
             if res.status_code != status.HTTP_200_OK:
                 return Response(data={"error":res.content}, status=res.status_code)
             res = res.json()
@@ -146,7 +146,7 @@ class TokenView(BaseClient):
                     {"vimid": vimid, "url": url})
 
         try:
-            res = requests.post(url=url, data=json.dumps(create_req), headers=headers)
+            res = requests.post(url=url, data=json.dumps(create_req), headers=headers,verify=False)
             if res.status_code != status.HTTP_201_CREATED:
                 return Response(data={"error":res.content}, status=res.status_code)
             tokenInfo = res.json()
