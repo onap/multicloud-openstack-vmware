@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_60546954",
+        "filename": "vio/vio/swagger/views/proxyplugin/identity/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-08-25T02:46:41Z",
+      "side": 1,
+      "message": "Is there any change this http code is a constant from a public lib?",
+      "range": {
+        "startLine": 142,
+        "startChar": 34,
+        "endLine": 142,
+        "endChar": 37
+      },
+      "revId": "890f78c7e3d4f1b8a1e199142e617bd403e91421",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
