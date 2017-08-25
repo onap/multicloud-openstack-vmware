@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_20fc213e",
+        "filename": "vio/vio/swagger/views/proxyplugin/identity/views.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-08-25T03:03:36Z",
+      "side": 1,
+      "message": "see my comment in PS1",
+      "range": {
+        "startLine": 93,
+        "startChar": 34,
+        "endLine": 93,
+        "endChar": 37
+      },
+      "revId": "d1b1910ac2ca139ab055776270a0d5b8e0707075",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
