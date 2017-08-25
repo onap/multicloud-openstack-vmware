@@ -139,6 +139,8 @@ class TokenView(BaseClient):
 
         try:
             res = requests.post(url=url, data=json.dumps(create_req), headers=headers)
+            if res.status_code != 201:
+                return Response(data={"error":res.content}, status=res.status_code)
             tokenInfo = res.json()
             resHeader = dict(res.headers)
         except Exception as e:
