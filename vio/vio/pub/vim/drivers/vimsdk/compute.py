@@ -125,3 +125,7 @@ class ComputeClient(base.DriverBase):
     @sdk.translate_exception
     def get_hypervisor(self, hypervisor, **query):
         return self.conn.compute.get_hypervisor(hypervisor=hypervisor, **query)
+
+    @sdk.translate_exception
+    def list_hypervisors(self, **query):
+        return self.conn.compute.hypervisors(**query)
