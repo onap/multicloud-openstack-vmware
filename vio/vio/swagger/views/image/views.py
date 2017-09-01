@@ -21,6 +21,7 @@ from vio.pub.vim.vimapi.glance import OperateImage
 from vio.swagger import image_utils
 from vio.pub.exceptions import VimDriverVioException
 
+
 class GetDeleteImageView(APIView):
 
     def get(self, request, vimid, tenantid, imageid):
@@ -63,6 +64,7 @@ class GetDeleteImageView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class CreateListImagesView(APIView):
 
@@ -119,7 +121,8 @@ class CreateListImagesView(APIView):
 
             param = image_utils.req_body_formatter(req_body)
             image = image_instance.create_vim_image(vimid, tenantid,
-                                                    imagePath=req_body.get('imagePath'),
+                                                    imagePath=req_body.get(
+                                                        'imagePath'),
                                                     **param)
 
             rsp = image_utils.image_formatter(image)

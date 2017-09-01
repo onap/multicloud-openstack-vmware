@@ -88,7 +88,8 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s:[%(name)s]:[%(filename)s]-[%(lineno)d] [%(levelname)s]:%(message)s',
+            'format': '%(asctime)s:[%(name)s]:[%(filename)s]-[%(lineno)d]\
+             [%(levelname)s]:%(message)s',
         },
     },
     'filters': {

@@ -69,7 +69,7 @@ class OperateServers(OperateNova):
         if sg:
             req['security_groups'] = []
             for v in sg:
-                req['security_groups'].append({'name':v})
+                req['security_groups'].append({'name': v})
         # todo attach volumes after server created
         volumes = create_req.get('volumeArray', [])
         if volumes:

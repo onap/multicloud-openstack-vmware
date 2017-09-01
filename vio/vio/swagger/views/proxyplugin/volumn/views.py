@@ -17,37 +17,35 @@ class VolumeServer(BaseClient):
 
     serverType = "cinder"
 
-    def get(self,request,vimid,tenantid,other):
+    def get(self, request, vimid, tenantid, other):
 
-        return  self.send(request=request,method="GET",vimid=vimid,tenantid=tenantid,other=other)
+        return self.send(request=request, method="GET", vimid=vimid,
+                         tenantid=tenantid, other=other)
 
-    def post(self,request,vimid,tenantid,other):
+    def post(self, request, vimid, tenantid, other):
 
-        return  self.send(request=request,method="POST",vimid=vimid,tenantid=tenantid,other=other)
+        return self.send(request=request, method="POST", vimid=vimid,
+                         tenantid=tenantid, other=other)
 
     def put(self, request, vimid, tenantid, other):
 
-        return  self.send(request=request,method="PUT",vimid=vimid,tenantid=tenantid,other=other)
+        return self.send(request=request, method="PUT", vimid=vimid,
+                         tenantid=tenantid, other=other)
 
     def delete(self, request, vimid, tenantid, other):
 
-        return  self.send(request=request,method="DELETE",vimid=vimid,tenantid=tenantid,other=other)
+        return self.send(request=request, method="DELETE", vimid=vimid,
+                         tenantid=tenantid, other=other)
 
     def patch(self, request, vimid, tenantid, other):
 
-        return  self.send(request=request,method="PATCH",vimid=vimid,tenantid=tenantid,other=other)
+        return self.send(request=request, method="PATCH", vimid=vimid,
+                         tenantid=tenantid, other=other)
 
 
 class VolumeServer2(VolumeServer):
     serverType = "cinderv2"
 
+
 class VolumeServer3(VolumeServer):
     serverType = "volumev3"
-
-
-
-
-
-
-
-

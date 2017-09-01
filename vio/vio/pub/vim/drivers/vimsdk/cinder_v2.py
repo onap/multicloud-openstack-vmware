@@ -17,6 +17,7 @@ from vio.pub.vim.drivers.vimsdk import sdk
 
 LOG = logging.getLogger(__name__)
 
+
 class CinderClient(base.DriverBase):
     '''Cinder V2 driver.'''
 
@@ -30,17 +31,14 @@ class CinderClient(base.DriverBase):
         volumes = self.conn.block_store.volumes(**query)
         return volumes
 
-
     @sdk.translate_exception
     def create_volume(self, **body):
         volume_info = self.conn.block_store.create_volume(**body)
         return volume_info
 
-
     @sdk.translate_exception
     def delete_volume(self, volumeid):
         self.conn.block_store.delete_volume(volumeid)
-
 
     @sdk.translate_exception
     def get_volume(self, volumeid):

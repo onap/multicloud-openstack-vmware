@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from vio.pub.msapi import extsys
-from vio.pub.vim.vimapi.nova import OperateServers
+# from vio.pub.vim.vimapi.nova import OperateServers
 from vio.pub.vim.vimapi.nova import OperateService
 from vio.pub.exceptions import VimDriverVioException
 from vio.swagger import nova_utils

@@ -19,6 +19,7 @@ class ClientException(Exception):
         self.message = message or self.message
         super(ClientException, self).__init__(self.message)
 
+
 class ServerException(Exception):
 
     message = "ServerException"
@@ -28,6 +29,7 @@ class ServerException(Exception):
         self.message = message or self.message
         self.status_code = status_code
         self.content = content
+
 
 class RetriableConnectionFailure(Exception):
 
@@ -50,8 +52,6 @@ class SSLError(ConnectionError):
     message = "An SSL error occurred."
 
 
-
-
 class UnknownConnectionError(ConnectionError):
 
     def __init__(self, msg, original):
@@ -59,10 +59,9 @@ class UnknownConnectionError(ConnectionError):
         self.original = original
 
 
-
 class NotFoundError(ServerException):
     message = "Cannot find value"
 
+
 class VimDriverVioException(ServerException):
     message = "Cannot find  vim driver"
-

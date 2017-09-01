@@ -14,12 +14,12 @@
 import logging
 
 
-from vio.pub.msapi import extsys
-from vio.pub.vim.drivers import base
+# from vio.pub.msapi import extsys
+# from vio.pub.vim.drivers import base
 
 logger = logging.getLogger(__name__)
+
 
 def login(data):
 
     print data
-

@@ -25,7 +25,7 @@ class NeutronClient(base.DriverBase):
     def subnet_create(self, **args):
         network = self.conn.network.create_subnet(**args)
         return network
-    
+
     @sdk.translate_exception
     def network_create(self, **args):
         network = self.conn.network.create_network(**args)
@@ -81,5 +81,3 @@ class NeutronClient(base.DriverBase):
     def ports_get(self, **kwargs):
         ports = self.conn.network.ports(**kwargs)
         return ports
-
-    

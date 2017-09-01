@@ -17,9 +17,10 @@ class ComputeServer(BaseClient):
 
     serverType = "nova"
 
-    def get(self,request,vimid,tenantid,other):
+    def get(self, request, vimid, tenantid, other):
 
-        (url, headers, _) = self.buildRequest(request, vimid, tenantid=tenantid,tail=other)
+        (url, headers, _) = self.buildRequest(
+            request, vimid, tenantid=tenantid, tail=other)
         query = ""
         for k, v in request.GET.items():
             query += (k + "=" + v)
@@ -30,14 +31,17 @@ class ComputeServer(BaseClient):
             url += "?" + query
         return self._request(url, method="GET", headers=headers)
 
-    def post(self,request,vimid,tenantid,other):
+    def post(self, request, vimid, tenantid, other):
 
-        return  self.send(request=request,method="POST",vimid=vimid,tenantid=tenantid,other=other)
+        return self.send(request=request, method="POST", vimid=vimid,
+                         tenantid=tenantid, other=other)
 
-    def put(self,request,vimid,tenantid,other):
+    def put(self, request, vimid, tenantid, other):
 
-        return  self.send(request=request,method="PUT",vimid=vimid,tenantid=tenantid,other=other)
+        return self.send(request=request, method="PUT", vimid=vimid,
+                         tenantid=tenantid, other=other)
 
-    def delete(self,request,vimid,tenantid,other):
+    def delete(self, request, vimid, tenantid, other):
 
-        return  self.send(request=request,method="DELETE",vimid=vimid,tenantid=tenantid,other=other)
+        return self.send(request=request, method="DELETE", vimid=vimid,
+                         tenantid=tenantid, other=other)

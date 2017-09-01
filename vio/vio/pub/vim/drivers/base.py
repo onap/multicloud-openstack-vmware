@@ -13,7 +13,6 @@
 import copy
 
 
-
 class DriverBase(object):
     '''Base class for all drivers.'''
 

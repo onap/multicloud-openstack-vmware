@@ -12,8 +12,8 @@
 
 import logging
 
-from vio.pub.msapi.extsys import get_vim_by_id
-from vio.pub.vim.drivers.vimsdk import neutron_v2_0
+# from vio.pub.msapi.extsys import get_vim_by_id
+# from vio.pub.vim.drivers.vimsdk import neutron_v2_0
 from vio.pub.vim.vimapi.network.OperateNetwork import BaseNet, translate
 
 

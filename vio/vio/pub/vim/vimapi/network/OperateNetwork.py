@@ -39,9 +39,10 @@ class BaseNet(object):
     def get_vim_info(self, vimid):
         try:
             vim_info = get_vim_by_id(vimid)
-        except VimDriverVioException as e:
-            raise VimDriverVioException("Failed to query VIM with id (%s) from extsys." % vimid,
-                                        status.HTTP_404_NOT_FOUND)
+        except VimDriverVioException:
+            raise VimDriverVioException(
+                "Failed to query VIM with id (%s) from extsys." % vimid,
+                status.HTTP_404_NOT_FOUND)
         return vim_info
 
     def auth(self, vim_info, tenant_id):
