@@ -10,7 +10,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from vio.swagger.views.hypervisor.views import HostView
@@ -24,12 +24,14 @@ from vio.swagger.views.volume.views import CreateListVolumeView
 from vio.swagger.views.volume.views import GetDeleteVolumeView
 from vio.swagger.views.server.views import ListServersView, GetServerView
 from vio.swagger.views.flavor.views import FlavorsView, FlavorView
-from vio.swagger.views.network.views import CreateNetworkView, DeleteNetworkView
+from vio.swagger.views.network.views import CreateNetworkView
+from vio.swagger.views.network.views import DeleteNetworkView
 from vio.swagger.views.subnet.views import CreateSubnetView, DeleteSubnetView
 from vio.swagger.views.port.views import CreatePortView, DeletePortView
 
-#proxy
-from vio.swagger.views.proxyplugin.identity.views import TokenView,IdentityServer
+# proxy
+from vio.swagger.views.proxyplugin.identity.views import TokenView
+from vio.swagger.views.proxyplugin.identity.views import IdentityServer
 from vio.swagger.views.proxyplugin.nova.views import ComputeServer
 from vio.swagger.views.proxyplugin.image.views import ImageServer
 from vio.swagger.views.proxyplugin.neutron.views import NetWorkServer
@@ -42,7 +44,7 @@ urlpatterns = [
         r'tenants$', ListTenantsView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z_-]+)/images$',
-         CreateListImagesView.as_view()),
+        CreateListImagesView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z_-]+)/images/(?P<imageid>[0-9a-zA-Z_-]+)$',
         GetDeleteImageView.as_view()),
@@ -72,19 +74,25 @@ urlpatterns = [
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/hosts/(?P<hostname>[0-9a-zA-Z_-]+)$',
         HostView.as_view()),
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/networks$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)\
+        /(?P<tenantid>[0-9a-zA-Z\-\_]+)/networks$',
         CreateNetworkView.as_view()),
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/networks/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)\
+        /(?P<tenantid>[0-9a-zA-Z\-\_]+)/networks/'
         r'(?P<networkid>[0-9a-zA-Z\-\_]+)$',
         DeleteNetworkView.as_view()),
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/subnets$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)\
+        /(?P<tenantid>[0-9a-zA-Z\-\_]+)/subnets$',
         CreateSubnetView.as_view()),
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/subnets/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)\
+        /(?P<tenantid>[0-9a-zA-Z\-\_]+)/subnets/'
         r'(?P<subnetid>[0-9a-zA-Z\-\_]+)$',
         DeleteSubnetView.as_view()),
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)\
+        /(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports$',
         CreatePortView.as_view()),
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)\
+        /(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
         r'(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortView.as_view()),
 
@@ -94,36 +102,44 @@ urlpatterns = [
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity$',
         IdentityServer.as_view()),
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/(?P<other>(.*))$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
+        /identity/(?P<other>(.*))$',
         IdentityServer.as_view()),
 
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/glance/(?P<other>(.*))$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
+        /glance/(?P<other>(.*))$',
         ImageServer.as_view()),
 
     url(
-        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinder/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
+        /cinder/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         VolumeServer.as_view()),
 
     url(
-        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinderv2/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
+        /cinderv2/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         VolumeServer.as_view()),
 
     url(
-        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/cinderv3/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
+        /cinderv3/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         VolumeServer.as_view()),
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/neutron$',
         NetWorkServer.as_view()),
 
-    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/neutron/(?P<other>(.*))$',
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
+        /neutron/(?P<other>(.*))$',
         NetWorkServer.as_view()),
 
     url(
-        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/heat/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
+        /heat/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         HeatServer.as_view()),
 
     url(
-        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
+        /nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         ComputeServer.as_view()),
 
 ]

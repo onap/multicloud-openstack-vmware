@@ -20,4 +20,5 @@ logger = logging.getLogger(__name__)
 class OperateLimits(OperateNova):
 
     def get_limits(self, data, project_id, **kwargs):
-        return self.request('get_limits', data, project_id=project_id, **kwargs)
+        return self.request('get_limits', data,
+                            project_id=project_id, **kwargs)

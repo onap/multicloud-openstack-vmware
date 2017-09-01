@@ -21,17 +21,20 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
-from vio.pub.utils.syscomm import catalog,jsonResponse
+from vio.pub.utils.syscomm import catalog, jsonResponse
 import vio.pub.exceptions as exceptions
 
 
 logger = logging.getLogger(__name__)
 
+
 class TCPKeepAliveAdapter(requests.adapters.HTTPAdapter):
     """The custom adapter used to set TCP Keep-Alive on all connections."""
 
     def init_poolmanager(self, *args, **kwargs):
-        if 'socket_options' not in kwargs and tuple(int(v) for v in requests.__version__.split('.')) >= (2, 4, 1):
+        if 'socket_options' not in kwargs \
+            and tuple(int(v) for v in requests.__version__.split('.')) \
+                >= (2, 4, 1):
             socket_options = [
                 # Keep Nagle's algorithm off
                 (socket.IPPROTO_TCP, socket.TCP_NODELAY, 1),
@@ -58,37 +61,40 @@ class TCPKeepAliveAdapter(requests.adapters.HTTPAdapter):
 class BaseClient(APIView):
 
     def __init__(self):
-        super(BaseClient,self).__init__()
+        super(BaseClient, self).__init__()
 
         self.session = requests.Session()
         for schema in list(self.session.adapters):
-            self.session.mount(schema,TCPKeepAliveAdapter())
+            self.session.mount(schema, TCPKeepAliveAdapter())
 
-    def buildRequest(self,request,vimid,tenantid="",tail=None):
+    def buildRequest(self, request, vimid, tenantid="", tail=None):
 
-        preUrl = catalog.getEndpointBy(vimid, serverType=self.serverType,interface="public")
+        preUrl = catalog.getEndpointBy(
+            vimid, serverType=self.serverType, interface="public")
         token = request.META.get('HTTP_X_AUTH_TOKEN', "")
         tail = "/" + tail if tail else ""
         tenantid = "/" + tenantid if tenantid else ""
         endPointURL = preUrl + tenantid + tail
 
         headers = {"X-Auth-Token": token}
-        headers['Content-Type'] = request.META.get("CONTENT_TYPE","application/json")
+        headers['Content-Type'] = request.META.get(
+            "CONTENT_TYPE", "application/json")
         try:
             json_req = json.loads(request.body)
-        except Exception as e:
+        except Exception:
             json_req = ""
 
-        return (endPointURL,headers,json_req)
+        return (endPointURL, headers, json_req)
 
-
-    def _request(self, url, method,redirect=20,
-                      connect_retries=0, connect_retry_delay=0.5, **kwargs):
+    def _request(self, url, method, redirect=20,
+                 connect_retries=0, connect_retry_delay=0.5, **kwargs):
 
         try:
             try:
-                logger.info("%(method)s Request to %(url)s ",{'url':url,'method':method})
-                resp = self.session.request(method, url,verify=False,timeout=30,**kwargs)
+                logger.info("%(method)s Request to %(url)s ",
+                            {'url': url, 'method': method})
+                resp = self.session.request(
+                    method, url, verify=False, timeout=30, **kwargs)
             except requests.exceptions.SSLError as e:
                 msg = 'SSL exception connecting to %(url)s: %(error)s' % {
                     'url': url, 'error': e}
@@ -106,10 +112,11 @@ class BaseClient(APIView):
 
         except exceptions.RetriableConnectionFailure as e:
             if connect_retries <= 0:
-                return Response(data={"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response(data={"error": str(e)},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             logger.info('Failure: %(e)s. Retrying in %(delay).1fs.',
-                         {'e': e, 'delay': connect_retry_delay})
+                        {'e': e, 'delay': connect_retry_delay})
             time.sleep(connect_retry_delay)
 
             return self._request(
@@ -117,7 +124,6 @@ class BaseClient(APIView):
                 connect_retries=connect_retries - 1,
                 connect_retry_delay=connect_retry_delay * 2,
                 **kwargs)
-
 
         if resp.status_code in [301, 302, 303, 305, 307, 308]:
 
@@ -134,7 +140,7 @@ class BaseClient(APIView):
                 location = resp.headers['location']
             except KeyError:
                 logger.warning("Failed to redirect request to %s as new "
-                                "location was not provided.", resp.url)
+                               "location was not provided.", resp.url)
                 pass
 
             else:
@@ -148,35 +154,35 @@ class BaseClient(APIView):
                 new_resp.history.insert(0, resp)
                 resp = new_resp
 
-        data,content_type = jsonResponse(resp.content)
-        return Response(data=data, status=resp.status_code,content_type=content_type)
+        data, content_type = jsonResponse(resp.content)
+        return Response(data=data, status=resp.status_code,
+                        content_type=content_type)
 
+    def send(self, request, method, vimid, tenantid="", other="", **kwargs):
 
-    def send(self,request,method,vimid,tenantid="",other="",**kwargs):
-
-        (url, headers, data) = self.buildRequest(request, vimid, tenantid=tenantid, tail=other)
+        (url, headers, data) = self.buildRequest(
+            request, vimid, tenantid=tenantid, tail=other)
         kwargs.setdefault('headers', headers)
 
-        if method in ["POST","PUT","PATCH"]:
+        if method in ["POST", "PUT", "PATCH"]:
             kwargs.setdefault('data', json.dumps(data, encoding='utf-8'))
 
-        return self._request(url,method,**kwargs)
+        return self._request(url, method, **kwargs)
 
-
-    def get(self,request,vimid):
+    def get(self, request, vimid):
         raise NotImplementedError()
 
-    def post(self,request,vimid):
+    def post(self, request, vimid):
         raise NotImplementedError()
 
-    def put(self,request,vimid):
+    def put(self, request, vimid):
         raise NotImplementedError()
 
-    def patch(self,request,vimid):
+    def patch(self, request, vimid):
         raise NotImplementedError()
 
-    def delete(self,request,vimid):
+    def delete(self, request, vimid):
         raise NotImplementedError()
 
-    def head(self,request,vimid):
+    def head(self, request, vimid):
         raise NotImplementedError()

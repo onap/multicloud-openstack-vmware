@@ -20,6 +20,7 @@ from vio.pub.vim.vimapi.nova import OperateFlavors
 from vio.swagger import nova_utils
 from vio.pub.exceptions import VimDriverVioException
 
+
 class FlavorsView(APIView):
 
     def post(self, request, vimid, tenantid):
@@ -114,7 +115,8 @@ class FlavorView(APIView):
 
         flavors_op = OperateFlavors.OperateFlavors()
         try:
-            flavor, extra_specs = flavors_op.get_flavor(data, tenantid, flavorid)
+            flavor, extra_specs = flavors_op.get_flavor(
+                data, tenantid, flavorid)
             flavor_dict = nova_utils.flavor_formatter(flavor, extra_specs)
         except Exception as e:
             if hasattr(e, "http_status"):

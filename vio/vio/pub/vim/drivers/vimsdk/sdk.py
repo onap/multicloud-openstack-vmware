@@ -110,7 +110,8 @@ def create_connection(params=None):
     prof.set_version('image', 'v2')
 
     try:
-        conn = connection.Connection(profile=prof, verify=False, user_agent=USER_AGENT,
+        conn = connection.Connection(profile=prof, verify=False,
+                                     user_agent=USER_AGENT,
                                      auth_plugin=auth_plugin, **params)
     except Exception as ex:
         raise parse_exception(ex)
@@ -129,4 +130,3 @@ def authenticate(**kwargs):
     }
 
     return access_info
-

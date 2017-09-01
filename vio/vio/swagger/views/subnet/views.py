@@ -37,12 +37,13 @@ class CreateSubnetView(APIView):
             req_paras = ["name", "networkId", "cidr", "ipVersion"]
             for para in req_paras:
                 if para not in body:
-                     raise Exception('Required parameter %s is '
-                                     'missing in subnet creation.' % para)
+                    raise Exception('Required parameter %s is '
+                                    'missing in subnet creation.' % para)
             subnet_name = body.get('name')
             subnet_id = body.get('id', None)
             target = subnet_id or subnet_name
-            resp = subnet.list_subnet(vimid, tenantid, target, ignore_missing=True)
+            resp = subnet.list_subnet(
+                vimid, tenantid, target, ignore_missing=True)
             if resp:
                 resp['returnCode'] = 0
                 return Response(data=resp, status=status.HTTP_200_OK)
@@ -62,7 +63,7 @@ class CreateSubnetView(APIView):
         logger.info("Enter %s, method is %s, vim_id is %s",
                     syscomm.fun_name(), request.method, vimid)
         query = dict(request.query_params)
-        subnet =  OperateSubnet.OperateSubnet()
+        subnet = OperateSubnet.OperateSubnet()
         try:
             resp = subnet.list_subnets(vimid, tenantid, **query)
             return Response(data=resp, status=status.HTTP_200_OK)
@@ -79,7 +80,7 @@ class DeleteSubnetView(APIView):
     def get(self, request, vimid, tenantid, subnetid):
         logger.info("Enter %s, method is %s, vim_id is %s",
                     syscomm.fun_name(), request.method, vimid)
-        subnet =  OperateSubnet.OperateSubnet()
+        subnet = OperateSubnet.OperateSubnet()
         try:
             resp = subnet.list_subnet(vimid, tenantid, subnetid)
             return Response(data=resp, status=status.HTTP_200_OK)
@@ -93,7 +94,7 @@ class DeleteSubnetView(APIView):
     def delete(self, request, vimid, tenantid, subnetid):
         logger.info("Enter %s, method is %s, vim_id is %s",
                     syscomm.fun_name(), request.method, vimid)
-        subnet =  OperateSubnet.OperateSubnet()
+        subnet = OperateSubnet.OperateSubnet()
         try:
             resp = subnet.delete_subnet(vimid, tenantid, subnetid)
             return Response(data=resp, status=status.HTTP_204_NO_CONTENT)
@@ -103,6 +104,3 @@ class DeleteSubnetView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-

@@ -48,7 +48,8 @@ class OperateFlavors(OperateNova):
         return flavor, extra_specs
 
     def list_flavors(self, data, project_id, **query):
-        flavors = self.request('list_flavors', data, project_id=project_id, **query)
+        flavors = self.request('list_flavors', data,
+                               project_id=project_id, **query)
         flavors = list(flavors)
         result = []
         for flavor in flavors:
@@ -57,7 +58,8 @@ class OperateFlavors(OperateNova):
             if query.get('name') and flavor.name not in query['name']:
                 continue
             extra_specs = self.request('get_flavor_extra_specs', data,
-                                       project_id=project_id, flavor_id=flavor.id)
+                                       project_id=project_id,
+                                       flavor_id=flavor.id)
             result.append((flavor, extra_specs))
         return result
 
@@ -66,7 +68,8 @@ class OperateFlavors(OperateNova):
             flavor = self.request('get_flavor', data,
                                   project_id=project_id, flavor_id=flavor_id)
             extra_specs = self.request('get_flavor_extra_specs', data,
-                                       project_id=project_id, flavor_id=flavor_id)
+                                       project_id=project_id,
+                                       flavor_id=flavor_id)
             return flavor, extra_specs
 
         except exceptions.ResourceNotFound:

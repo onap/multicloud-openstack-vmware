@@ -12,7 +12,7 @@
 
 import logging
 
-from openstack import exceptions
+# from openstack import exceptions
 
 from vio.pub.vim.vimapi.nova.OperateNova import OperateNova
 

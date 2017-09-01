@@ -37,8 +37,8 @@ class CreatePortView(APIView):
             req_paras = ["subnetId", "networkId", "name"]
             for para in req_paras:
                 if para not in body:
-                     raise Exception('Required parameter %s is '
-                                     'missing in port creation.' % para)
+                    raise Exception('Required parameter %s is '
+                                    'missing in port creation.' % para)
             port_name = body.get('name')
             port_id = body.get('id', None)
             target = port_id or port_name
@@ -104,6 +104,3 @@ class DeletePortView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-

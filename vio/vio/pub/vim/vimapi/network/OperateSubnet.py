@@ -12,9 +12,9 @@
 
 import logging
 
-from vio.pub.msapi.extsys import get_vim_by_id
-from vio.pub.vim.drivers.vimsdk import neutron_v2_0
-from vio.pub.vim.vimapi.network.OperateNetwork import BaseNet,translate
+# from vio.pub.msapi.extsys import get_vim_by_id
+# from vio.pub.vim.drivers.vimsdk import neutron_v2_0
+from vio.pub.vim.vimapi.network.OperateNetwork import BaseNet, translate
 
 
 logger = logging.getLogger(__name__)
@@ -54,7 +54,9 @@ class OperateSubnet(BaseNet):
         network = self.auth(vim_info, tenantid)
         body = translate(self.keys_mapping, body)
         subnet = network.subnet_create(**body)
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId'], "tenantId": tenantid}
+        vim_dict = {
+            "vimName": vim_info['name'], "vimId": vim_info['vimId'],
+            "tenantId": tenantid}
         resp = self._convert(subnet)
         resp.update(vim_dict)
         return resp
@@ -65,7 +67,9 @@ class OperateSubnet(BaseNet):
         subnet = network.subnet_get(subnetid, ignore_missing=ignore_missing)
         if subnet is None:
             return subnet
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId'], "tenantId": tenantid}
+        vim_dict = {
+            "vimName": vim_info['name'], "vimId": vim_info['vimId'],
+            "tenantId": tenantid}
         resp = self._convert(subnet)
         resp.update(vim_dict)
         return resp
@@ -80,7 +84,9 @@ class OperateSubnet(BaseNet):
         network = self.auth(vim_info, tenantid)
         query.update({"project_id": tenantid})
         resp = network.subnets_get(**query)
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId'], "tenantId": tenantid}
+        vim_dict = {
+            "vimName": vim_info['name'], "vimId": vim_info['vimId'],
+            "tenantId": tenantid}
         subnets = {'subnets': []}
         if resp:
             for subnet in resp:

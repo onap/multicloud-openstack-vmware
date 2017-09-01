@@ -14,11 +14,10 @@
 import logging
 
 
-from vio.pub.msapi import extsys
+# from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.baseclient import baseclient
 
 logger = logging.getLogger(__name__)
-
 
 
 class OperateTenant(baseclient):
@@ -44,4 +43,3 @@ class OperateTenant(baseclient):
                 continue
             projs.append(p)
         return projs
-

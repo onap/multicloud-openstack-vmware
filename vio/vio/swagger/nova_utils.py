@@ -37,11 +37,13 @@ def server_formatter(server, interfaces=[]):
     # TODO: wait sdk fix block_device_mapping
     try:
         if server.attached_volumes:
-            r["volumeArray"] = [{'volumeId': v['id']} for v in server.attached_volumes]
+            r["volumeArray"] = [{'volumeId': v['id']}
+                                for v in server.attached_volumes]
         elif server.block_device_mapping:
-            r["volumeArray"] = [{'volumeId': v['uuid']} for v in server.block_device_mapping]
-    except ValueError as e:
-        r['volumeArray'] = [{'volumeId':""}]
+            r["volumeArray"] = [{'volumeId': v['uuid']}
+                                for v in server.block_device_mapping]
+    except ValueError:
+        r['volumeArray'] = [{'volumeId': ""}]
     if server.image_id or server.image:
         r['boot'] = {
             'type': 2,

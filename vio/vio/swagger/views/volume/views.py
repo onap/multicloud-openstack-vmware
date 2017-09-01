@@ -41,7 +41,7 @@ class GetDeleteVolumeView(APIView):
         try:
             volume = volume_op.get_vim_volume(volumeid)
             vim_rsp = volume_utils.vim_formatter(vim_info, tenantid)
-            rsp  = volume_utils.volume_formatter(volume)
+            rsp = volume_utils.volume_formatter(volume)
             rsp.update(vim_rsp)
             return Response(data=rsp, status=status.HTTP_200_OK)
         except Exception as e:
@@ -91,7 +91,8 @@ class CreateListVolumeView(APIView):
             vim_rsp = volume_utils.vim_formatter(vim_info, tenantid)
             for volume in volumes:
                 volume_info = volume_op.get_vim_volume(volume.id)
-                rsp['volumes'].append(volume_utils.volume_formatter(volume_info))
+                rsp['volumes'].append(
+                    volume_utils.volume_formatter(volume_info))
 
             rsp.update(vim_rsp)
             return Response(data=rsp, status=status.HTTP_200_OK)
@@ -101,7 +102,6 @@ class CreateListVolumeView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
     def post(self, request, vimid, tenantid):
         try:
@@ -122,7 +122,7 @@ class CreateListVolumeView(APIView):
             for volume in volumes_detail:
                 if volume.name == body.get('name'):
                     volume_info = volume_op.get_vim_volume(volume.id)
-                    rsp  = volume_utils.volume_formatter(volume_info)
+                    rsp = volume_utils.volume_formatter(volume_info)
                     rsp['returnCode'] = 0
                     rsp.update(vim_rsp)
                     return Response(data=rsp, status=status.HTTP_200_OK)
@@ -136,7 +136,7 @@ class CreateListVolumeView(APIView):
             param = volume_utils.req_body_formatter(body)
 
             volume_info = volume_op.create_vim_volume(**param)
-            rsp  = volume_utils.volume_formatter(volume_info)
+            rsp = volume_utils.volume_formatter(volume_info)
             rsp['returnCode'] = 1
             rsp.update(vim_rsp)
             return Response(data=rsp, status=status.HTTP_202_ACCEPTED)

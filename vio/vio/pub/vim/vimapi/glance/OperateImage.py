@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 running_threads = {}
 running_thread_lock = threading.Lock()
 
+
 class imageThread(threading.Thread):
     def __init__(self, vimid, tenantid, image, imagefd):
 
@@ -36,15 +37,14 @@ class imageThread(threading.Thread):
         self.tenantid = tenantid
         self.image = image
 
-
     def run(self):
 
         logger.debug("start imagethread")
-        self.transfer_image(self.vimid, self.tenantid, self.image, self.imagefd)
+        self.transfer_image(self.vimid, self.tenantid,
+                            self.image, self.imagefd)
         running_thread_lock.acquire()
         running_threads.pop(self.imageid)
         running_thread_lock.release()
-
 
     def transfer_image(self, vimid, tenantid, image, imagefd):
 
@@ -99,6 +99,6 @@ class OperateImage(baseclient):
         running_thread_lock.release()
         try:
             upload_image_thread.start()
-        except Exception as ex:
+        except Exception:
             pass
         return image

@@ -22,6 +22,7 @@ class SampleList(APIView):
     """
     List all samples.
     """
+
     def get(self, request, format=None):
         logger.debug("get")
         return Response({"status": "active"})

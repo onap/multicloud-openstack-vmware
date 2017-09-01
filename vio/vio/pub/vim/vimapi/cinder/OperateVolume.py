@@ -14,7 +14,7 @@
 import logging
 
 
-from vio.pub.msapi import extsys
+# from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.baseclient import baseclient
 from vio.swagger import volume_utils
 

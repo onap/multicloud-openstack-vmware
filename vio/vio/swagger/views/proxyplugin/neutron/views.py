@@ -13,27 +13,31 @@
 from vio.swagger.views.proxyplugin.httpclient import BaseClient
 
 
-
 class NetWorkServer(BaseClient):
 
     serverType = "neutron"
 
-    def get(self,request,vimid,other=None):
+    def get(self, request, vimid, other=None):
 
-        return  self.send(request=request,method="GET",vimid=vimid,other=other)
+        return self.send(request=request, method="GET",
+                         vimid=vimid, other=other)
 
-    def post(self,request,vimid,other):
+    def post(self, request, vimid, other):
 
-        return  self.send(request=request,method="POST",vimid=vimid,other=other)
+        return self.send(request=request, method="POST",
+                         vimid=vimid, other=other)
 
     def patch(self, request, vimid, other):
 
-        return  self.send(request=request,method="PATCH",vimid=vimid,other=other)
+        return self.send(request=request, method="PATCH",
+                         vimid=vimid, other=other)
 
     def put(self, request, vimid, other):
 
-        return  self.send(request=request,method="PUT",vimid=vimid,other=other)
+        return self.send(request=request, method="PUT",
+                         vimid=vimid, other=other)
 
     def delete(self, request, vimid, other):
 
-        return  self.send(request=request,method="DELETE",vimid=vimid,other=other)
+        return self.send(request=request, method="DELETE",
+                         vimid=vimid, other=other)

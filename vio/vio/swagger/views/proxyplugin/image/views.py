@@ -17,7 +17,7 @@ class ImageServer(BaseClient):
 
     serverType = "glance"
 
-    def get(self,request,vimid,other):
+    def get(self, request, vimid, other):
 
         (url, headers, _) = self.buildRequest(request, vimid, tail=other)
 
@@ -31,20 +31,22 @@ class ImageServer(BaseClient):
             url += "?" + query
         return self._request(url, method="GET", headers=headers)
 
-
     def post(self, request, vimid, other):
 
-        return  self.send(request=request,method="POST",vimid=vimid,other=other)
-
+        return self.send(request=request, method="POST",
+                         vimid=vimid, other=other)
 
     def patch(self, request, vimid, other):
 
-        return  self.send(request=request,method="PATCH",vimid=vimid,other=other)
+        return self.send(request=request, method="PATCH",
+                         vimid=vimid, other=other)
 
-    def put(self,request,vimid,other):
+    def put(self, request, vimid, other):
 
-        return  self.send(request=request,method="PUT",vimid=vimid,other=other)
+        return self.send(request=request, method="PUT",
+                         vimid=vimid, other=other)
 
     def delete(self, request, vimid, other):
 
-        return  self.send(request=request,method="DELETE",vimid=vimid,other=other)
+        return self.send(request=request, method="DELETE",
+                         vimid=vimid, other=other)

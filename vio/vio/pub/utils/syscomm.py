@@ -14,35 +14,34 @@ import inspect
 import json
 from collections import defaultdict
 
+
 def fun_name():
     return inspect.stack()[1][3]
 
 
-def jsonResponse(data,encoding='utf-8'):
+def jsonResponse(data, encoding='utf-8'):
 
     content_type = "application/json"
     try:
-        res = json.loads(data,encoding=encoding)
-    except  Exception as e:
+        res = json.loads(data, encoding=encoding)
+    except Exception:
         res = data
         content_type = "text/plain"
-    return (res,content_type)
+    return (res, content_type)
 
 
 class Catalogs(object):
 
     def __init__(self):
-        self.ct=defaultdict(dict)
+        self.ct = defaultdict(dict)
 
+    def storeEndpoint(self, vimid, endpoints):
+        self.ct.setdefault(vimid, endpoints)
 
-    def storeEndpoint(self,vimid,endpoints):
-        self.ct.setdefault(vimid,endpoints)
-
-    def getEndpointBy(self,vimid,serverType,interface='public'):
+    def getEndpointBy(self, vimid, serverType, interface='public'):
 
         vim = self.ct.get(vimid)
-        return vim.get(serverType).get(interface,"") if vim else ""
-
+        return vim.get(serverType).get(interface, "") if vim else ""
 
 
 catalog = Catalogs()

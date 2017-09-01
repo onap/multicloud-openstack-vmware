@@ -16,23 +16,23 @@ def volume_formatter(volume):
     attachments = []
     for attach in volume.attachments:
         vim_attach = {
-            'device' : attach['device'],
-            'volumeId' : attach['volume_id'],
-            'hostName' : attach['host_name'],
-            'Id' : attach['attachment_id'],
-            'serverId' : attach['server_id']
+            'device': attach['device'],
+            'volumeId': attach['volume_id'],
+            'hostName': attach['host_name'],
+            'Id': attach['attachment_id'],
+            'serverId': attach['server_id']
         }
         attachments.append(vim_attach)
 
     return {
-        'id' : volume.id,
-        'name' : volume.name,
-        'createTime' : volume.created_at,
-        'status' : volume.status,
-        'type' : volume.volume_type,
-        'size' : volume.size,
-        'availabilityZone' : volume.availability_zone,
-        'attachments' : attachments
+        'id': volume.id,
+        'name': volume.name,
+        'createTime': volume.created_at,
+        'status': volume.status,
+        'type': volume.volume_type,
+        'size': volume.size,
+        'availabilityZone': volume.availability_zone,
+        'attachments': attachments
     }
 
 

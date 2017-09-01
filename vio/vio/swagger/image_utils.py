@@ -21,14 +21,14 @@ def image_formatter(image):
         properties['vmware_ostype'] = image.get("vmware_ostype")
 
     return {
-        'id' : image.get("id"),
-        'name' : image.get("name"),
-        'imageType' : image.get("disk_format"),
-        'status' : image.get("status"),
-        'size' : image.get("size"),
-        'containerFormat' : image.get("container_format"),
-        'visibility' : image.get("visibility"),
-        'properties' : properties
+        'id': image.get("id"),
+        'name': image.get("name"),
+        'imageType': image.get("disk_format"),
+        'status': image.get("status"),
+        'size': image.get("size"),
+        'containerFormat': image.get("container_format"),
+        'visibility': image.get("visibility"),
+        'properties': properties
     }
 
 
@@ -51,6 +51,7 @@ def sdk_param_formatter(data):
     param['user_domain_name'] = 'default'
     param['project_domain_name'] = 'default'
     return param
+
 
 def req_body_formatter(body):
 
