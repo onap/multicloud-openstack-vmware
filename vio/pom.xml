@@ -12,7 +12,9 @@
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project 
+    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.onap.oparent</groupId>
         <artifactId>oparent</artifactId>
@@ -24,8 +26,8 @@
     <artifactId>multicloud-vio</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>multicloud/openstack/vmware</name>
-    <description>multiclouddriver for vio</description>
+    <name>multicloud/opentack/vmware</name>
+    <description>multicloud vio</description>
     <build>
       <plugins>
         <plugin>
