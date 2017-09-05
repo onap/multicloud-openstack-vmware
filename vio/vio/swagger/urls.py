@@ -36,6 +36,17 @@ from vio.swagger.views.proxyplugin.neutron.views import NetWorkServer
 from vio.swagger.views.proxyplugin.volumn.views import VolumeServer
 from vio.swagger.views.proxyplugin.heat.views import HeatServer
 
+#fake
+from vio.swagger.views.fakeplugin.identity.views import FakeProjects
+from vio.swagger.views.fakeplugin.identity.views import FakeToken
+from vio.swagger.views.fakeplugin.image.views import FakeImage
+from vio.swagger.views.fakeplugin.heat.views import FakeHeat
+from vio.swagger.views.fakeplugin.volumn.views import FakeVolumn
+from vio.swagger.views.fakeplugin.neutron.views import FakeNeutron
+from vio.swagger.views.fakeplugin.nova.views import FakeNovaServer
+from vio.swagger.views.fakeplugin.nova.views import FakeNovaHypervisors
+
+
 urlpatterns = [
     url(r'^api/multicloud-vio/v0/swagger.json$', SwaggerJsonView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
@@ -87,6 +98,23 @@ urlpatterns = [
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z\-\_]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
         r'(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortView.as_view()),
+
+    # fake urls
+    url(r'^api/multicloud-vio/v0/vmware_fake/identity/v3', FakeToken.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/identity/projects$', FakeProjects.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/identity/projects/(?P<projectid>[0-9a-z-A-Z]+)$', FakeProjects.as_view()),
+
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/os-hypervisors$',
+        FakeNovaHypervisors.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/os-hypervisors/detail$',
+        FakeNovaHypervisors.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/servers$', FakeNovaServer.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/servers/(?P<serverid>[0-9a-z-A-Z]+)$',
+        FakeNovaServer.as_view()),
+    url(
+        r'^api/multicloud-vio/v0/vmware_fake/nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/servers/(?P<serverid>[0-9a-z-A-Z]+)/action$',
+        FakeNovaServer.as_view()),
+
 
     #   proxy
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',
