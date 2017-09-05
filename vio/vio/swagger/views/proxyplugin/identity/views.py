@@ -17,11 +17,13 @@ from rest_framework.response import Response
 from vio.pub.msapi import extsys
 from vio.pub.exceptions import VimDriverVioException
 from vio.pub.utils.syscomm import catalog
-from vio.pub.config.config import MSB_SERVICE_PORT, MSB_SERVICE_IP
+from vio.pub.config.config import MSB_SERVICE_PORT,MSB_SERVICE_IP
+from vio.swagger.views.fakeplugin.fakeData.content import keystoneVersion
 import json
 import requests
 from collections import defaultdict
 from copy import deepcopy
+
 
 from vio.swagger.views.proxyplugin.httpclient import BaseClient
 
@@ -86,8 +88,11 @@ class TokenView(BaseClient):
             return Response(data={"error": str(e)}, status=e.status_code)
         except Exception as e:
             logging.exception("error %s" % e)
-            return Response(data={"error": str(e)},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(data={"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        #fake
+        if vim_info['name'] == "vmware_fake":
+            return Response(data=keystoneVersion(), status=status.HTTP_200_OK)
+
 
         keystoneURL = vim_info['url']
         logger.info("vimid(%(vimid)s) get keystone url %(url)s ",
@@ -97,7 +102,7 @@ class TokenView(BaseClient):
             if res.status_code != status.HTTP_200_OK:
                 return Response(data={"error":res.content}, status=res.status_code)
             res = res.json()
-            res['version']['links'][0]['href']="http://"+MSB_ADDRESS+"/multivim-vio/v0/"+vimid +"/identity/v3"
+            res['version']['links'][0]['href']="http://"+MSB_ADDRESS+"/multicloud-vio/v0/"+vimid +"/identity/v3"
 
 
         except Exception as e:
