@@ -93,7 +93,7 @@ class TokenView(BaseClient):
             if res.status_code != status.HTTP_200_OK:
                 return Response(data={"error":res.content}, status=res.status_code)
             res = res.json()
-            res['version']['links'][0]['href']="http://"+MSB_ADDRESS+"/multivim-vio/v0/"+vimid +"/identity/v3"
+            res['version']['links'][0]['href']="http://"+MSB_ADDRESS+"/multicloud-vio/v0/"+vimid +"/identity/v3"
 
 
         except Exception as e:
