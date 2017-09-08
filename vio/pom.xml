@@ -23,10 +23,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.onap.multicloud.openstack.vmware</groupId>
-    <artifactId>multicloud-vio</artifactId>
+    <artifactId>multicloud-vmware</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>multicloud/opentack/vmware</name>
+    <name>multicloud/openstack/vmware</name>
     <description>multiclouddriver for vio</description>
     <build>
       <plugins>
