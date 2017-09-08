@@ -7,22 +7,18 @@ from uuid import uuid4
 from datetime import datetime
 from datetime import timedelta
 
-MSB_SERVER = MSB_SERVICE_IP+":"+MSB_SERVICE_PORT
+MSB_SERVER = MSB_SERVICE_IP + ":" + MSB_SERVICE_PORT
 
-Token = "gAAAAABZmlkS3H24i7446u41QoDMMEFi49sUbYiB2fqrZq00TR92RDLxt4AWzHsBa36IeWeY_eVEnDWAjIuV" \
-         "vK2osp6mPTEKGCvywrksCorunJqPCf46nBhGt-P4bqXMUWRMgowfIS2_kv1pQwvoP00_Rs6KlDaWt-miEu7s24m3En9Qsbg8Ecw"
-
-
+Token = "gAAAAABZmlkS3H24i7446u41QoDMMEFi49sUbYiB2fqrZq00TR92RDLx" \
+        "t4AWzHsBa36IeWeY_eVEnDWAjIuV" \
+         "vK2osp6mPTEKGCvywrksCorunJqPCf46nBhGt-P4bq" \
+        "XMUWRMgowfIS2_kv1pQwvoP00_Rs6KlDaWt-miEu7s24m3En9Qsbg8Ecw"
 TenatId = "c049d4ad1dee475db8c3627bef9e916a"
-
-
-
-
 serverMapps = defaultdict(dict)
 
 
-
 def keystoneVersion():
+
     data = {
         "version": {
             "status": "stable",
@@ -36,7 +32,8 @@ def keystoneVersion():
             "id": "v3.6",
             "links": [
                 {
-                    "href": "http://" + MSB_SERVER + "/api/multicloud-vio/v0/vmware_fake/identity/v3",
+                    "href": "http://" + MSB_SERVER +
+                            "/api/multicloud-vio/v0/vmware_fake/identity/v3",
                     "rel": "self"
                 }
             ]
@@ -45,15 +42,12 @@ def keystoneVersion():
     }
 
     data['version']['update'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-
     return data
-
 
 
 def keystoneToken(teanatid=None):
 
-    data=  {
+    data = {
         "token": {
             "value": Token,
             "methods": [
@@ -66,7 +60,8 @@ def keystoneToken(teanatid=None):
                 }
             ],
 
-            "expires_at": (datetime.now()+timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"),
+            "expires_at": (datetime.now() +
+                           timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"),
             "project": {
                 "domain": {
                     "id": "c049d4ad1dee475db8c3627bef9e916a",
@@ -74,26 +69,25 @@ def keystoneToken(teanatid=None):
                 },
                 "id": TenatId,
                 "name": "admin"
-            },
-        "catalog":[
+            }, "catalog": [
             {
-                "endpoints":[
-                {  "url": "http://"+MSB_SERVER+"/api/multicloud-vio/v0/vmware_fake/cinder/"+TenatId,
+                "endpoints": [{"url": "http://" + MSB_SERVER +
+                        "/api/multicloud-vio/v0/vmware_fake/cinder/" + TenatId,
                         "interface": "admin",
                         "region": "nova",
                         "region_id": "nova",
                         "id": "89943db2263e4281b7db8001ce17cdf5"
-                },
+                 },
                 ],
                 "type": "volume",
                 "id": "3e4941704e9941a582b157ac7203ec1b",
                 "name": "cinder"
             },
 
-            {
-                "endpoints": [
-                {
-                    "url": "http://"+MSB_SERVER+"/api/multicloud-vio/v0/vmware_fake/neutron/"+TenatId,
+            {"endpoints": [{
+                    "url": "http://" + MSB_SERVER +
+                           "/api/multicloud-vio/v0/vmware_fake/neutron/"
+                           + TenatId,
                     "interface": "admin",
                     "region": "nova",
                     "region_id": "nova",
@@ -105,9 +99,9 @@ def keystoneToken(teanatid=None):
                 "name": "neutron"
             },
             {
-                "endpoints": [
-                {
-                    "url": "http://"+MSB_SERVER+"/api/multicloud-vio/v0/vmware_fake/identity",
+                "endpoints": [{
+                    "url": "http://"+MSB_SERVER+
+                           "/api/multicloud-vio/v0/vmware_fake/identity",
                     "interface": "admin",
                     "region": "nova",
                     "region_id": "nova",
@@ -121,7 +115,9 @@ def keystoneToken(teanatid=None):
             {
                 "endpoints": [
                     {
-                        "url": "http://" + MSB_SERVER + "/api/multicloud-vio/v0/vmware_fake/heat/"+TenatId,
+                        "url": "http://" + MSB_SERVER +
+                               "/api/multicloud-vio/v0/vmware_fake/heat/"
+                               + TenatId,
                         "interface": "admin",
                         "region": "nova",
                         "region_id": "nova",
@@ -135,7 +131,9 @@ def keystoneToken(teanatid=None):
             {
                 "endpoints": [
                     {
-                        "url": "http://" + MSB_SERVER + "/api/multicloud-vio/v0/vmware_fake/nova/"+TenatId,
+                        "url": "http://" + MSB_SERVER +
+                               "/api/multicloud-vio/v0/vmware_fake/nova/"
+                               + TenatId,
                         "interface": "admin",
                         "region": "nova",
                         "region_id": "nova",
@@ -149,7 +147,8 @@ def keystoneToken(teanatid=None):
             {
                 "endpoints": [
                     {
-                        "url": "http://" + MSB_SERVER + "/api/multicloud-vio/v0/vmware_fake/glance",
+                        "url": "http://" + MSB_SERVER +
+                               "/api/multicloud-vio/v0/vmware_fake/glance",
                         "interface": "admin",
                         "region": "nova",
                         "region_id": "nova",
@@ -180,13 +179,9 @@ def keystoneToken(teanatid=None):
     return data
 
 
-
-
 def ListProjects(token=None):
     if token != Token:
-        return {"error":{"message":"unauthorization","code":401}}
-
-
+        return {"error": {"message": "unauthorization","code": 401}}
 
     data = {
                 "projects": [
@@ -194,7 +189,8 @@ def ListProjects(token=None):
                         "is_domain": "false",
                         "description": "Admin Project",
                         "links": {
-                            "self": "http://127.0.0.1:5000/v3/projects/0cf31a5c8da74fe3afb14683f9043f7b"
+                            "self": "http://127.0.0.1:5000/v3/projects/"
+                                    "0cf31a5c8da74fe3afb14683f9043f7b"
                         },
                         "enabled": "true",
                         "domain_id": "c049d4ad1dee475db8c3627bef9e916a",
@@ -204,9 +200,11 @@ def ListProjects(token=None):
                     },
                     {
                         "is_domain": "false",
-                        "description": "Bootstrap project for initializing the cloud.",
+                        "description": "Bootstrap project for "
+                                       "initializing the cloud.",
                         "links": {
-                            "self": "http://127.0.0.1:5000/v3/projects/3888e02273224c7a93c961d8dde8094f"
+                            "self": "http://127.0.0.1:5000/v3/projects/"
+                                    "3888e02273224c7a93c961d8dde8094f"
                         },
                         "enabled": "true",
                         "domain_id": "default",
@@ -218,7 +216,8 @@ def ListProjects(token=None):
                         "is_domain": "false",
                         "description": "Service Project",
                         "links": {
-                            "self": "http://127.0.0.1:5000/v3/projects/e75f80048997438dbc0bfaa822dfdf65"
+                            "self": "http://127.0.0.1:5000/v3/projects/"
+                                    "e75f80048997438dbc0bfaa822dfdf65"
                         },
                         "enabled": "true",
                         "domain_id": "c049d4ad1dee475db8c3627bef9e916a",
@@ -237,34 +236,33 @@ def ListProjects(token=None):
     return data
 
 
-def showProject(token,projectid=""):
+def showProject(token, projectid=""):
     if token != Token:
         return {"error": {"message": "unauthorization", "code": 401}}
-
 
     data = {
             "project":
                 {
                     "is_domain": "false", "description": "Admin Project", "links":
                     {
-                        "self": "https://127.0.0.1:5000/v3/projects/9e8a26d207ef454981750e98e42e9aa8"
+                        "self": "https://127.0.0.1:5000/v3/projects/"
+                                "9e8a26d207ef454981750e98e42e9aa8"
                     },
                     "enabled": "true", "id": projectid,
-                    "parent_id": "e71c537250a74a7a8917904a8ece675c", "domain_id": "e71c537250a74a7a8917904a8ece675c", "name": "admin"
+                    "parent_id": "e71c537250a74a7a8917904a8ece675c",
+                    "domain_id": "e71c537250a74a7a8917904a8ece675c",
+                    "name": "admin"
                 }
             }
 
     return data
 
 
-
-
 def GetOSHypervisor(token):
     if token != Token:
-        return {"error":{"message":"unauthorization","code":401}}
+        return {"error": {"message": "unauthorization","code": 401}}
 
-
-    data =  {
+    data = {
             "hypervisors": [
                 {
                     "status": "enabled",
@@ -278,7 +276,8 @@ def GetOSHypervisor(token):
                     "hypervisor_type": "VMware vCenter Server",
                     "local_gb_used": 1107,
                     "host_ip": "127.0.0.1",
-                    "hypervisor_hostname": "domain-c202.22bfc05c-da55-4ba6-ba93-08d9a067138e",
+                    "hypervisor_hostname": "domain-c202.22bfc"
+                                           "05c-da55-4ba6-ba93-08d9a067138e",
                     "memory_mb_used": 32762,
                     "memory_mb": 98258,
                     "current_workload": 0,
@@ -298,30 +297,28 @@ def GetOSHypervisor(token):
     return data
 
 
-
-
-def getServers(token,tenantid=None):
-
+def getServers(token, tenantid=None):
 
     if token != Token:
-        return {"error":{"message":"unauthorization","code":401}}
+        return {"error": {"message": "unauthorization","code": 401}}
 
-   
-    data ={"servers":[]}
+    data = {"servers": []}
     for k,v in serverMapps.iteritems():
-        server = {"id":k,
-                "links":[
+        server = {"id": k,
+                  "links": [
                     {
-                        "href": "https://127.0.0.1:8774/v2.1/" + v['tenantid']+"/servers/" + k,
+                        "href": "https://127.0.0.1:8774/v2.1/"
+                                + v['tenantid']+"/servers/" + k,
                         "ref": "self"
                     },
                     {
-                        "href": "https://127.0.0.1:8774/v2.1/" + v['tenantid'] + "/servers/" + k,
+                        "href": "https://127.0.0.1:8774/v2.1/"
+                                + v['tenantid'] + "/servers/" + k,
                         "ref": "bookmark"
                     }
                     
                 ],
-                "naem":v['name']
+                  "naem": v['name']
         
                 }
         data['servers'].append(server)
@@ -329,18 +326,19 @@ def getServers(token,tenantid=None):
     return data
 
 
-def showServerDetail(token,serverid,tenantid=None):
+def showServerDetail(token, serverid, tenantid=None):
     if token != Token:
-        return {"error":{"message":"unauthorization","code":401}}
+        return {"error": {"message": "unauthorization","code": 401}}
 
-    if serverid  not in  serverMapps:
-        return {"error": {"message":"instance {0} is not exsit".format(serverid),"code":404}}
+    if serverid not in serverMapps:
+        return {"error": {"message":"instance {0} is not "
+                                    "exsit".format(serverid),"code":404}}
 
     try:
         _serverStatus(serverid)
     except ValueError:
-        return {"error": {"message": "instance {0} is not exsit".format(serverid), "code": 404}}
-
+        return {"error": {"message": "instance {0} is not "
+                                     "exsit".format(serverid), "code": 404}}
 
     data = {
         "server": {
@@ -363,11 +361,13 @@ def showServerDetail(token,serverid,tenantid=None):
             },
             "links": [
                 {
-                    "href": "https://127.0.0.1:8774/v2.1/"+TenatId+"/servers/" + serverid,
+                    "href": "https://127.0.0.1:8774/v2.1/"+
+                            TenatId + "/servers/" + serverid,
                     "rel": "self"
                 },
                 {
-                    "href": "https://127.0.0.1:8774/"+TenatId+"/servers/" + serverid,
+                    "href": "https://127.0.0.1:8774/"+
+                            TenatId + "/servers/" + serverid,
                     "rel": "bookmark"
                 }
             ],
@@ -375,7 +375,9 @@ def showServerDetail(token,serverid,tenantid=None):
                 "id": "0c80630a-eb3a-47c0-950a-facb2721139c",
                 "links": [
                     {
-                        "href": "https://127.0.0.1:8774/"+TenatId+"/images/0c80630a-eb3a-47c0-950a-facb2721139c",
+                        "href": "https://127.0.0.1:8774/"+
+                                TenatId+"/images/"
+                                "0c80630a-eb3a-47c0-950a-facb2721139c",
                         "rel": "bookmark"
                     }
                 ]
@@ -383,12 +385,14 @@ def showServerDetail(token,serverid,tenantid=None):
 
             "OS-EXT-STS:vm_state": serverMapps[serverid]['status'].lower(),
             "OS-EXT-SRV-ATTR:instance_name": "instance-00000053",
-            "OS-SRV-USG:launched_at": (datetime.now()).strftime("%Y-%m-%d %H:%M:%S"),
+            "OS-SRV-USG:launched_at":
+                (datetime.now()).strftime("%Y-%m-%d %H:%M:%S"),
             "flavor": {
                 "id": "13",
                 "links": [
                     {
-                        "href": "https://127.0.0.1:8774/"+TenatId+"/flavors/13",
+                        "href": "https://127.0.0.1:8774/"
+                                + TenatId + "/flavors/13",
                         "rel": "bookmark"
                     }
                 ]
@@ -409,11 +413,13 @@ def showServerDetail(token,serverid,tenantid=None):
             "metadata": {},
             "status": serverMapps[serverid]['status'],
             "updated": (datetime.now()).strftime("%Y-%m-%d %H:%M:%S"),
-            "hostId": "5a9fc696507589459e64ba6dfb0ad1570c0952cdd1c184b0b7bdde9a",
+            "hostId": "5a9fc696507589459e64ba"
+                      "6dfb0ad1570c0952cdd1c184b0b7bdde9a",
             "OS-EXT-SRV-ATTR:host": "compute01",
             "OS-SRV-USG:terminated_at": "null",
             "key_name": "onap_key_L6dr",
-            "OS-EXT-SRV-ATTR:hypervisor_hostname": "domain-c202.22bfc05c-da55-4ba6-ba93-08d9a067138e",
+            "OS-EXT-SRV-ATTR:hypervisor_hostname":
+                "domain-c202.22bfc05c-da55-4ba6-ba93-08d9a067138e",
             "name": "vio-mso",
             "created": serverMapps[serverid]['createTime'],
             "tenant_id": tenantid,
@@ -425,66 +431,66 @@ def showServerDetail(token,serverid,tenantid=None):
     return data
 
 
-
-def deleteServer(token,serverid):
+def deleteServer(token, serverid):
     if token != Token:
-        return {"error": {"message":"unauthorization","code":401}}
+        return {"error": {"message": "unauthorization","code": 401}}
 
-    if serverid not in  serverMapps:
+    if serverid not in serverMapps:
         return {"error": {"message": "instance {0} is not exsit".format(serverid), "code": 404}}
 
     serverMapps[serverid]['turnStatusTime'] = datetime.now()
     serverMapps[serverid]['status'] = "DELETING"
-
-    #del serverMapps[serverid]
     
     return {}
 
 
-def operator_server(token,serverid,action):
+def operator_server(token, serverid, action):
     if token != Token:
-        return {"error": {"message":"unauthorization","code":401}}
+        return {"error": {"message": "unauthorization","code": 401}}
 
     if serverid not in serverMapps:
-        return {"error": {"message":"instance {0} is not exsit".format(serverid),"code":404}}
+        return {"error": {"message":"instance {0} is not "
+                                    "exsit".format(serverid),"code": 404}}
     try:
         _serverStatus(serverid)
     except ValueError:
-        return  {"error": {"message": "instance {0} is not exsit".format(serverid), "code": 404}}
-
+        return {"error": {"message": "instance {0} is not "
+                                     "exsit".format(serverid), "code": 404}}
 
     if action == "os-stop":
         if serverMapps[serverid]['status'] != "ACTIVE":
             return {
                 "error": {
-                "message": "Cannot 'stop' instance {0} while it is in vm_state {1}".format(serverid,serverMapps[serverid]['status']),
-                "code": 409
+                    "message": "Cannot 'stop' instance {0} while it is in "
+                               "vm_state {1}".format(serverid,
+                                        serverMapps[serverid]['status']),
+                    "code": 409
                 }
             }
 
         serverMapps[serverid]['turnStatusTime'] = datetime.now()
         serverMapps[serverid]['status'] = "POWERING_OFF"
 
-        
     elif action == "os-start":
         if serverMapps[serverid]['status'] != "SHUTDOWN":
             return {
                 "error": {
-                    "message": "Cannot 'start' instance {0} while it is in vm_state {1}".format(serverid,serverMapps[serverid]['status']),
+                    "message": "Cannot 'start' instance {0} while it "
+                               "is in vm_state {1}".format(serverid,
+                                    serverMapps[serverid]['status']),
                     "code": 409
                 }
             }
-
         serverMapps[serverid]['turnStatusTime'] = datetime.now()
         serverMapps[serverid]['status'] = "POWERING_ON"
-        #serverMapps[serverid]['status'] = "ACTIVE"
-
 
     elif action == "resume":
         if serverMapps[serverid]['status'] != "SUSPENDED":
             return {
                 "error": {
-                    "message": "Cannot 'resume' instance {0} while it is in vm_state {1}".format(serverid,serverMapps[serverid]['status']),
+                    "message": "Cannot 'resume' instance {0} while it "
+                               "is in vm_state {1}".format(serverid,
+                                        serverMapps[serverid]['status']),
                     "code": 409
                 }
             }
@@ -495,7 +501,9 @@ def operator_server(token,serverid,action):
         if serverMapps[serverid]['status'] != "ACTIVE":
             return {
                 "error": {
-                    "message": "Cannot 'suspend' instance {0} while it is in vm_state {1}".format(serverid,serverMapps[serverid]['status']),
+                    "message": "Cannot 'suspend' instance {0} while "
+                               "it is in vm_state {1}".format(serverid,
+                                serverMapps[serverid]['status']),
                     "code": 409
                 }
             }
@@ -507,8 +515,9 @@ def operator_server(token,serverid,action):
         if serverMapps[serverid]['status'] != "PAUSED":
             return {
                 "error": {
-                    "message": "Cannot 'unpause' instance {0} while it is in vm_state {1}".format(serverid,
-                                                                                                  serverMapps[serverid]['status']),
+                    "message": "Cannot 'unpause' instance {0} while it "
+                               "is in vm_state {1}".format(serverid,
+                                        serverMapps[serverid]['status']),
                     "code": 409
                 }
             }
@@ -519,8 +528,9 @@ def operator_server(token,serverid,action):
         if serverMapps[serverid]['status'] != "ACTIVE":
             return {
                 "error": {
-                    "message": "Cannot 'pause' instance {0} while it is in vm_state {1}".format(serverid,
-                                                                                                  serverMapps[serverid]['status']),
+                    "message": "Cannot 'pause' instance {0} while it"
+                               "is in vm_state {1}".format(serverid,
+                                        serverMapps[serverid]['status']),
                     "code": 409
                 }
             }
@@ -528,50 +538,50 @@ def operator_server(token,serverid,action):
         serverMapps[serverid]['status'] = "PAUSED"
 
     elif action == "reboot":
-        if serverMapps[serverid]['status'] == "ERROR" or serverMapps[serverid]['status'] == "REBOOTING":
+        if serverMapps[serverid]['status'] == "ERROR" or \
+                        serverMapps[serverid]['status'] == "REBOOTING":
             return {
                 "error": {
-                    "message": "Cannot 'reboot' instance {0} while it is in vm_state {1}".format(serverid,
-                                                                                                  serverMapps[serverid]['status']),
+                    "message": "Cannot 'reboot' instance {0} while it "
+                               "is in vm_state {1}".format(serverid,
+                                        serverMapps[serverid]['status']),
                     "code": 409
                 }
             }
         serverMapps[serverid]['turnStatusTime'] = datetime.now()
         serverMapps[serverid]['status'] = "REBOOTING"
 
-        #serverMapps[serverid]['status'] = "ACTIVE"
-
     else:
-        return {"error":{"message":"unspported action","code": 405}}
-
+        return {"error": {"message": "unspported action","code": 405}}
 
     return {}
 
 
-
-def createInstance(token,minCount=1,maxCount=2,json=None):
+def createInstance(token, minCount=1, maxCount=2, json=None):
 
     if token != Token:
-        return {"error": {"message":"unauthorization","code":401}}
+        return {"error": {"message": "unauthorization","code": 401}}
 
     try:
            name = json['server']['name']
 
     except Exception as e:
-        return  {"error": {"message": "invalidate data", "code":403}}
-
+        return {"error": {"message": "invalidate data", "code": 403}}
 
     uid = str(uuid4())
+
     data = {
                 "server": {
                     "id": uid,
                     "links": [
                         {
-                            "href": "http://openstack.example.com/v2/"+TenatId+"/servers/"+uid,
+                            "href": "http://openstack.example."
+                                    "com/v2/" + TenatId + "/servers/" + uid,
                             "rel": "self"
                         },
                         {
-                            "href": "http://openstack.example.com/"+TenatId+"/servers/"+uid,
+                            "href": "http://openstack.example."
+                                    "com/" + TenatId + "/servers/" + uid,
                             "rel": "bookmark"
                         }
                     ],
@@ -579,14 +589,11 @@ def createInstance(token,minCount=1,maxCount=2,json=None):
                 }
             }
 
-    serverMapps[uid] = {"name":name,"tenantid":TenatId,"status":"BUILDING",'createTime':(datetime.now()).strftime("%Y-%m-%d %H:%M:%S"),
-                        "turnStatusTime":datetime.now()}
-    
+    serverMapps[uid] = {"name": name,"tenantid": TenatId,"status":"BUILDING",
+                        'createTime': (datetime.now()).
+                            strftime("%Y-%m-%d %H:%M:%S"),
+                        "turnStatusTime": datetime.now()}
     return data
-
-
-
-
 
 
 def _serverStatus(serverid):
@@ -595,7 +602,8 @@ def _serverStatus(serverid):
         currentTime = datetime.now()
         print currentTime - startTime
         if currentTime - startTime >= timedelta(seconds=10):
-            if serverMapps[serverid]['status'] == "SPAWNING" or serverMapps[serverid]['status'] == "BUILDING":
+            if serverMapps[serverid]['status'] == "SPAWNING" \
+                    or serverMapps[serverid]['status'] == "BUILDING":
                 serverMapps[serverid]['status'] = "ACTIVE"
             elif serverMapps[serverid]['status'] == "DELETING":
                 del serverMapps[serverid]
@@ -610,13 +618,9 @@ def _serverStatus(serverid):
                 serverMapps[serverid]['status'] = "ACTIVE"
             else:
                 pass
-        elif timedelta(seconds=5) <= currentTime - startTime < timedelta(seconds=10):
+        elif timedelta(seconds=5) <= currentTime - startTime \
+                < timedelta(seconds=10):
             if serverMapps[serverid]['status'] == "BUILDING":
                 serverMapps[serverid]['status'] = "SPAWNING"
         else:
             pass
-
-
-
-
-

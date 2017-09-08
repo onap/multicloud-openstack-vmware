@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from vio.pub.msapi import extsys
 from vio.pub.exceptions import VimDriverVioException
 from vio.pub.utils.syscomm import catalog
-from vio.pub.config.config import MSB_SERVICE_PORT,MSB_SERVICE_IP
+from vio.pub.config.config import MSB_SERVICE_PORT, MSB_SERVICE_IP
 from vio.swagger.views.fakeplugin.fakeData.content import keystoneVersion
 import json
 import requests
@@ -88,22 +88,26 @@ class TokenView(BaseClient):
             return Response(data={"error": str(e)}, status=e.status_code)
         except Exception as e:
             logging.exception("error %s" % e)
-            return Response(data={"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        #fake
+            return Response(data={"error": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # fake
         if vim_info['name'] == "vmware_fake":
             return Response(data=keystoneVersion(), status=status.HTTP_200_OK)
-
 
         keystoneURL = vim_info['url']
         logger.info("vimid(%(vimid)s) get keystone url %(url)s ",
                     {"vimid": vimid, "url": keystoneURL})
-        try:
-            res = requests.get(url=keystoneURL,verify=False)
-            if res.status_code != status.HTTP_200_OK:
-                return Response(data={"error":res.content}, status=res.status_code)
-            res = res.json()
-            res['version']['links'][0]['href']="http://"+MSB_ADDRESS+"/multicloud-vio/v0/"+vimid +"/identity/v3"
 
+        try:
+            res = requests.get(url=keystoneURL, verify=False)
+            if res.status_code != status.HTTP_200_OK:
+                return Response(data={"error": res.content},
+                                status=res.status_code)
+            res = res.json()
+            res['version']['links'][0]['href'] = \
+                "http://" + \
+                MSB_ADDRESS + "/multicloud-vio/v0/" \
+                + vimid + "/identity/v3"
 
         except Exception as e:
             logging.exception("error %s" % e)
@@ -151,9 +155,11 @@ class TokenView(BaseClient):
                     {"vimid": vimid, "url": url})
 
         try:
-            res = requests.post(url=url, data=json.dumps(create_req), headers=headers,verify=False)
+            res = requests.post(url=url, data=json.dumps(create_req),
+                                headers=headers, verify=False)
             if res.status_code != status.HTTP_201_CREATED:
-                return Response(data={"error":res.content}, status=res.status_code)
+                return Response(data={"error": res.content},
+                                status=res.status_code)
             tokenInfo = res.json()
             resHeader = dict(res.headers)
         except Exception as e:
