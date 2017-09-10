@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_35cd4b5e",
+        "filename": "vio/vio/swagger/views/proxyplugin/identity/views.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2017-09-10T05:10:12Z",
+      "side": 1,
+      "message": "Add a space between \u0027,\u0027 and \u0027v\u0027",
+      "range": {
+        "startLine": 96,
+        "startChar": 46,
+        "endLine": 96,
+        "endChar": 48
+      },
+      "revId": "76afc71afd77569ff156ffda333a9c7bf0a8dfbd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_15dc8711",
+        "filename": "vio/vio/swagger/views/proxyplugin/identity/views.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2017-09-10T05:10:12Z",
+      "side": 1,
+      "message": "Add a space between \u0027,\u0027 and \u0027v\u0027",
+      "range": {
+        "startLine": 149,
+        "startChar": 85,
+        "endLine": 149,
+        "endChar": 87
+      },
+      "revId": "76afc71afd77569ff156ffda333a9c7bf0a8dfbd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
