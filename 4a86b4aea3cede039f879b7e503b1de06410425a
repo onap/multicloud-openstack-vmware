@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_75ebd3b0",
+        "filename": "vio/vio/swagger/views/proxyplugin/identity/views.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2017-09-10T05:08:09Z",
+      "side": 1,
+      "message": "multicloud?",
+      "range": {
+        "startLine": 100,
+        "startChar": 71,
+        "endLine": 100,
+        "endChar": 79
+      },
+      "revId": "4a86b4aea3cede039f879b7e503b1de06410425a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
