@@ -38,6 +38,10 @@ from vio.swagger.views.proxyplugin.neutron.views import NetWorkServer
 from vio.swagger.views.proxyplugin.volumn.views import VolumeServer
 from vio.swagger.views.proxyplugin.heat.views import HeatServer
 
+# extensions
+from vio.swagger.views.extensions.views import Extensions
+
+
 urlpatterns = [
     url(r'^api/multicloud-vio/v0/swagger.json$', SwaggerJsonView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
@@ -133,14 +137,20 @@ urlpatterns = [
         NetWorkServer.as_view()),
 
     url(
-        r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
-        /heat/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        (r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)'
+         r'/heat/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$'),
         HeatServer.as_view()),
 
     url(
         r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
         /nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         ComputeServer.as_view()),
+
+    # Extensions
+    url(
+        (r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)'
+         r'/extensions$'),
+        Extensions.as_view()),
 
 ]
 
