@@ -38,6 +38,10 @@ from vio.swagger.views.proxyplugin.neutron.views import NetWorkServer
 from vio.swagger.views.proxyplugin.volumn.views import VolumeServer
 from vio.swagger.views.proxyplugin.heat.views import HeatServer
 
+# Registry
+from vio.swagger.views.registry.views import Registry
+
+
 urlpatterns = [
     url(r'^api/multicloud-vio/v0/swagger.json$', SwaggerJsonView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
@@ -95,6 +99,12 @@ urlpatterns = [
         /(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
         r'(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortView.as_view()),
+
+    # Registry
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/registry$',
+        Registry.as_view()),
+    # url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)$',
+    #     Registry.as_view()),
 
     #   proxy
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',

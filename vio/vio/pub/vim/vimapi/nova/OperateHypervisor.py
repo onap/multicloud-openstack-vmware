@@ -29,3 +29,11 @@ class OperateHypervisor(OperateNova):
                                 **kwargs)
         except exceptions.ResourceNotFound:
             return None
+
+    def list_hypervisors(self, data, **query):
+        try:
+            return self.request('list_hypervisors', data,
+                                project_id=data['project_id'],
+                                **query)
+        except exceptions.ResourceNotFound:
+            return None
