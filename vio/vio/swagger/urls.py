@@ -41,6 +41,9 @@ from vio.swagger.views.proxyplugin.heat.views import HeatServer
 # Registry
 from vio.swagger.views.registry.views import Registry
 
+# Extensions
+from vio.swagger.views.extensions.views import Extensions
+
 
 urlpatterns = [
     url(r'^api/multicloud-vio/v0/swagger.json$', SwaggerJsonView.as_view()),
@@ -151,6 +154,12 @@ urlpatterns = [
         r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)\
         /nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         ComputeServer.as_view()),
+
+    # Extensions
+    url(
+        (r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)'
+         r'/extensions$'),
+        Extensions.as_view()),
 
 ]
 
