@@ -26,7 +26,7 @@
     <artifactId>multicloud-vio</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>multicloud/opentack/vmware</name>
+    <name>multicloud-opentack-vmware</name>
     <description>multicloud vio</description>
     <build>
       <plugins>
