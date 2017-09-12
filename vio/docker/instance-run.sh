@@ -1,7 +1,5 @@
 #!/bin/bash -v
 
-redis-server &
-
 cd ./vio
 ./run.sh
 
