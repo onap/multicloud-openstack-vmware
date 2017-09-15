@@ -31,6 +31,7 @@ def get_vim_by_id(vim_id):
     ret['type'] = ret['cloud-type']
     ret['version'] = ret['cloud-region-version']
     ret['vimId'] = vim_id
+    ret['name'] = vim_id
     ret['userName'] = ret['esr-system-info-list'][
         'esr-system-info'][0]['username']
     ret['password'] = ret['esr-system-info-list'][
@@ -39,4 +40,10 @@ def get_vim_by_id(vim_id):
         'esr-system-info'][0]['default-tenant']
     ret['url'] = ret['esr-system-info-list'][
         'esr-system-info'][0]['service-url']
+    ret['domain'] = ret['esr-system-info-list'][
+        'esr-system-info'][0]['cloud-domain']
+    ret['cacert'] = ret['esr-system-info-list'][
+        'esr-system-info'][0]['ssl-cacert']
+    ret['insecure'] = ret['esr-system-info-list'][
+        'esr-system-info'][0]['ssl-insecure']
     return ret
