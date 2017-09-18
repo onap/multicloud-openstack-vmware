@@ -41,9 +41,36 @@ from vio.swagger.views.proxyplugin.heat.views import HeatServer
 # Registry
 from vio.swagger.views.registry.views import Registry
 
+# fake
+from vio.swagger.views.fakeplugin.identity.views import FakeProjects
+from vio.swagger.views.fakeplugin.identity.views import FakeToken
+from vio.swagger.views.fakeplugin.image.views import FakeImage
+from vio.swagger.views.fakeplugin.image.views import FakeImageDetail
+from vio.swagger.views.fakeplugin.image.views import FakeImageSchema
+from vio.swagger.views.fakeplugin.nova.views import FakeNovaServer
+from vio.swagger.views.fakeplugin.nova.views import FakeNovaHypervisors
+from vio.swagger.views.fakeplugin.nova.views import FakeNovaAggregate
+from vio.swagger.views.fakeplugin.nova.views import FakeNovaHypervisorsUptime
+from vio.swagger.views.fakeplugin.nova.views import FakeNovaServerDetail
+from vio.swagger.views.fakeplugin.nova.views import FakeFlavorList
+from vio.swagger.views.fakeplugin.nova.views import FakeFlavorDetail
+from vio.swagger.views.fakeplugin.neutron.views import FakeNeutron
+from vio.swagger.views.fakeplugin.neutron.views import FakeNeutronDetail
+from vio.swagger.views.fakeplugin.neutron.views import FakeNeutronNetwork
+
 
 urlpatterns = [
+    # swagger
     url(r'^api/multicloud-vio/v0/swagger.json$', SwaggerJsonView.as_view()),
+
+    # fake urls
+    url(r'^api/multicloud-vio/v0/vmware_fake/neutron/networks$',
+        FakeNeutronNetwork.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/neutron/networks/'
+        r'(?P<netid>[0-9a-z-A-Z]+)$',
+        FakeNeutronDetail.as_view()),
+
+    # vio
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'tenants$', ListTenantsView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
@@ -100,9 +127,65 @@ urlpatterns = [
         r'(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortView.as_view()),
 
+    # fake urls
+    url(r'^api/multicloud-vio/v0/vmware_fake/identity/v3',
+        FakeToken.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/identity/projects$',
+        FakeProjects.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/identity/projects/'
+        r'(?P<projectid>[0-9a-z-A-Z]+)$',
+        FakeProjects.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
+        r'/os-hypervisors/detail$',
+        FakeNovaHypervisors.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/os-hypervisors/'
+        r'(?P<hyperid>[0-9a-z-A-Z]+)$',
+        FakeNovaHypervisors.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/os-hypervisors/'
+        r'(?P<hyperid>[0-9a-z-A-Z]+)/uptime$',
+        FakeNovaHypervisorsUptime.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/os-aggregates$',
+        FakeNovaAggregate.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/servers$',
+        FakeNovaServer.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/servers/detail$',
+        FakeNovaServerDetail.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/servers/'
+        r'(?P<serverid>[0-9a-z-A-Z]+)$',
+        FakeNovaServer.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/servers/'
+        r'(?P<serverid>[0-9a-z-A-Z]+)/action$',
+        FakeNovaServer.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/flavors$',
+        FakeFlavorList.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/flavors/'
+        r'(?P<flavorid>[0-9a-z-A-Z]+)$',
+        FakeFlavorDetail.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/glance/v2/schemas/image$',
+        FakeImageSchema.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/glance/v2/images/'
+        r'(?P<imageid>[0-9a-z-A-Z\-\_]+)$',
+        FakeImageDetail.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/glance/v2/images',
+        FakeImage.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/glance/version',
+        FakeImage.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/neutron$',
+        FakeNeutron.as_view()),
+
     # Registry
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/registry$',
-        Registry.as_view()),
+        .as_view()),
     # url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)$',
     #     Registry.as_view()),
 
