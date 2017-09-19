@@ -87,26 +87,12 @@ class ServerViewTest(unittest.TestCase):
         self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR,
                          self.lsv.get(req, "vimid", "tenantid").status_code)
 
-    @mock.patch.object(nova_utils, 'server_formatter')
-    @mock.patch.object(OperateServers, 'list_servers')
+    @mock.patch.object(OperateServers, 'get_server')
     @mock.patch.object(extsys, 'get_vim_by_id')
-    def test_server_get_view_fail(self, mock_vim_info,
-                                  mock_servers, mock_formatter):
+    def test_server_get_view_fail(self, mock_vim_info, mock_servers):
         mock_vim_info.return_value = VIM_INFO
 
-        class Server:
-            def __init__(self, id, project_id, name, availability_zone):
-                self.id = id
-                self.project_id = project_id
-                self.name = name
-                self.availability_zone = availability_zone
-        s1 = Server(1, "p1", "name1", "nova")
-        s2 = Server(2, "p2", "name2", "nova")
-        servers = [s1, s2]
-        mock_servers.return_value = servers
-        os = OperateServers()
-        os.list_server_interfaces = mock.Mock(return_value=[])
-        mock_formatter.return_value = servers
+        mock_servers.side_effect = TypeError('wrong type')
 
         class Request:
             def __init__(self, query_params):
@@ -136,16 +122,17 @@ class ServerViewTest(unittest.TestCase):
             status.HTTP_204_NO_CONTENT,
             self.gsv.delete(req, "vimid", "tenantid", "serverid").status_code)
 
+    @mock.patch.object(OperateServers, 'delete_server')
     @mock.patch.object(extsys, 'get_vim_by_id')
-    def test_delete_server_view_fail(self, mock_vim_info):
+    def test_delete_server_view_fail(self, mock_vim_info, mock_delete_server):
         mock_vim_info.return_value = VIM_INFO
-        os = OperateServers()
-        os.delete_server = mock.Mock(return_value=[])
+        mock_delete_server.side_effect = TypeError("wrong type")
 
         class Request:
             def __init__(self, query_params):
                 self.query_params = query_params
         req = Request({'k': 'v'})
+
         self.assertEqual(
             status.HTTP_500_INTERNAL_SERVER_ERROR,
             self.gsv.delete(req, "vimid", "tenantid", "serverid").status_code)

@@ -35,12 +35,12 @@ class FlavorViewTest(unittest.TestCase):
 
     @mock.patch.object(nova_utils, 'flavor_formatter')
     @mock.patch.object(OperateFlavors, 'find_flavor')
+    @mock.patch.object(OperateFlavors, 'get_flavor')
     @mock.patch.object(extsys, 'get_vim_by_id')
-    def test_flavor_list_view_fail(self, mock_vim_info,
+    def test_flavor_list_view_fail(self, mock_vim_info, mock_get_flavor,
                                    mock_find_flavor, mock_formatter):
 
         mock_vim_info.return_value = VIM_INFO
-        mock_formatter.return_value = {"vimName": "name", "vimId": 1}
 
         class Request:
             def __init__(self, query_params, body, method):
@@ -48,10 +48,28 @@ class FlavorViewTest(unittest.TestCase):
                 self.body = body
                 self.method = method
         req = Request({'k': 'v'},
-                      json.dumps({'name': 'flavor-name', 'id': 1}), "POST")
+                      json.dumps({'name': 'flavor-name', 'flavor_id': 1}),
+                      "POST")
         self.assertEqual(
             status.HTTP_500_INTERNAL_SERVER_ERROR,
             self.fsv.post(req, "vimid", "tenantid").status_code)
+
+    @mock.patch.object(nova_utils, 'flavor_formatter')
+    @mock.patch.object(OperateFlavors, 'get_flavor')
+    @mock.patch.object(extsys, 'get_vim_by_id')
+    def test_flavor_get_fail(self, mock_vim_info,
+                             mock_get_flavor, mock_formatter):
+        mock_vim_info.return_value = VIM_INFO
+
+        mock_formatter.return_value = {"id": 1, "name": "nova"}
+
+        class Request:
+            def __init__(self, query_params):
+                self.query_params = query_params
+        req = Request({'k': 'v'})
+        self.assertEqual(
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            self.fv.get(req, "vimid", "tenantid", "flavorid").status_code)
 
     @mock.patch.object(nova_utils, 'flavor_formatter')
     @mock.patch.object(OperateFlavors, 'list_flavors')
@@ -102,22 +120,6 @@ class FlavorViewTest(unittest.TestCase):
             status.HTTP_200_OK,
             self.fv.get(req, "vimid", "tenantid", "flavorid").status_code)
 
-    @mock.patch.object(nova_utils, 'flavor_formatter')
-    @mock.patch.object(extsys, 'get_vim_by_id')
-    def test_flavor_get_fail(self, mock_vim_info, mock_formatter):
-        mock_vim_info.return_value = VIM_INFO
-        of = OperateFlavors()
-        of.get_flavor = mock.Mock([])
-        mock_formatter.return_value = {"id": 1, "name": "nova"}
-
-        class Request:
-            def __init__(self, query_params):
-                self.query_params = query_params
-        req = Request({'k': 'v'})
-        self.assertEqual(
-            status.HTTP_500_INTERNAL_SERVER_ERROR,
-            self.fv.get(req, "vimid", "tenantid", "flavorid").status_code)
-
     @mock.patch.object(OperateFlavors, 'delete_flavor')
     @mock.patch.object(extsys, 'get_vim_by_id')
     def test_flavor_delete_view(self, mock_vim_info, mock_delete_flavor):
@@ -141,12 +143,12 @@ class FlavorViewTest(unittest.TestCase):
             status.HTTP_204_NO_CONTENT,
             self.fv.delete(req, "vimid", "tenantid", "flavorid").status_code)
 
+    @mock.patch.object(OperateFlavors, 'delete_flavor')
     @mock.patch.object(extsys, 'get_vim_by_id')
-    def test_flavor_delete_view_fail(self, mock_vim_info):
+    def test_flavor_delete_view_fail(self, mock_vim_info, mock_delete_flavor):
 
         mock_vim_info.return_value = VIM_INFO
-        of = OperateFlavors()
-        of.delete_flavor = mock.Mock([])
+        mock_delete_flavor.side_effect = TypeError("wrong type")
 
         class Request:
             def __init__(self, query_params, method):

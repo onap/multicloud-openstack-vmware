@@ -51,11 +51,12 @@ class LimitsViewTest(unittest.TestCase):
             self.lv.get(req, "vimid", "tenantid").status_code)
 
     @mock.patch.object(nova_utils, 'server_limits_formatter')
+    @mock.patch.object(OperateLimits, 'get_limits')
     @mock.patch.object(extsys, 'get_vim_by_id')
-    def test_server_get_limit_fail(self, mock_vim_info, mock_formatter):
+    def test_server_get_limit_fail(self, mock_vim_info,
+                                   mock_limits, mock_formatter):
         mock_vim_info.return_value = VIM_INFO
-        ol = OperateLimits()
-        ol.get_limits = mock.Mock({})
+        mock_limits.side_effect = KeyError('wrong type')
         mock_formatter.return_value = {"name": "name1", "project_id": 1}
 
         class Request:
