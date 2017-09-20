@@ -2,7 +2,7 @@
 
 # Configure MSB IP address
 MSB_IP=`echo $MSB_ADDR | cut -d: -f 1`
-MSB_PORT=`echo $MSB_ADDR | cut -d: -f 2`
+MSB_PORT=`echo $MSB_PORT | cut -d: -f 2`
 sed -i "s|MSB_SERVICE_IP.*|MSB_SERVICE_IP = '$MSB_IP'|" vio/vio/pub/config/config.py
 sed -i "s|MSB_SERVICE_PORT.*|MSB_SERVICE_PORT = '$MSB_PORT'|" vio/vio/pub/config/config.py
 sed -i "s|DB_NAME.*|DB_NAME = 'inventory'|" vio/vio/pub/config/config.py
