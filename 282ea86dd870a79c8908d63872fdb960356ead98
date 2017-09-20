@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_0d47b24c",
+        "filename": "vio/vio/swagger/urls.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2017-09-20T06:15:28Z",
+      "side": 1,
+      "message": "Why not put them together with L133-186?",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 37
+      },
+      "revId": "282ea86dd870a79c8908d63872fdb960356ead98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
