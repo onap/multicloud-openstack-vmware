@@ -69,14 +69,15 @@ class BaseClient(APIView):
 
     def buildRequest(self, request, vimid, tenantid="", tail=None):
 
+        headers = {}
         preUrl = catalog.getEndpointBy(
             vimid, serverType=self.serverType, interface="public")
         token = request.META.get('HTTP_X_AUTH_TOKEN', "")
         tail = "/" + tail if tail else ""
         tenantid = "/" + tenantid if tenantid else ""
         endPointURL = preUrl + tenantid + tail
-
-        headers = {"X-Auth-Token": token}
+        headers["X-Auth-Token"] = token
+        headers["X-Subject-Token"] = token
         headers['Content-Type'] = request.META.get(
             "CONTENT_TYPE", "application/json")
         try:
@@ -84,7 +85,7 @@ class BaseClient(APIView):
         except Exception:
             json_req = ""
 
-        return (endPointURL, headers, json_req)
+        return endPointURL, headers, json_req
 
     def _request(self, url, method, redirect=20,
                  connect_retries=0, connect_retry_delay=0.5, **kwargs):

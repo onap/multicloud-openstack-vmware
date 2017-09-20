@@ -33,7 +33,7 @@ def get_vim_by_id(vim_id):
     ret['vimId'] = vim_id
     ret['name'] = vim_id
     ret['userName'] = ret['esr-system-info-list'][
-        'esr-system-info'][0]['username']
+        'esr-system-info'][0]['user-name']
     ret['password'] = ret['esr-system-info-list'][
         'esr-system-info'][0]['password']
     ret['tenant'] = ret['esr-system-info-list'][
@@ -43,7 +43,7 @@ def get_vim_by_id(vim_id):
     ret['domain'] = ret['esr-system-info-list'][
         'esr-system-info'][0]['cloud-domain']
     ret['cacert'] = ret['esr-system-info-list'][
-        'esr-system-info'][0]['ssl-cacert']
+        'esr-system-info'][0].get('ssl-cacert', "")
     ret['insecure'] = ret['esr-system-info-list'][
-        'esr-system-info'][0]['ssl-insecure']
+        'esr-system-info'][0].get('ssl-insecure', False)
     return ret
