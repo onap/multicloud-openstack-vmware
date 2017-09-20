@@ -19,6 +19,8 @@ from vio.swagger.views.registry.views import Registry
 from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.keystone.OperateTenant import OperateTenant
 from vio.pub.vim.vimapi.glance.OperateImage import OperateImage
+from vio.pub.vim.vimapi.nova.OperateFlavors import OperateFlavors
+from vio.pub.vim.vimapi.nova.OperateHypervisor import OperateHypervisor
 
 VIM_INFO = {'vimId': 1, 'name': 'name1', 'userName': 'user1',
             'password': '1234', 'url': 'abc', 'tenant': 't1'}
@@ -113,3 +115,78 @@ class RegistryViewTest(unittest.TestCase):
         self.assertEqual(
             {'images': [{'id': 1, 'name': 'i1'}, {'id': 2, 'name': 'i2'}]},
             self.reg._get_images(a))
+
+    @mock.patch.object(OperateFlavors, 'list_flavors')
+    @mock.patch.object(extsys, 'get_vim_by_id')
+    def test_reg_get_flavors_view_fail(self, mock_vim_info, mock_flavors):
+        mock_vim_info.return_value = VIM_INFO
+
+        class Flavor:
+            def __init__(self, id, name):
+                self.id = id
+                self.name = name
+
+            def to_dict(self):
+                return {"name": self.name, "id": self.id}
+        f1 = Flavor(1, "f1")
+        f2 = Flavor(2, "f2")
+        flavors = [[f1], [f2]]
+        mock_flavors.return_value = flavors
+        auth = {"name": "user", "tenant": "t1", "auth_url": "url"}
+
+        self.assertEqual(
+            {'flavors': [{'id': 1, 'name': 'f1'}, {'id': 2, 'name': 'f2'}]},
+            self.reg._get_flavors(auth))
+
+    @mock.patch.object(OperateFlavors, 'list_flavors')
+    @mock.patch.object(extsys, 'get_vim_by_id')
+    def test_reg_get_flavors_view_fail2(self, mock_vim_info, mock_flavors):
+        mock_vim_info.return_value = VIM_INFO
+        mock_flavors.side_effect = TypeError("wrong type")
+        self.assertEqual(
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            self.reg._get_flavors("viminfo").status_code)
+
+    @mock.patch.object(OperateHypervisor, 'list_hypervisors')
+    @mock.patch.object(extsys, 'get_vim_by_id')
+    def test_reg_get_hypervisors_view(self, mock_vim_info, mock_hypervisor):
+        mock_vim_info.return_value = VIM_INFO
+
+        class Hypervisor:
+            def __init__(self, id, name):
+                self.id = id
+                self.name = name
+
+            def to_dict(self):
+                return {"name": self.name, "id": self.id}
+        h1 = Hypervisor(1, "h1")
+        h2 = Hypervisor(2, "h2")
+        hypervisors = [h1, h2]
+        mock_hypervisor.return_value = hypervisors
+
+        class Auth:
+            def __init__(self, id):
+                self.id = id
+
+            def get(self, username):
+                self.username = username
+        a = Auth(1)
+        self.assertEqual(
+            {'hypervisors': [{'id': 1, 'name': 'h1'},
+                             {'id': 2, 'name': 'h2'}]},
+            self.reg._get_hypervisors(a))
+
+    @mock.patch.object(OperateHypervisor, 'list_hypervisors')
+    @mock.patch.object(extsys, 'get_vim_by_id')
+    def test_reg_get_hypervisors_view_fail(self,
+                                           mock_vim_info, mock_hypervisor):
+        mock_vim_info.return_value = VIM_INFO
+        mock_hypervisor.side_effect = TypeError("wrong type")
+        self.assertEqual(
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            self.reg._get_hypervisors("viminfo").status_code)
+
+    def test_reg_find_tenant(self):
+        tenants = {"tenants": [
+            {"name": "t1", "id": 1}, {"name": "t2", "id": 2}]}
+        self.assertEqual(self.reg._find_tenant_id("t2", tenants), 2)
