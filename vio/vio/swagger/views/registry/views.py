@@ -24,6 +24,7 @@ from vio.pub.vim.vimapi.keystone import OperateTenant
 from vio.pub.vim.vimapi.glance import OperateImage
 from vio.pub.vim.vimapi.nova import OperateFlavors
 from vio.pub.vim.vimapi.nova import OperateHypervisor
+from vio.pub.vim.vimapi.network import OperateNetwork
 
 
 logger = logging.getLogger(__name__)
@@ -76,6 +77,20 @@ class Registry(APIView):
             rsp['flavors'].append(flavor[0].to_dict())
         return rsp
 
+    def _get_networks(self, auth_info):
+        net_op = OperateNetwork.OperateNetwork()
+        try:
+            resp = net_op.list_networks(
+                auth_info['vimId'], auth_info['tenant'])
+        except Exception as e:
+            if hasattr(e, "http_status"):
+                return Response(data={'error': str(e)}, status=e.http_status)
+            else:
+                return Response(data={'error': str(e)},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        rsp = {'networks': resp['networks']}
+        return rsp
+
     def _get_hypervisors(self, auth_info):
         hypervisor_op = OperateHypervisor.OperateHypervisor()
         try:
@@ -112,7 +127,7 @@ class Registry(APIView):
         rsp = {}
         # get tenants
         try:
-            print('Updating tenants')
+            logger.debug('Getting tenants')
             tenants = self._get_tenants(data)
             rsp.update(tenants)
             data['tenant'] = self._find_tenant_id(
@@ -120,19 +135,23 @@ class Registry(APIView):
             data['project_id'] = data['tenant']
             # set default tenant
             # get images
-            print('Updating images')
+            logger.debug('Getting images')
             images = self._get_images(data)
             rsp.update(images)
             # get flavors
-            print('Updating flavors')
+            logger.debug('Getting flavors')
             flavors = self._get_flavors(data)
             rsp.update(flavors)
+            # get networks
+            logger.debug('Getting networks')
+            networks = self._get_networks(data)
+            rsp.update(networks)
             # get hypervisors
-            print('Updating hypervisors')
+            logger.debug('Getting hypervisors')
             hypervisors = self._get_hypervisors(data)
             rsp.update(hypervisors)
             # update A&AI
-            print('Put data into A&AI')
+            logger.debug('Put data into A&AI')
             cloud_owner, cloud_region = extsys.split_vim_to_owner_region(
                 vimid)
             aai_adapter = AAIClient(cloud_owner, cloud_region)
@@ -142,38 +161,16 @@ class Registry(APIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data="", status=status.HTTP_200_OK)
 
+
+class UnRegistry(APIView):
+
     def delete(self, request, vimid):
         try:
-            vim_info = extsys.get_vim_by_id(vimid)
-        except VimDriverVioException as e:
-            return Response(data={'error': str(e)}, status=e.status_code)
-
-        data = {}
-        data['vimId'] = vim_info['vimId']
-        data['username'] = vim_info['userName']
-        data['password'] = vim_info['password']
-        data['url'] = vim_info['url']
-        data['project_name'] = vim_info['tenant']
-
-        query = dict(request.query_params)
-        tenant_instance = OperateTenant.OperateTenant()
-        try:
-            projects = tenant_instance.get_projects(data, **query)
+            cloud_owner, cloud_region = extsys.split_vim_to_owner_region(
+                    vimid)
+            aai_adapter = AAIClient(cloud_owner, cloud_region)
+            aai_adapter.delete_vim()
         except Exception as e:
-            if hasattr(e, "http_status"):
-                return Response(data={'error': str(e)}, status=e.http_status)
-            else:
-                return Response(data={'error': str(e)},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        rsp = {}
-        rsp['vimId'] = vim_info['vimId']
-        rsp['vimName'] = vim_info['name']
-        rsp['tenants'] = []
-
-        for project in projects:
-            tenant = {}
-            tenant['id'] = project.id
-            tenant['name'] = project.name
-            rsp['tenants'].append(tenant)
-        return Response(data=rsp, status=status.HTTP_200_OK)
+            return Response(data=e.message,
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data="", status=status.HTTP_204_NO_CONTENT)

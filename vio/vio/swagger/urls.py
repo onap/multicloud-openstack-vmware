@@ -40,6 +40,7 @@ from vio.swagger.views.proxyplugin.heat.views import HeatServer
 
 # Registry
 from vio.swagger.views.registry.views import Registry
+from vio.swagger.views.registry.views import UnRegistry
 
 # Extensions
 from vio.swagger.views.extensions.views import Extensions
@@ -106,8 +107,8 @@ urlpatterns = [
     # Registry
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/registry$',
         Registry.as_view()),
-    # url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)$',
-    #     Registry.as_view()),
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)$',
+        UnRegistry.as_view()),
 
     #   proxy
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',

@@ -161,8 +161,22 @@ class AAIClient(object):
         return json.loads(resp[1])
 
     def delete_vim(self):
+        resp = self.get_vim(get_all=True)
+        logger.debug('Delete tenants')
+        self._del_tenants(resp)
+        logger.debug('Delete images')
+        self._del_images(resp)
+        logger.debug('Delete flavors')
+        self._del_flavors(resp)
+        logger.debug('Delete networks')
+        self._del_networks(resp)
+        logger.debug('Delete availability zones')
+        self._del_azs(resp)
+        logger.debug('Delete cloud region')
         resource = ("/cloud-infrastructure/cloud-regions/cloud-region"
-                    "/%s/%s" % (self.cloud_owner, self.cloud_region))
+                    "/%s/%s?resource-version=%s" %
+                    (self.cloud_owner, self.cloud_region,
+                     resp['resource-version']))
         resp = call_req(self.base_url, self.username, self.password,
                         rest_no_auth, resource, "DELETE",
                         headers=self.default_headers)
@@ -171,7 +185,6 @@ class AAIClient(object):
                 status_code=400,
                 content="Failed to delete cloud %s_%s: %s." % (
                     self.cloud_owner, self.cloud_region, resp[1]))
-        return json.loads(resp[1])
 
     def update_vim(self, content):
         # update identity url
@@ -182,6 +195,8 @@ class AAIClient(object):
         self.add_images(content)
         # update images
         self.add_flavors(content)
+        # update networks
+        self.add_networks(content)
         # update pservers
         self.add_pservers(content)
 
@@ -250,6 +265,22 @@ class AAIClient(object):
                      content=json.dumps(body),
                      headers=self.default_headers)
 
+    def add_networks(self, content):
+        for network in content['networks']:
+            resource = ("/cloud-infrastructure/cloud-regions/cloud-region/"
+                        "%s/%s/oam-networks/oam-network/%s" % (
+                            self.cloud_owner, self.cloud_region,
+                            network['id']))
+            body = {
+                'network-uuid': network['id'],
+                'network-name': network['name'],
+                'cvlan-tag': network['segmentationId'] or 0,
+            }
+            call_req(self.base_url, self.username, self.password,
+                     rest_no_auth, resource, "PUT",
+                     content=json.dumps(body),
+                     headers=self.default_headers)
+
     def add_pservers(self, content):
         for hypervisor in content['hypervisors']:
             resource = ("/cloud-infrastructure/pservers/pserver/%s" % (
@@ -305,3 +336,97 @@ class AAIClient(object):
                      rest_no_auth, resource, "PUT",
                      content=json.dumps(body),
                      headers=self.default_headers)
+
+    def _del_tenants(self, rsp):
+        tenants = rsp.get("tenants", [])
+        if not tenants:
+            return
+        for tenant in tenants["tenant"]:
+            resource = ("/cloud-infrastructure/cloud-regions/cloud-region/"
+                        "%s/%s/tenants/tenant/%s?resource-version=%s" % (
+                            self.cloud_owner, self.cloud_region,
+                            tenant['tenant-id'], tenant['resource-version']))
+            resp = call_req(self.base_url, self.username, self.password,
+                            rest_no_auth, resource, "DELETE",
+                            headers=self.default_headers)
+            if resp[0] != 0:
+                raise VimDriverVioException(
+                    status_code=400,
+                    content="Failed to delete tenant %s: %s." % (
+                        tenant['tenant-id'], resp[1]))
+
+    def _del_flavors(self, rsp):
+        tenants = rsp.get("flavors", [])
+        if not tenants:
+            return
+        for tenant in tenants["flavor"]:
+            resource = ("/cloud-infrastructure/cloud-regions/cloud-region/"
+                        "%s/%s/flavors/flavor/%s?resource-version=%s" % (
+                            self.cloud_owner, self.cloud_region,
+                            tenant['flavor-id'], tenant['resource-version']))
+            resp = call_req(self.base_url, self.username, self.password,
+                            rest_no_auth, resource, "DELETE",
+                            headers=self.default_headers)
+            if resp[0] != 0:
+                raise VimDriverVioException(
+                    status_code=400,
+                    content="Failed to delete flavor %s: %s." % (
+                        tenant['flavor-id'], resp[1]))
+
+    def _del_images(self, rsp):
+        tenants = rsp.get("images", [])
+        if not tenants:
+            return
+        for tenant in tenants["image"]:
+            resource = ("/cloud-infrastructure/cloud-regions/cloud-region/"
+                        "%s/%s/images/image/%s?resource-version=%s" % (
+                            self.cloud_owner, self.cloud_region,
+                            tenant['image-id'], tenant['resource-version']))
+            resp = call_req(self.base_url, self.username, self.password,
+                            rest_no_auth, resource, "DELETE",
+                            headers=self.default_headers)
+            if resp[0] != 0:
+                raise VimDriverVioException(
+                    status_code=400,
+                    content="Failed to delete image %s: %s." % (
+                        tenant['image-id'], resp[1]))
+
+    def _del_networks(self, rsp):
+        networks = rsp.get("oam-networks", [])
+        if not networks:
+            return
+        for network in networks["oam-network"]:
+            resource = ("/cloud-infrastructure/cloud-regions/cloud-region/"
+                        "%s/%s/oam-networks/oam-network/%s?"
+                        "resource-version=%s" % (
+                            self.cloud_owner, self.cloud_region,
+                            network['network-uuid'],
+                            network['resource-version']))
+            resp = call_req(self.base_url, self.username, self.password,
+                            rest_no_auth, resource, "DELETE",
+                            headers=self.default_headers)
+            if resp[0] != 0:
+                raise VimDriverVioException(
+                    status_code=400,
+                    content="Failed to delete network %s: %s." % (
+                        network['network-uuid'], resp[1]))
+
+    def _del_azs(self, rsp):
+        azs = rsp.get("availability-zones", [])
+        if not azs:
+            return
+        for az in azs["availability-zone"]:
+            resource = ("/cloud-infrastructure/cloud-regions/cloud-region/"
+                        "%s/%s/availability-zones/availability-zone/%s?"
+                        "resource-version=%s" % (
+                            self.cloud_owner, self.cloud_region,
+                            az['availability-zone-name'],
+                            az['resource-version']))
+            resp = call_req(self.base_url, self.username, self.password,
+                            rest_no_auth, resource, "DELETE",
+                            headers=self.default_headers)
+            if resp[0] != 0:
+                raise VimDriverVioException(
+                    status_code=400,
+                    content="Failed to delete availability zone %s: %s." % (
+                        az['availability-zone-name'], resp[1]))
