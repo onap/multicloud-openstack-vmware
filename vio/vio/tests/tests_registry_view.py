@@ -14,9 +14,11 @@ import unittest
 import mock
 from rest_framework import status
 from vio.swagger.views.registry.views import Registry
+from vio.swagger.views.registry.views import UnRegistry
 
 
 from vio.pub.msapi import extsys
+from vio.pub.utils.restcall import AAIClient
 from vio.pub.vim.vimapi.keystone.OperateTenant import OperateTenant
 from vio.pub.vim.vimapi.glance.OperateImage import OperateImage
 from vio.pub.vim.vimapi.nova.OperateFlavors import OperateFlavors
@@ -33,28 +35,6 @@ class RegistryViewTest(unittest.TestCase):
 
     def tearDown(self):
         pass
-
-    @mock.patch.object(OperateTenant, 'get_projects')
-    @mock.patch.object(extsys, 'get_vim_by_id')
-    def test_reg_delete_view(self, mock_vim_info, mock_projects):
-        mock_vim_info.return_value = VIM_INFO
-
-        class Project:
-            def __init__(self, id, name):
-                self.id = id
-                self.name = name
-        p1 = Project(1, "p1")
-        p2 = Project(2, "p2")
-        projects = [p1, p2]
-        mock_projects.return_value = projects
-
-        class Request:
-            def __init__(self, query_params):
-                self.query_params = query_params
-        req = Request({'k': 'v'})
-        self.assertEqual(
-            status.HTTP_200_OK,
-            self.reg.delete(req, "vimid").status_code)
 
     @mock.patch.object(OperateTenant, 'get_projects')
     @mock.patch.object(extsys, 'get_vim_by_id')
@@ -190,3 +170,25 @@ class RegistryViewTest(unittest.TestCase):
         tenants = {"tenants": [
             {"name": "t1", "id": 1}, {"name": "t2", "id": 2}]}
         self.assertEqual(self.reg._find_tenant_id("t2", tenants), 2)
+
+
+class UnRegistryViewTest(unittest.TestCase):
+
+    def setUp(self):
+        self.reg = UnRegistry()
+
+    def tearDown(self):
+        pass
+
+    @mock.patch.object(AAIClient, 'delete_vim')
+    @mock.patch.object(extsys, 'get_vim_by_id')
+    def test_reg_delete_view(self, mock_vim_info, mock_del_vim):
+        mock_vim_info.return_value = VIM_INFO
+
+        class Request:
+            def __init__(self, query_params):
+                self.query_params = query_params
+        req = Request({'k': 'v'})
+        self.assertEqual(
+            status.HTTP_204_NO_CONTENT,
+            self.reg.delete(req, "vimid").status_code)

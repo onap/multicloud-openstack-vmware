@@ -24,7 +24,6 @@ class GlanceClient(base.DriverBase):
 
     def __init__(self, params):
         super(GlanceClient, self).__init__(params)
-        LOG.info("%s", str(params))
         self.conn = sdk.create_connection(params)
         self.session = self.conn.session
         self._proxy = self.conn.image
