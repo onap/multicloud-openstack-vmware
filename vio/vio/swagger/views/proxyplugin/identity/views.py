@@ -46,7 +46,26 @@ class IdentityServer(BaseClient):
         if query != "":
             query = query[:-1]
             url += "/?" + query
-        return self._request(url, method="GET", headers=headers)
+
+        try:
+            res = self._request(url, method="GET", headers=headers)
+            if res.status_code != status.HTTP_200_OK:
+                return Response(data={"error": res.content},
+                                status=res.status_code)
+            res = res.data
+            # replace keystone auth url with multicloud
+            # identity url
+            if other is None:
+                res['version']['links'][0]['href'] = \
+                    "http://" + MSB_ADDRESS + "/multicloud-vio/v0/" \
+                    + vimid + "/identity"
+
+        except Exception as e:
+            logging.exception("error %s" % e)
+            return Response(data={"error": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(data=res, status=status.HTTP_200_OK)
 
     def patch(self, request, vimid, other):
 
