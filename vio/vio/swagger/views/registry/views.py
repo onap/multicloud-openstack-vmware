@@ -36,11 +36,9 @@ class Registry(APIView):
         try:
             projects = tenant_instance.get_projects(auth_info)
         except Exception as e:
-            if hasattr(e, "http_status"):
-                return Response(data={'error': str(e)}, status=e.http_status)
-            else:
-                return Response(data={'error': str(e)},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.exception("get tenants error %(e)s", {"e": e})
+            raise e
+
         rsp = {"tenants": []}
         for project in projects:
             rsp['tenants'].append(project.to_dict())
@@ -51,11 +49,9 @@ class Registry(APIView):
         try:
             images = image_instance.get_vim_images()
         except Exception as e:
-            if hasattr(e, "http_status"):
-                return Response(data={'error': str(e)}, status=e.http_status)
-            else:
-                return Response(data={'error': str(e)},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.exception("get images error %(e)s", {"e": e})
+            raise e
+
         rsp = {"images": []}
         for image in images:
             rsp['images'].append(image.to_dict())
@@ -67,11 +63,9 @@ class Registry(APIView):
             flavors = flavors_op.list_flavors(
                 auth_info, auth_info['tenant'])
         except Exception as e:
-            if hasattr(e, "http_status"):
-                return Response(data={'error': str(e)}, status=e.http_status)
-            else:
-                return Response(data={'error': str(e)},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.exception("get flavors error %(e)s", {"e": e})
+            raise e
+
         rsp = {"flavors": []}
         for flavor in flavors:
             rsp['flavors'].append(flavor[0].to_dict())
@@ -83,11 +77,9 @@ class Registry(APIView):
             resp = net_op.list_networks(
                 auth_info['vimId'], auth_info['tenant'])
         except Exception as e:
-            if hasattr(e, "http_status"):
-                return Response(data={'error': str(e)}, status=e.http_status)
-            else:
-                return Response(data={'error': str(e)},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.exception("get networks error %(e)s", {"e": e})
+            raise e
+
         rsp = {'networks': resp['networks']}
         return rsp
 
@@ -96,11 +88,9 @@ class Registry(APIView):
         try:
             hypervisors = hypervisor_op.list_hypervisors(auth_info)
         except Exception as e:
-            if hasattr(e, "http_status"):
-                return Response(data={'error': str(e)}, status=e.http_status)
-            else:
-                return Response(data={'error': str(e)},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.exception("get hypervisors error %(e)s", {"e": e})
+            raise e
+
         rsp = {"hypervisors": []}
         for hypervisor in hypervisors:
             rsp['hypervisors'].append(hypervisor.to_dict())
@@ -157,8 +147,12 @@ class Registry(APIView):
             aai_adapter = AAIClient(cloud_owner, cloud_region)
             aai_adapter.update_vim(rsp)
         except Exception as e:
-            return Response(data=e.message,
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            if hasattr(e, "http_status"):
+                return Response(data={'error': str(e)}, status=e.http_status)
+            else:
+                return Response(data={'error': str(e)},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return Response(data="", status=status.HTTP_200_OK)
 
 
