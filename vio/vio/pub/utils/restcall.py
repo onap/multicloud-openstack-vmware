@@ -249,11 +249,15 @@ class AAIClient(object):
             resource = ("/cloud-infrastructure/cloud-regions/cloud-region/"
                         "%s/%s/images/image/%s" % (
                             self.cloud_owner, self.cloud_region, image['id']))
+            split_image_name = image['name'].split("-")
+            image-os-distro = split_image_name[0]
+            image-os-version = (split_image_name[1] if \
+                len(split_image_name) > 1 else "")
             body = {
                 'image-name': image['name'],
                 # 'image-architecture': image[''],
-                'image-os-distro': image['name'].split("-")[0],
-                'image-os-version': image['name'].split("-")[1],
+                'image-os-distro': image-os-distro,
+                'image-os-version': image-os-version,
                 # 'application': image[''],
                 # 'application-vendor': image[''],
                 # 'application-version': image[''],
