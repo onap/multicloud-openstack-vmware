@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Ethan Lynn <ethanlynnl@vmware.com>
+Code-Review+2: xinhuili <lxinhui@vmware.com>
+Verified+1: xinhuili <lxinhui@vmware.com>
+Submitted-by: xinhuili <lxinhui@vmware.com>
+Submitted-at: Fri, 22 Sep 2017 09:01:45 +0000
+Reviewed-on: http://gerrit.onap.org/r/14203
+Project: multicloud/openstack/vmware
+Branch: refs/heads/master
