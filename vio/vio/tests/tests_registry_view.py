@@ -61,12 +61,9 @@ class RegistryViewTest(unittest.TestCase):
     @mock.patch.object(extsys, 'get_vim_by_id')
     def test_reg_get_tenants_view_fail(self, mock_vim_info, mock_projects):
         mock_vim_info.return_value = VIM_INFO
-
-        mock_projects.side_effect = TypeError("wrong type")
-
-        self.assertEqual(
-            status.HTTP_500_INTERNAL_SERVER_ERROR,
-            self.reg._get_tenants("vimid").status_code)
+        mock_projects.side_effect = Exception("something wrong")
+        self.assertRaisesRegexp(Exception, "something .*",
+                                self.reg._get_tenants, "viminfo")
 
     @mock.patch.object(OperateImage, 'get_vim_images')
     @mock.patch.object(extsys, 'get_vim_by_id')
@@ -122,10 +119,8 @@ class RegistryViewTest(unittest.TestCase):
     @mock.patch.object(extsys, 'get_vim_by_id')
     def test_reg_get_flavors_view_fail2(self, mock_vim_info, mock_flavors):
         mock_vim_info.return_value = VIM_INFO
-        mock_flavors.side_effect = TypeError("wrong type")
-        self.assertEqual(
-            status.HTTP_500_INTERNAL_SERVER_ERROR,
-            self.reg._get_flavors("viminfo").status_code)
+        mock_flavors.side_effect = Exception("something wrong")
+        self.assertRaises(Exception, self.reg._get_flavors)
 
     @mock.patch.object(OperateHypervisor, 'list_hypervisors')
     @mock.patch.object(extsys, 'get_vim_by_id')
@@ -161,10 +156,9 @@ class RegistryViewTest(unittest.TestCase):
     def test_reg_get_hypervisors_view_fail(self,
                                            mock_vim_info, mock_hypervisor):
         mock_vim_info.return_value = VIM_INFO
-        mock_hypervisor.side_effect = TypeError("wrong type")
-        self.assertEqual(
-            status.HTTP_500_INTERNAL_SERVER_ERROR,
-            self.reg._get_hypervisors("viminfo").status_code)
+        mock_hypervisor.side_effect = Exception("something wrong")
+        self.assertRaisesRegexp(Exception, "something .*",
+                                self.reg._get_hypervisors, "viminfo")
 
     def test_reg_find_tenant(self):
         tenants = {"tenants": [
