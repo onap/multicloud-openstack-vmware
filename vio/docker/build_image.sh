@@ -7,6 +7,7 @@ cd ${DOCKER_BUILD_DIR}
 BUILD_ARGS="--no-cache"
 ORG="onap"
 VERSION="1.0.0-SNAPSHOT"
+STAGING="1.0.0-STAGING"
 PROJECT="multicloud"
 IMAGE="vio"
 DOCKER_REPOSITORY="nexus3.onap.org:10003"
@@ -21,14 +22,15 @@ fi
 
 function build_image {
     echo "Start build docker image: ${IMAGE_NAME}"
-    docker build ${BUILD_ARGS} -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest .
+    docker build ${BUILD_ARGS} -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${STAGING} .
 }
 
 function push_image {
     echo "Start push docker image: ${IMAGE_NAME}"
     docker push ${IMAGE_NAME}:${VERSION}
     docker push ${IMAGE_NAME}:latest
-}
+    docker push ${IMAGE_NAME}:${STAGING}
+} 
 
 build_image
 push_image
