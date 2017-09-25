@@ -36,25 +36,20 @@
         <sitePath>/content/sites/site/org/onap/multicloud/openstack/vmware/${project.artifactId/${project.version}</sitePath>
     </properties>
     <distributionManagement>
-        <repository>
 	    <site>
 	      <id>ecomp-site</id>
 	      <url>dav:${nexusproxy}${sitePath}</url>
 	    </site>
+        <repository>
             <id>ecomp-releases</id>
             <name>ECOMP Release Repository</name>
             <url>${nexusproxy}/content/repositories/releases/</url>
         </repository>
-        <repository>
-            <id>ecomp-staging</id>
-            <name>ECOMP Staging Repository</name>
-            <url>${nexusproxy}/content/repositories/staging/</url>
-        </repository>
-        <repository>
+        <snapshotRepository>
             <id>ecomp-snapshots</id>
             <name>ECOMP Snapshot Repository</name>
             <url>${nexusproxy}/content/repositories/snapshots/</url>
-        </repository>
+        </snapshotRepository>
     </distributionManagement>
 
     <build>
