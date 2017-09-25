@@ -36,11 +36,11 @@
         <sitePath>/content/sites/site/org/onap/multicloud/openstack/vmware/${project.artifactId/${project.version}</sitePath>
     </properties>
     <distributionManagement>
-        <repository>
 	    <site>
 	      <id>ecomp-site</id>
 	      <url>dav:${nexusproxy}${sitePath}</url>
 	    </site>
+        <repository>
             <id>ecomp-releases</id>
             <name>ECOMP Release Repository</name>
             <url>${nexusproxy}/content/repositories/releases/</url>
