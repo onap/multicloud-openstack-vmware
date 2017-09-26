@@ -1,0 +1,5 @@
+# VMWare vSphere Management SDK
+pyvmomi==6.5.0.2017.5-1
+
+# Pure Python Vi Implementation
+pyvim==0.0.21
