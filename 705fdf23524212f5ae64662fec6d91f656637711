@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_27cdc9b7",
+        "filename": "vesagent/docker/opt/start-manager.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-09-27T08:21:17Z",
+      "side": 1,
+      "message": "Does this mean that this patch will not actual run any process in the docker?",
+      "revId": "705fdf23524212f5ae64662fec6d91f656637711",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_e7c22184",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonAlarmStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-09-27T08:21:17Z",
+      "side": 1,
+      "message": "I think we should eliminate tailing space,",
+      "range": {
+        "startLine": 19,
+        "startChar": 26,
+        "endLine": 19,
+        "endChar": 27
+      },
+      "revId": "705fdf23524212f5ae64662fec6d91f656637711",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_873915a6",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonAlarmStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-09-27T08:21:17Z",
+      "side": 1,
+      "message": "and use 4 spaces to replace tab in this patch.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 2
+      },
+      "revId": "705fdf23524212f5ae64662fec6d91f656637711",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
