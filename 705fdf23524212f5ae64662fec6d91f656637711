@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a437d4f_1a71f8a7",
+        "filename": "vesagent/docker/opt/start-manager.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-09-27T12:21:03Z",
+      "side": 1,
+      "message": "For the time being, yes.\nThe vesagent app execution command is in Line 3 but is commented for now as with incorrect vvSphere it does not work properly.\nWe are modifying some code to read the required args from properties file as we wont know beforehand the vSphere IP and credentials.\nSo, this will be enabled in next check-in",
+      "parentUuid": "9a437d4f_27cdc9b7",
+      "revId": "705fdf23524212f5ae64662fec6d91f656637711",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a437d4f_e7c22184",
         "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonAlarmStorage.java",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "9a437d4f_5da2dafd",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonAlarmStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-09-27T12:21:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a437d4f_e7c22184",
+      "range": {
+        "startLine": 19,
+        "startChar": 26,
+        "endLine": 19,
+        "endChar": 27
+      },
+      "revId": "705fdf23524212f5ae64662fec6d91f656637711",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a437d4f_873915a6",
         "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonAlarmStorage.java",
         "patchSetId": 1
@@ -53,6 +95,30 @@
       "writtenOn": "2017-09-27T08:21:17Z",
       "side": 1,
       "message": "and use 4 spaces to replace tab in this patch.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 2
+      },
+      "revId": "705fdf23524212f5ae64662fec6d91f656637711",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_7d9d9ebb",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonAlarmStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-09-27T12:21:03Z",
+      "side": 1,
+      "message": "Done for all code files\nChanges uploaded again for review.",
+      "parentUuid": "9a437d4f_873915a6",
       "range": {
         "startLine": 23,
         "startChar": 0,
