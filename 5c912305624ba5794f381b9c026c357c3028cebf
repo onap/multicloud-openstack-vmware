@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a2f8d8d_3458f6f9",
+        "filename": "vesagent/docker/Dockerfile",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2017-10-10T10:52:26Z",
+      "side": 1,
+      "message": "How could you change the variables in Agent.properties?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 31
+      },
+      "revId": "5c912305624ba5794f381b9c026c357c3028cebf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_f4c38e88",
+        "filename": "vesagent/docker/docker-build.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2017-10-10T10:52:26Z",
+      "side": 1,
+      "message": "change to vio-vesagent, it\u0027s not a common vesagent. thanks",
+      "range": {
+        "startLine": 64,
+        "startChar": 7,
+        "endLine": 64,
+        "endChar": 15
+      },
+      "revId": "5c912305624ba5794f381b9c026c357c3028cebf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
