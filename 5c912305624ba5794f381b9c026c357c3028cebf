@@ -117,6 +117,30 @@
       "revId": "5c912305624ba5794f381b9c026c357c3028cebf",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_f41ca915",
+        "filename": "vesagent/docker/docker-build.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-10-11T06:34:08Z",
+      "side": 1,
+      "message": "Will be done in next patch",
+      "parentUuid": "1a2f8d8d_74043915",
+      "range": {
+        "startLine": 64,
+        "startChar": 7,
+        "endLine": 64,
+        "endChar": 15
+      },
+      "revId": "5c912305624ba5794f381b9c026c357c3028cebf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
