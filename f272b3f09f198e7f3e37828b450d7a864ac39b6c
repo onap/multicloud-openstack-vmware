@@ -1,0 +1,452 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a2f8d8d_7e9ad015",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "It is not good practice to use System.out.print in non-debug code. See [1]. Try to use a logger.\n\n[1] https://stackoverflow.com/questions/2750346/logger-vs-system-out-println",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 26
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_5e9f1404",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "nit: The java code convention should have name like \"updateMap\"",
+      "range": {
+        "startLine": 38,
+        "startChar": 47,
+        "endLine": 38,
+        "endChar": 56
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_1e898cca",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "just remove these lines. \"put\" will replace existing data, if there is any.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 7
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_3ea44856",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 46,
+        "startChar": 47,
+        "endLine": 46,
+        "endChar": 61
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_5eb6f48b",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "better to rename the method, it is a bit confusing here that the method just retrieve json from map.",
+      "range": {
+        "startLine": 58,
+        "startChar": 18,
+        "endLine": 58,
+        "endChar": 33
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_9ebc5c6e",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "not sure if it is appropriate here. maybe just return null? or raise a IllegalArgumentException?",
+      "range": {
+        "startLine": 67,
+        "startChar": 8,
+        "endLine": 67,
+        "endChar": 25
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_7ec1b0e3",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 32
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_3ebb2874",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "All these four methods shared same code logic. Is it possible to consolidate them?",
+      "range": {
+        "startLine": 92,
+        "startChar": 22,
+        "endLine": 92,
+        "endChar": 41
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_59a5ee02",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "What this method for?",
+      "range": {
+        "startLine": 129,
+        "startChar": 16,
+        "endLine": 129,
+        "endChar": 34
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_39aa22d5",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "nit: The indention here is not nice :)",
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_79878a62",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "So they only need to be closed when VESCollectorSendStatus return false, right?",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 31
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_597cce72",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "why keep these lines?",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 8
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_3981024b",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "Same comment here.",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 23
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_99823651",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "nit: The indention here and the following lines are not nice :)",
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_f9925a9e",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VesAgent.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "Is it possible to make it a constant or a property in file?",
+      "range": {
+        "startLine": 46,
+        "startChar": 35,
+        "endLine": 46,
+        "endChar": 41
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_d98f9e74",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VesAgent.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "nit: just \n\n for(int j \u003d 0; j \u003c jsonObject.size(); j++) {\n\nshould be fine.",
+      "range": {
+        "startLine": 87,
+        "startChar": 23,
+        "endLine": 87,
+        "endChar": 66
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_99e9161d",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VesAgent.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "Could this be a constant?",
+      "range": {
+        "startLine": 101,
+        "startChar": 49,
+        "endLine": 101,
+        "endChar": 54
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_79ee6a24",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VesTimer.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "So, the timer will do nothing right now, right? Why?",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 11
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_f9d93a84",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VsphereData.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "I think java Overloading allows these 2 methods have same name.",
+      "range": {
+        "startLine": 156,
+        "startChar": 34,
+        "endLine": 156,
+        "endChar": 48
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_59ca8ea2",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VsphereEntity.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-12T08:48:11Z",
+      "side": 1,
+      "message": "If these attributes are public, why do you need setter/getter below?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 35
+      },
+      "revId": "f272b3f09f198e7f3e37828b450d7a864ac39b6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
