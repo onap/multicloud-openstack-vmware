@@ -14,6 +14,17 @@ import inspect
 import json
 from collections import defaultdict
 
+keystoneV2Json = \
+    {
+        "auth": {
+            "tenantName": "",
+            "passwordCredentials": {
+                "username": "",
+                "password": ""
+            }
+        }
+    }
+
 
 def fun_name():
     return inspect.stack()[1][3]
@@ -42,6 +53,38 @@ class Catalogs(object):
 
         vim = self.ct.get(vimid)
         return vim.get(serverType).get(interface, "") if vim else ""
+
+
+def verifyKeystoneV2(param):
+
+    return _walk_json(param, keystoneV2Json)
+
+
+# comapare two json by key
+def _walk_json(data, data2):
+    if isinstance(data, dict) and isinstance(data2, dict):
+        if set(data.keys()) != set(data2.keys()):
+            return False
+        else:
+            v1 = data.values()
+            v2 = data2.values()
+            v1.sort()
+            v2.sort()
+            if len(v1) != len(v2):
+                return False
+            for (i, j) in zip(v1, v2):
+                # continue compare key
+                if isinstance(i, dict) and isinstance(j, dict):
+                    if not _walk_json(i, j):
+                        return False
+                # ignore value
+                else:
+                    continue
+
+            return True
+
+
+    return False
 
 
 catalog = Catalogs()
