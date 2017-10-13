@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a2f8d8d_91632ab1",
+        "filename": "vio/vio/pub/utils/syscomm.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-13T07:31:46Z",
+      "side": 1,
+      "message": "keystoneV2Json \u003d {\n        \"auth\": {\n            \"tenantName\": \"\",\n            \"passwordCredentials\": {\n                \"username\": \"\",\n                \"password\": \"\"\n            }\n        }\n    }\n\nshould works. Worth a try?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 5
+      },
+      "revId": "b0a7cc453b62890ba31600e891b246742f0830a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_f16b8e83",
+        "filename": "vio/vio/pub/utils/syscomm.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-13T07:31:46Z",
+      "side": 1,
+      "message": "This else is not necessary.",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 9
+      },
+      "revId": "b0a7cc453b62890ba31600e891b246742f0830a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_d1ff72a9",
+        "filename": "vio/vio/swagger/views/proxyplugin/identity/views.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-13T07:31:46Z",
+      "side": 1,
+      "message": "nit: using a set should be faster.",
+      "range": {
+        "startLine": 117,
+        "startChar": 38,
+        "endLine": 119,
+        "endChar": 64
+      },
+      "revId": "b0a7cc453b62890ba31600e891b246742f0830a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
