@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a2f8d8d_e67d16b3",
+        "filename": "vio/vio/pub/utils/syscomm.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2017-10-13T06:12:54Z",
+      "side": 1,
+      "message": "Do you mean json here?",
+      "range": {
+        "startLine": 64,
+        "startChar": 9,
+        "endLine": 64,
+        "endChar": 13
+      },
+      "revId": "b4b54bf6f49745a8dfc9a017ac8dc4382b666ddb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_863bf2ea",
+        "filename": "vio/vio/swagger/views/proxyplugin/identity/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2017-10-13T06:12:54Z",
+      "side": 1,
+      "message": "Could we directly replace url with v2.0 and send the request? Since vio support both v2.0 and v3 .",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 73
+      },
+      "revId": "b4b54bf6f49745a8dfc9a017ac8dc4382b666ddb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
