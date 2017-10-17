@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a2f8d8d_91a68ac0",
+        "filename": "vio/vio/pub/utils/syscomm.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1899
+      },
+      "writtenOn": "2017-10-17T07:57:39Z",
+      "side": 1,
+      "message": "it works for this kind of struct.",
+      "parentUuid": "1a2f8d8d_91632ab1",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 5
+      },
+      "revId": "b0a7cc453b62890ba31600e891b246742f0830a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a2f8d8d_f16b8e83",
         "filename": "vio/vio/pub/utils/syscomm.py",
         "patchSetId": 5
