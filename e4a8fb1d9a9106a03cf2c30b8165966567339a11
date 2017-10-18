@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a2f8d8d_327eaaaf",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-18T01:42:39Z",
+      "side": 1,
+      "message": "So they only need to be closed when VESCollectorSendStatus return false, right?",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 31
+      },
+      "revId": "e4a8fb1d9a9106a03cf2c30b8165966567339a11",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_d2440676",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-18T01:42:39Z",
+      "side": 1,
+      "message": "The indention here is not nice,  I think we should follow the onap java code convention, see [1]. pls also apply the code style in all the patch.\n\n[1] https://wiki.onap.org/display/DW/Java+code+style",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 2
+      },
+      "revId": "e4a8fb1d9a9106a03cf2c30b8165966567339a11",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_b2497a8d",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-18T01:42:39Z",
+      "side": 1,
+      "message": "Same comment as line 68",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 23
+      },
+      "revId": "e4a8fb1d9a9106a03cf2c30b8165966567339a11",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_925e7e44",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VsphereData.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-10-18T01:42:39Z",
+      "side": 1,
+      "message": "copy from my comment from PS5: I think java Overloading allows these 2 methods have same name.",
+      "range": {
+        "startLine": 148,
+        "startChar": 34,
+        "endLine": 148,
+        "endChar": 48
+      },
+      "revId": "e4a8fb1d9a9106a03cf2c30b8165966567339a11",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
