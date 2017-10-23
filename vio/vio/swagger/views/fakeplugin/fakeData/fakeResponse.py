@@ -1816,3 +1816,340 @@ def image_schema():
     }
 
     return data
+
+# heat stack
+STACK_ID = "3095aefc-09fb-4bc7-b1f0-f21a304e864c"
+STACK_NAME = "simple_stack"
+
+
+def getAllStacks(token):
+    if token != Token:
+        return {"error": {"message": "unauthorization", "code": 401}}
+
+    data =  \
+        {
+            "stacks": [
+                {
+                    "creation_time": "2014-06-03T20:59:46Z",
+                    "deletion_time": null,
+                    "description": "sample stack",
+                    "id": STACK_ID,
+                    "links": [
+                        {
+                            "href": "http://127.0.0.1:8004/v1/" + Tenantid +
+                                    "/stacks/" + STACK_NAME + "/" + STACK_ID,
+                            "rel": "self"
+                        }
+                    ],
+                    "parent": null,
+                    "stack_name": STACK_NAME,
+                    "stack_owner": null,
+                    "stack_status": "CREATE_COMPLETE",
+                    "stack_status_reason":
+                        "Stack CREATE completed successfully",
+                    "stack_user_project_id": Tenantid,
+                    "tags": null,
+                    "updated_time": null
+                }
+            ]
+        }
+
+    return data
+
+
+def createStack(stack_name, token):
+
+    if token != Token:
+        return {"error": {"message": "unauthorization", "code": 401}}
+
+    global STACK_NAME
+    STACK_NAME = stack_name
+
+    data = {
+            "stack": {
+                "id": STACK_ID,
+                "links": [
+                    {
+                        "href": "http://127.0.0.1:8004/v1/"
+                                + Tenantid + "/stacks/" +
+                                stack_name + "/" + STACK_ID,
+                        "rel": "self"
+                    }
+                ]
+            }
+        }
+
+    return data
+
+
+def createStackPreview(stack_name, token):
+
+    if token != Token:
+        return {"error": {"message": "unauthorization", "code": 401}}
+
+    global STACK_NAME
+    STACK_NAME = stack_name
+
+    data =  \
+        {
+            "stack": {
+                "capabilities": [],
+                "creation_time": "2017-10-31T15:12:36Z",
+                "deletion_time": null,
+                "description": "HOT template for Nova Server resource.\n",
+                "disable_rollback": true,
+                "id": "None",
+                "links": [
+                    {
+                        "href": "http://127.0.0.1:8004/v1/" +
+                                Tenantid + "/stacks/" +
+                                STACK_NAME + "/None",
+                        "rel": "self"
+                    }
+                ],
+                "notification_topics": [],
+                "outputs": [],
+                "parameters": {
+                    "OS::project_id": "6e18cc2bdbeb48a5basad2dc499f6804",
+                    "OS::stack_id": "None",
+                    "OS::stack_name": "teststack",
+                    "admin_user": "cloud-user",
+                    "flavor": "m1.small",
+                    "image": "F20-cfg",
+                    "key_name": "heat_key",
+                    "server_name": "MyServer"
+                },
+                "parent": null,
+                "resources": [
+                    {
+                        "attributes": {},
+                        "description": "",
+                        "metadata": {},
+                        "physical_resource_id": "",
+                        "properties": {
+                            "description": "Ping and SSH",
+                            "name": "the_sg",
+                            "rules": [
+                                {
+                                    "direction": "ingress",
+                                    "ethertype": "IPv4",
+                                    "port_range_max": null,
+                                    "port_range_min": null,
+                                    "protocol": "icmp",
+                                    "remote_group_id": null,
+                                    "remote_ip_prefix": null,
+                                    "remote_mode": "remote_ip_prefix"
+                                },
+                                {
+                                    "direction": "ingress",
+                                    "ethertype": "IPv4",
+                                    "port_range_max": 65535,
+                                    "port_range_min": 1,
+                                    "protocol": "tcp",
+                                    "remote_group_id": null,
+                                    "remote_ip_prefix": null,
+                                    "remote_mode": "remote_ip_prefix"
+                                },
+                                {
+                                    "direction": "ingress",
+                                    "ethertype": "IPv4",
+                                    "port_range_max": 65535,
+                                    "port_range_min": 1,
+                                    "protocol": "udp",
+                                    "remote_group_id": null,
+                                    "remote_ip_prefix": null,
+                                    "remote_mode": "remote_ip_prefix"
+                                }
+                            ]
+                        },
+                        "required_by": [
+                            "server1"
+                        ],
+                        "resource_action": "INIT",
+                        "resource_identity": {
+                            "path": "/resources/the_sg_res",
+                            "stack_id": "None",
+                            "stack_name": "teststack",
+                            "tenant": "6e18cc2bdbeb48a5b3cad2dc499f6804"
+                        },
+                        "resource_name": "the_sg_res",
+                        "resource_status": "COMPLETE",
+                        "resource_status_reason": "",
+                        "resource_type": "OS::Neutron::SecurityGroup",
+                        "stack_identity": {
+                            "path": "",
+                            "stack_id": "None",
+                            "stack_name": "teststack",
+                            "tenant": "6e18cc2bdbeb48a5b3cad2dc499f6804"
+                        },
+                        "stack_name": STACK_NAME,
+                        "updated_time": "2017-10-31T15:12:36Z"
+                    },
+                    {
+                        "attributes": {
+                            "accessIPv4": "",
+                            "accessIPv6": "",
+                            "addresses": "",
+                            "console_urls": "",
+                            "first_address": "",
+                            "instance_name": "",
+                            "name": "MyServer",
+                            "networks": "",
+                            "show": ""
+                        },
+                        "description": "",
+                        "metadata": {},
+                        "physical_resource_id": "",
+                        "properties": {
+                            "admin_pass": null,
+                            "admin_user": "cloud-user",
+                            "availability_zone": null,
+                            "block_device_mapping": null,
+                            "config_drive": null,
+                            "diskConfig": null,
+                            "flavor": "m1.small",
+                            "flavor_update_policy": "RESIZE",
+                            "image": "F20-cfg",
+                            "image_update_policy": "REPLACE",
+                            "key_name": "heat_key",
+                            "metadata": {
+                                "ha_stack": "None"
+                            },
+                            "name": "MyServer",
+                            "networks": [
+                                {
+                                    "fixed_ip": null,
+                                    "network": "private",
+                                    "port": null,
+                                    "uuid": null
+                                }
+                            ],
+                            "personality": {},
+                            "reservation_id": null,
+                            "scheduler_hints": null,
+                            "security_groups": [
+                                "None"
+                            ],
+                            "software_config_transport": "POLL_SERVER_CFN",
+                            "user_data": "",
+                            "user_data_format": "HEAT_CFNTOOLS"
+                        },
+                        "required_by": [],
+                        "resource_action": "INIT",
+                        "resource_identity": {
+                            "path": "/resources/hello_world",
+                            "stack_id": "None",
+                            "stack_name": "teststack",
+                            "tenant": "6e18cc2bdbeb48a3433cad2dc499sdf32234"
+                        },
+                        "resource_name": "hello_world",
+                        "resource_status": "COMPLETE",
+                        "resource_status_reason": "",
+                        "resource_type": "OS::Nova::Server",
+                        "stack_identity": {
+                            "path": "",
+                            "stack_id": "None",
+                            "stack_name": "teststack",
+                            "tenant": "6e18cc2bdbeb48a3433cad2dc499sdf32234"
+                        },
+                        "stack_name": "teststack",
+                        "updated_time": "2017-10-31T15:12:36Z"
+                    }
+                ],
+                "stack_name": "test_stack",
+                "stack_owner": null,
+                "tags": null,
+                "template_description":
+                    "HOT template for Nova Server resource.\n",
+                "timeout_mins": null,
+                "updated_time": null
+            }
+        }
+
+    return data
+
+
+def deleteStack(stack_id, token):
+
+    if token != Token:
+        return {"error": {"message": "unauthorization", "code": 401}}
+
+    if stack_id != STACK_ID:
+        return {"error": {"message": "stack not found", "code": 404}}
+
+    return ""
+
+
+def showStack(stack_id, token):
+
+    if token != Token:
+        return {"error": {"message": "unauthorization", "code": 401}}
+
+    if stack_id != STACK_ID:
+        return {"error": {"message": "stack not found", "code": 404}}
+
+    data = \
+        {
+            "stack": {
+                "capabilities": [],
+                "creation_time": "2014-06-03T20:59:46Z",
+                "deletion_time": null,
+                "description": "sample stack",
+                "disable_rollback": true,
+                "id": STACK_ID,
+                "links": [
+                    {
+                        "href": "http://127.0.0.1:8004/v1/"
+                                "eb1c63a4f77141548385f113a28f0f52/stacks/"
+                                "simple_stack/"
+                                "3095aefc-09fb-4bc7-b1f0-f21a304e864c",
+                        "rel": "self"
+                    }
+                ],
+                "notification_topics": [],
+                "outputs": [],
+                "parameters": {
+                    "OS::project_id": "3ab5b02f-a01f-4f95-afa1-e254afc4a435",
+                    "OS::stack_id": STACK_ID,
+                    "OS::stack_name": STACK_NAME
+                },
+                "parent": null,
+                "stack_name": STACK_NAME,
+                "stack_owner": "simple_username",
+                "stack_status": "CREATE_COMPLETE",
+                "stack_status_reason": "Stack CREATE completed successfully",
+                "stack_user_project_id": Tenantid,
+                "tags": null,
+                "template_description": "sample stack",
+                "timeout_mins": null,
+                "updated_time": null
+            }
+        }
+
+    return data
+
+
+def getStackResource(stack_id, token):
+
+    if token != Token:
+        return {"error": {"message": "unauthorization", "code": 401}}
+
+    if stack_id != STACK_ID:
+        return {"error": {"message": "stack not found", "code": 404}}
+
+    data = \
+        {
+            "code": "302 Found",
+            "message": "The resource was found at <a "
+                       "href=\"http://127.0.0.1:8004/"
+                       "v1/369166a68a3a49b78b4e138531556e55"
+                       "/stacks/s1/"
+                       "da778f26-6d25-4634-9531-d438188e48fd\">"
+                       "http://127.0.0.1:8004/v1/"
+                       "369166a68a3a49b78b4e138531556e55/stacks"
+                       "/s1/da778f26-6d25-4634-9531-d438188e48fd</a>;\n"
+                       "you should be redirected automatically.\n\n",
+            "title": "Found"
+        }
+
+    return data
