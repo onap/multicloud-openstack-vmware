@@ -64,6 +64,10 @@ fi
 function build_image {
     # build the image
     echo "Start build docker image: ${IMAGE_NAME}"
+    DIRNAME=`dirname $0`
+    DOCKER_BUILD_DIR=`cd $DIRNAME/; pwd`
+    echo "DOCKER_BUILD_DIR=${DOCKER_BUILD_DIR}"
+    cd ${DOCKER_BUILD_DIR}
     docker build ${BUILD_ARGS} -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest .
 }
 
