@@ -64,6 +64,7 @@ fi
 function build_image {
     # build the image
     echo "Start build docker image: ${IMAGE_NAME}"
+    cd ${WORKSPACE}/vesagent/docker/
     docker build ${BUILD_ARGS} -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest .
 }
 
