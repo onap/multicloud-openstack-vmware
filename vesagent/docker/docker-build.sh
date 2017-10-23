@@ -3,23 +3,6 @@ echo "WORKSPACE: ${WORKSPACE}"
 VERSION="1.0.0-SNAPSHOT"
 
 #
-# Copy vesagent Uber JAR to docker app directory
-#
-APP=${WORKSPACE}/vesagent/target/vesagent-${VERSION}.jar
-
-if [ ! -f "${APP}" ]
-then
-    echo "FATAL error cannot locate ${APP}"
-    exit 2
-fi
-
-APP_DIR=${WORKSPACE}/vesagent/docker/opt
-
-[ -d "${APP_DIR}/vesagent-${VERSION}.jar" ] && rm -rf "${APP_DIR}/vesagent-${VERSION}.jar"
-
-cp ${APP} ${APP_DIR}
-
-#
 # Copy configurations directory
 #
 CONF_DIR=${WORKSPACE}/vesagent/etc

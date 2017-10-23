@@ -19,6 +19,10 @@ WORKDIR /opt
 # Copy the local opt directory contents into the container at /opt
 ADD opt /opt
 
+#Download vesagent jar from nexus repo and place in /opt
+RUN  cd /opt/ && \
+    wget -O /opt/vesagent-1.0.0-SNAPSHOT.jar 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware&a=vesagent&v=LATEST&e=jar'
+
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
