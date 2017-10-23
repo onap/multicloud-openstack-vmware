@@ -61,6 +61,9 @@ from vio.swagger.views.fakeplugin.nova.views import FakeFlavorDetail
 from vio.swagger.views.fakeplugin.neutron.views import FakeNeutron
 from vio.swagger.views.fakeplugin.neutron.views import FakeNeutronDetail
 from vio.swagger.views.fakeplugin.neutron.views import FakeNeutronNetwork
+from vio.swagger.views.fakeplugin.heat.views import FakeHeatResources
+from vio.swagger.views.fakeplugin.heat.views import FakeHeatService
+from vio.swagger.views.fakeplugin.heat.views import FakeHeatServicePreview
 
 
 urlpatterns = [
@@ -186,6 +189,20 @@ urlpatterns = [
         FakeImage.as_view()),
     url(r'^api/multicloud-vio/v0/vmware_fake/neutron$',
         FakeNeutron.as_view()),
+    url(r'api/multicloud-vio/v0/vmware_fake/heat/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
+        r'/stacks/(?P<stack_id>[0-9a-z-A-Z\-\_]+)/resources$',
+        FakeHeatResources.as_view()),
+    url(r'api/multicloud-vio/v0/vmware_fake/heat/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
+        r'/stacks$', FakeHeatService.as_view()),
+    url(r'api/multicloud-vio/v0/vmware_fake/heat/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
+        r'/stacks/preview$', FakeHeatServicePreview.as_view()),
+    url(r'api/multicloud-vio/v0/vmware_fake/heat/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
+        r'/stacks/(?P<stackName>[0-9a-z-A-Z\-\_]+)'
+        r'/(?P<stackID>[0-9a-z-A-Z\-\_]+)$', FakeHeatService.as_view()),
 
     # Registry
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/registry$',
