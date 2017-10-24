@@ -22,6 +22,30 @@
       "revId": "45093803d4d90cdc4ca83df73ab05866ef002b53",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_c15b0853",
+        "filename": "vesagent/docker/docker-build.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-10-24T05:24:32Z",
+      "side": 1,
+      "message": "Thats another way to do it, in a single statement :)\nI\u0027ll modify and recommit.",
+      "parentUuid": "1a2f8d8d_81e2a09d",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 26
+      },
+      "revId": "45093803d4d90cdc4ca83df73ab05866ef002b53",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
