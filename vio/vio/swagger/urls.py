@@ -31,6 +31,7 @@ from vio.swagger.views.port.views import CreatePortView, DeletePortView
 
 # proxy
 from vio.swagger.views.proxyplugin.identity.views import TokenView
+from vio.swagger.views.proxyplugin.identity.views import TokenV2View
 from vio.swagger.views.proxyplugin.identity.views import IdentityServer
 from vio.swagger.views.proxyplugin.nova.views import ComputeServer
 from vio.swagger.views.proxyplugin.image.views import ImageServer
@@ -213,6 +214,8 @@ urlpatterns = [
     #   proxy
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',
         TokenView.as_view()),
+    url(r'api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v2.0',
+        TokenV2View.as_view()),
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity$',
         IdentityServer.as_view()),

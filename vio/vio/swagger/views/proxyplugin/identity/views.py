@@ -319,3 +319,144 @@ class TokenView(BaseClient):
         catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
         Res = Response(data=tokenInfo, status=status.HTTP_200_OK)
         return Res
+
+
+class TokenV2View(BaseClient):
+
+    serverType = "identity"
+
+    def get(self, request, vimid):
+
+        url_path = request.get_full_path()
+        if url_path[url_path.rfind("identity"):] != "identity/v2.0":
+            return Response(data={"error": "method not allowed"},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        try:
+            vim_info = extsys.get_vim_by_id(vim_id=vimid)
+        except VimDriverVioException as e:
+            return Response(data={"error": str(e)}, status=e.status_code)
+        except Exception as e:
+            logging.exception("error %s" % e)
+            return Response(data={"error": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        keystoneURL = vim_info['url']
+        # replace to v2.0
+        url = keystoneURL.split('/')
+        url[-1] = 'v2.0'
+        url = "/".join(url)
+
+        logger.info("vimid(%(vimid)s) get keystoneV2 url %(url)s ",
+                    {"vimid": vimid, "url": url})
+        try:
+            res = requests.get(url=url, verify=False)
+            if res.status_code not in [status.HTTP_200_OK,
+                                       status.HTTP_201_CREATED,
+                                       status.HTTP_202_ACCEPTED]:
+                return Response(data={"error": res.content},
+                                status=res.status_code)
+            res = res.json()
+            res['version']['links'][0]['href'] = \
+                "http://" + MSB_ADDRESS + "/multicloud-vio/v0/" \
+               + vimid + "/identity/v2.0"
+
+        except Exception as e:
+            logging.exception("error %s" % e)
+            return Response(data={"error": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(data=res, status=status.HTTP_200_OK)
+
+    def post(self, request, vimid):
+
+        try:
+            create_req = json.loads(request.body)
+        except Exception as e:
+            return Response(
+                data={'error': 'Fail to decode request body %s.' % e},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        url_path = request.get_full_path()
+
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+        except Exception as e:
+            logging.exception("error %s" % e)
+            return Response(data={"error": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        if url_path[url_path.rfind("identity"):] != "identity/v2.0/tokens":
+            return Response(data={"error": "method not allowed"},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        # replace to v2.0
+        url = vim_info['url'].split('/')
+        url[-1] = 'v2.0'
+        url = "/".join(url)
+        url += "/tokens"
+        headers = {"Content-Type": "application/json"}
+        logger.info("vimid(%(vimid)s) request V2 token url %(url)s ",
+                    {"vimid": vimid, "url": url})
+
+        try:
+            res = requests.post(url=url, data=json.dumps(create_req),
+                                headers=headers, verify=False)
+            if res.status_code not in [status.HTTP_200_OK,
+                                       status.HTTP_201_CREATED,
+                                       status.HTTP_202_ACCEPTED]:
+                return Response(data={"error": res.content},
+                                status=res.status_code)
+            tokenInfo = res.json()
+        except Exception as e:
+            logging.exception("error %s" % e)
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        try:
+            tenantid = tokenInfo['access']['token']['tenant']['id']
+            vimEndpoints = defaultdict(dict)
+            for cal in tokenInfo['access']['serviceCatalog']:
+                # endpoint urls
+                item = cal['endpoints'][0]
+                adminurl = deepcopy(item['adminURL']).split('/')
+                internalurl = deepcopy(item['internalURL']).split('/')
+                publicurl = deepcopy(item['publicURL']).split('/')
+                adminurl = adminurl[0] + "//" + adminurl[2] + (
+                    "/" + adminurl[3] if len(adminurl) > 3 else "")
+                internalurl = internalurl[0] + "//" + internalurl[2] + (
+                    "/" + internalurl[3] if len(internalurl) > 3 else "")
+                publicurl = publicurl[0] + "//" + publicurl[2] + (
+                    "/" + publicurl[3] if len(publicurl) > 3 else "")
+
+                for (key, urlname) in zip(('admin', 'internal', 'public'),
+                                          (adminurl, internalurl,
+                                           publicurl)):
+                    vimEndpoints[cal['name']][key] = urlname
+
+                if cal['type'] in ['image', 'network',
+                                   'cloudformation', 'identity']:
+                    name = cal['name'] if cal['type'] != 'identity' \
+                        else cal['type']
+                    for i in ("adminURL", "internalURL", "publicURL"):
+                        item[i] = "http://" + MSB_ADDRESS + \
+                                  "/multicloud-vio/v0/" + vimid + "/" + name
+                else:
+                    for i in ("adminURL", "internalURL", "publicURL"):
+                        item[i] = "http://" + MSB_ADDRESS + \
+                                  "/multicloud-vio/v0/" + vimid + \
+                                  "/" + cal["name"] + "/" + tenantid
+
+        except Exception as e:
+            logging.exception("error %s" % e)
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        logger.info("vimid(%(vimid)s) service enpoints %(endpoint)s ", {
+            "vimid": vimid, "endpoint": vimEndpoints})
+
+        catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
+        Res = Response(data=tokenInfo, status=status.HTTP_200_OK)
+
+        return Res
