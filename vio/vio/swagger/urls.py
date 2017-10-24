@@ -31,6 +31,7 @@ from vio.swagger.views.port.views import CreatePortView, DeletePortView
 
 # proxy
 from vio.swagger.views.proxyplugin.identity.views import TokenView
+from vio.swagger.views.proxyplugin.identity.views import TokenV2View
 from vio.swagger.views.proxyplugin.identity.views import IdentityServer
 from vio.swagger.views.proxyplugin.nova.views import ComputeServer
 from vio.swagger.views.proxyplugin.image.views import ImageServer
@@ -48,6 +49,7 @@ from vio.swagger.views.extensions.views import Extensions
 # fake
 from vio.swagger.views.fakeplugin.identity.views import FakeProjects
 from vio.swagger.views.fakeplugin.identity.views import FakeToken
+from vio.swagger.views.fakeplugin.identity.views import FakeTokenV2
 from vio.swagger.views.fakeplugin.image.views import FakeImage
 from vio.swagger.views.fakeplugin.image.views import FakeImageDetail
 from vio.swagger.views.fakeplugin.image.views import FakeImageSchema
@@ -137,6 +139,8 @@ urlpatterns = [
     # fake urls
     url(r'^api/multicloud-vio/v0/vmware_fake/identity/v3',
         FakeToken.as_view()),
+    url(r'api/multicloud-vio/v0/vmware_fake/identity/v2.0',
+        FakeTokenV2.as_view()),
     url(r'^api/multicloud-vio/v0/vmware_fake/identity/projects$',
         FakeProjects.as_view()),
     url(r'^api/multicloud-vio/v0/vmware_fake/identity/projects/'
@@ -199,6 +203,12 @@ urlpatterns = [
     url(r'api/multicloud-vio/v0/vmware_fake/heat/'
         r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
         r'/stacks/preview$', FakeHeatServicePreview.as_view()),
+
+    url(r'api/multicloud-vio/v0/vmware_fake/heat/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
+        r'/stacks/(?P<stackName>[0-9a-z-A-Z\-\_]+)',
+        FakeHeatService.as_view()),
+
     url(r'api/multicloud-vio/v0/vmware_fake/heat/'
         r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
         r'/stacks/(?P<stackName>[0-9a-z-A-Z\-\_]+)'
@@ -213,6 +223,8 @@ urlpatterns = [
     #   proxy
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',
         TokenView.as_view()),
+    url(r'api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v2.0',
+        TokenV2View.as_view()),
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity$',
         IdentityServer.as_view()),

@@ -4,8 +4,14 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from vio.swagger.views.fakeplugin.fakeData.fakeResponse import keystone_token
-from vio.swagger.views.fakeplugin.fakeData.fakeResponse import keystone_version
+from vio.swagger.views.fakeplugin.fakeData.fakeResponse import \
+    keystone_token
+from vio.swagger.views.fakeplugin.fakeData.fakeResponse import \
+    keystone_tokenV2
+from vio.swagger.views.fakeplugin.fakeData.fakeResponse import \
+    keystone_version
+from vio.swagger.views.fakeplugin.fakeData.fakeResponse import \
+    keystone_version2
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import list_projects
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import show_project
 
@@ -42,7 +48,7 @@ class FakeToken(APIView):
         except Exception as e:
             return Response(
                 data={'error': 'Invalidate request body %s.' % e},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                status=status.HTTP_400_BAD_REQUEST)
 
         url_path = request.get_full_path()
 
@@ -55,3 +61,30 @@ class FakeToken(APIView):
         res = Response(data=tokeninfo, status=status.HTTP_201_CREATED)
         res['X-Subject-Token'] = tokeninfo['token']['value']
         return res
+
+
+class FakeTokenV2(APIView):
+
+    def get(self, request):
+
+        return Response(data=keystone_version2(),
+                        status=status.HTTP_200_OK)
+
+    def post(self, request):
+
+        try:
+            create_req = json.loads(request.body)
+        except Exception as e:
+            return Response(
+                data={'error': 'Invalidate request body %s.' % e},
+                status=status.HTTP_400_BAD_REQUEST)
+
+        url_path = request.get_full_path()
+
+        if url_path[url_path.rfind("identity"):] != \
+                "identity/v2.0/tokens":
+            return Response(data={"error": "method not allowed"},
+                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        tokeninfo = keystone_tokenV2()
+        return Response(data=tokeninfo, status=status.HTTP_200_OK)
