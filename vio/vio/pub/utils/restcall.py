@@ -93,10 +93,6 @@ def call_req(base_url, user, passwd, auth_type, resource, method, content='',
             res_info = ("The URL[%s] request failed or is not responding." %
                         full_url)
         ret = [3, res_info, resp_status, resp]
-    except:
-        logger.error(traceback.format_exc())
-        ret = [4, str(sys.exc_info()), resp_status, resp]
-
 #    logger.debug("[%s]ret=%s" % (callid, str(ret)))
     return ret
 
