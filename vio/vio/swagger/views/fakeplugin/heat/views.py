@@ -56,7 +56,7 @@ class FakeHeatService(APIView):
         data = ""
         if stackName is None and stackID is None:
             data = getAllStacks(token=token)
-        elif stackName and stackID:
+        elif stackName or stackID:
             data = showStack(stack_id=stackID, token=token)
 
         if 'error' in data:

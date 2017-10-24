@@ -67,6 +67,39 @@ def keystone_version():
     return data
 
 
+def keystone_version2():
+
+    data = {
+                "version": {
+                    "status": "deprecated",
+                    "updated": "2016-08-04T00:00:00Z",
+                    "media-types": [
+                        {
+                            "base": "application/json",
+                            "type": "application/"
+                                    "vnd.openstack.identity-v2.0+json"
+                        }
+                    ],
+                    "id": "v2.0",
+                    "links": [
+                        {
+                            "href": "http://" + MSB_SERVER +
+                                    "/api/multicloud-vio/"
+                                    "v0/vmware_fake/identity/v2.0",
+                            "rel": "self"
+                        },
+                        {
+                            "href": "https://docs.openstack.org/",
+                            "type": "text/html",
+                            "rel": "describedby"
+                        }
+                    ]
+                }
+            }
+
+    return data
+
+
 def keystone_token(teanatid=None):
 
     data = {
@@ -333,6 +366,294 @@ def keystone_token(teanatid=None):
     }
 
     return data
+
+
+def keystone_tokenV2():
+
+        data = \
+            {
+                "access": {
+                    "token": {
+                        "issued_at": "2017-10-24T06:47:51.000000Z",
+                        "expires": "2017-10-24T08:47:51.000000Z",
+                        "id": Token,
+                        "tenant": {
+                            "enabled": true,
+                            "description": "Bootstrap "
+                                           "project for "
+                                           "initializing the cloud.",
+                            "name": "admin",
+                            "id": Tenantid
+                        },
+                        "audit_ids": [
+                            "_KKMw5S3RUCl8SNKwmiDcA"
+                        ]
+                    },
+                    "serviceCatalog": [
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL":
+                                        "http://" + MSB_SERVER +
+                                        "/api/multicloud-vio/"
+                                        "v0/vmware_fake/nova/" + Tenantid,
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/nova/"
+                                                 + Tenantid,
+                                    "internalURL": "http://" + MSB_SERVER
+                                                   + "/api/multicloud-vio/"
+                                                     "v0/vmware_fake/nova/"
+                                                   + Tenantid,
+                                    "id": "10fd2ceacc994090a96ab3b8541e066e"
+                                }
+                            ],
+                            "type": "compute",
+                            "name": "nova"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER +
+                                                "/api/multicloud-vio/"
+                                                "v0/vmware_fake/neutron",
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/neutron",
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/neutron",
+                                    "id": "1bf876c18fd64e4f89cfa3c8a9624864"
+                                }
+                            ],
+                            "type": "network",
+                            "name": "neutron"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER +
+                                                "/api/multicloud-vio/"
+                                                "v0/vmware_fake/cinderv2/"
+                                                + Tenantid,
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/cinderv2/"
+                                                 + Tenantid,
+                                    "internalURL": "http://" + MSB_SERVER
+                                                   + "/api/multicloud-vio/"
+                                                     "v0/vmware_fake/cinderv2/"
+                                                   + Tenantid,
+                                    "id": "70ed007f3aae44288e1851d5ade542ef"
+                                }
+                            ],
+                            "type": "volumev2",
+                            "name": "cinderv2"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER +
+                                                "/api/multicloud-vio/"
+                                                "v0/vmware_fake/cinderv3/"
+                                                + Tenantid,
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/cinderv3/"
+                                                 + Tenantid,
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/cinderv3/"
+                                                   + Tenantid,
+                                    "id": "2090cf622a904c1bbc0f500c2f1b1c78"
+                                }
+                            ],
+                            "type": "volumev3",
+                            "name": "cinderv3"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER
+                                                + "/api/multicloud-vio/"
+                                                  "v0/vmware_fake/glance",
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER
+                                                 + "/api/multicloud-vio/"
+                                                   "v0/vmare_fake/glance",
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/glance",
+                                    "id": "25404699d5fc4e1989f421243c0006d1"
+                                }
+                            ],
+                            "type": "image",
+                            "name": "glance"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER +
+                                                "/api/multicloud-vio/"
+                                                "v0/vmware_fake/nova_legacy/"
+                                                + Tenantid,
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/nova_legacy/"
+                                                 + Tenantid,
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/"
+                                                   "nova_legacy/"
+                                                   + Tenantid,
+                                    "id": "303b4193e0784d0391a2bc318ff27229"
+                                }
+                            ],
+                            "type": "compute_legacy",
+                            "name": "nova_legacy"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER
+                                                + "/api/multicloud-vio/"
+                                                  "v0/vmware_fake/heat-cfn",
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/heat-cfn",
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/heat-cfn",
+                                    "id": "1152aa50dd1a4a99be272aa84f910ef6"
+                                }
+                            ],
+                            "type": "cloudformation",
+                            "name": "heat-cfn"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER +
+                                                "/api/multicloud-vio/"
+                                                "v0/vmware_fake/cinder/"
+                                                + Tenantid,
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/cinder/"
+                                                 + Tenantid,
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/cinder/"
+                                                   + Tenantid,
+                                    "id": "1cdfe5803856412f9daa3bed79f6e9ac"
+                                }
+                            ],
+                            "type": "volume",
+                            "name": "cinder"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER +
+                                                "/api/multicloud-vio/"
+                                                "v0/vmware_fake/heat/"
+                                                + Tenantid,
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/heat/"
+                                                 + Tenantid,
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/heat/"
+                                                   + Tenantid,
+                                    "id": "7eb9b5633c8f431da405192665782392"
+                                }
+                            ],
+                            "type": "orchestration",
+                            "name": "heat"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER +
+                                                "/api/multicloud-vio/"
+                                                "v0/vmware_fake/placement/"
+                                                + Tenantid,
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/placement/"
+                                                 + Tenantid,
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/placement/"
+                                                   + Tenantid,
+                                    "id": "9b509d9d5db54f51bbd27d9991586250"
+                                }
+                            ],
+                            "type": "placement",
+                            "name": "placement"
+                        },
+                        {
+                            "endpoints_links": [],
+                            "endpoints": [
+                                {
+                                    "adminURL": "http://" + MSB_SERVER +
+                                                "/api/multicloud-vio/"
+                                                "v0/vmware_fake/identity",
+                                    "region": "nova",
+                                    "publicURL": "http://" + MSB_SERVER +
+                                                 "/api/multicloud-vio/"
+                                                 "v0/vmware_fake/identity",
+                                    "internalURL": "http://" + MSB_SERVER +
+                                                   "/api/multicloud-vio/"
+                                                   "v0/vmware_fake/identity",
+                                    "id": "62a158d5b28d4fdbb485e8cf6ae5cc92"
+                                }
+                            ],
+                            "type": "identity",
+                            "name": "keystone"
+                        }
+                    ],
+                    "user": {
+                        "username": "admin",
+                        "roles_links": [],
+                        "id": "08a03743532f4c64b5e283b15646fd10",
+                        "roles": [
+                            {
+                                "name": "admin"
+                            }
+                        ],
+                        "name": "admin"
+                    },
+                    "metadata": {
+                        "is_admin": 0,
+                        "roles": [
+                            "cd1ffa75112d47f9ac64a758fa75d688"
+                        ]
+                    }
+                }
+            }
+
+        return data
 
 
 def list_projects(token=None):
@@ -2085,9 +2406,6 @@ def showStack(stack_id, token):
 
     if token != Token:
         return {"error": {"message": "unauthorization", "code": 401}}
-
-    if stack_id != STACK_ID:
-        return {"error": {"message": "stack not found", "code": 404}}
 
     data = \
         {
