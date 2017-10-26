@@ -18,20 +18,19 @@ import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.json.simple.JSONObject;
 
 public class VsphereData {
-    private final Logger log = LoggerFactory.getLogger(VsphereData.class); 
+    private final Logger log = LoggerFactory.getLogger(VsphereData.class);
     public VsphereDataEntity  gettingVMInfo(JSONObject js,VsphereDataEntity vsphereDataEntity,VsphereEntity vsphereEntity){
         String vsphereVMname = (String) js.get("Name");
         vsphereEntity.setVsphereVMname(vsphereVMname);
         vsphereDataEntity.setSourceName(vsphereVMname);
         String status = (String) js.get("Heartbeatstatus");
-        vsphereDataEntity.setStatus(status.toString());
+        vsphereDataEntity.setStatus(status);
 
-        String instance_uuid=(String) js.get("Instance UUID");
-        vsphereDataEntity.setSourceId(instance_uuid);
+        String instanceUuid=(String) js.get("Instance UUID");
+        vsphereDataEntity.setSourceId(instanceUuid);
 
         String sourceType="VirtualMachine";
         vsphereDataEntity.setSourceType(sourceType);
@@ -54,23 +53,20 @@ public class VsphereData {
 
         UUID uuid = UUID.randomUUID();
 
-
-        //String eventId  = "ab305d54-85b4-a31b-7db2-fb6b9e546015";
         String sourceName=vsphereDataEntity.getSourceName();
         String reportingEntityName = "Multi-Cloud";
         Integer sequence=0;
-        //String eventType="GuestOS";
-        String eventName="";
-        String priority="";
-        String eventSeverity="";
-        String alarmCondition="";
-        String vfStatus="";
-        String specificProblem="";
+        String eventName;
+        String priority;
+        String eventSeverity;
+        String alarmCondition;
+        String vfStatus;
+        String specificProblem;
         long unixTime = (System.currentTimeMillis() / 1000L)*1000000 ;
-        Long startEpochMicrosec = null;
-        Long lastEpochMicrosec = null;
-        String eventId="";
-        String sourceId =vsphereDataEntity.getSourceId().toString();
+        Long startEpochMicrosec;
+        Long lastEpochMicrosec;
+        String eventId;
+        String sourceId =vsphereDataEntity.getSourceId();
         Double faultFieldsVersion=2.0;
         if (vsphereDataEntity.getStatus() !="green") {
             eventName="Fault_MultiCloud_VMFailure";
@@ -105,9 +101,7 @@ public class VsphereData {
             for alarm on case both will be the same value
             but for alarm off case the lastEpochMicroSec will be current System/Date/Time */
 
-
         //here we have to create jsonobjects
-        //JSONObject commonEventHeader = new JSONObject();
         commonEventHeader.put("version", version);
         commonEventHeader.put("domain",domain);
         commonEventHeader.put("eventName",eventName);
@@ -120,7 +114,6 @@ public class VsphereData {
         commonEventHeader.put("startEpochMicrosec",startEpochMicrosec);
         commonEventHeader.put("lastEpochMicrosec",lastEpochMicrosec);
 
-        //JSONObject faultFields = new JSONObject();
         faultFields.put("faultFieldsVersion",faultFieldsVersion );
         faultFields.put("eventSeverity",eventSeverity );
         faultFields.put("alarmCondition",alarmCondition );
@@ -129,26 +122,17 @@ public class VsphereData {
         faultFields.put("alarmInterfaceA", "aaaa");
         faultFields.put("eventSourceType", "other");
 
-        //JSONObject eventObj = new JSONObject();
         eventObj.put("commonEventHeader", commonEventHeader);
         eventObj.put("faultFields",faultFields);
 
-        //JSONObject event = new JSONObject();
         event.put("event", eventObj);
     }
 
-    public List<String> listJsonAlarm(String Json,String alarmCondition){
-        System.out.println("adding to list- json and alarm");
-        List<String> list = new ArrayList<String>();
-        list.add(Json);
-        list.add(alarmCondition);
-        return list;
-    }
 
-    public List<JsonAlarmStorage> listJsonAlarm2(JSONObject json,String alarmCondition, String vesSendStatus){
+    public List<JsonAlarmStorage> listJsonAlarm(JSONObject json,String alarmCondition, String vesSendStatus){
         log.info("adding to list- json and alarm");
         JsonAlarmStorage store = new JsonAlarmStorage();
-        List<JsonAlarmStorage> list = new ArrayList<JsonAlarmStorage>();
+        List<JsonAlarmStorage> list = new ArrayList<>();
         store.json = json;
         store.alarm=alarmCondition;
         store.vesSendStatus = vesSendStatus;

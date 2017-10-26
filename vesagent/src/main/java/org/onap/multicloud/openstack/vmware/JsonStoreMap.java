@@ -30,21 +30,21 @@ import org.slf4j.LoggerFactory;
  *  If need to add any values --> add to JsonStoreMap */
 
 public class JsonStoreMap {
-    protected static final Map<String, List<JsonAlarmStorage>> map = new HashMap<String, List<JsonAlarmStorage>>();
+    protected static final Map<String, List<JsonAlarmStorage>> map = new HashMap<>();
     private final Logger log = LoggerFactory.getLogger(JsonStoreMap.class);
-    private String line  =  "......................";
+    private String line = "......................";
     public Map<String, List<JsonAlarmStorage>> addToMap(String key,List<JsonAlarmStorage> value){
-        log.info ("adding to map");
+        log.info("adding to map");
         map.put(key, value);
         return map;
     }
     public Map<String, List<JsonAlarmStorage>> updateMap(String key,List<JsonAlarmStorage> value){
-        log.info("updating map");
-        map.put(key, value);
-        return map;
+       log.info("updating the Map");
+       map.put(key, value);
+       return map;
       }
     public Map<String, List<JsonAlarmStorage>> updateMapBatch(String vesSendStatus){
-       log.info("updating map for batch");
+        log.info("updating the map for batch");
         Iterator i = map.keySet().iterator();
         while(i.hasNext())
         {
@@ -55,26 +55,19 @@ public class JsonStoreMap {
         log.info("updated total batch with  vesSendStatus = 'failed'");
         return map;
     }
-    public String retrieveAlarmConditionFromMap(String key){
-        List<JsonAlarmStorage> value;
-        System.out.println("retriving alarm condition from map");
-        if (map.containsKey(key)) {
-            value = map.get(key);
-            //System.out.println("Key : " + key +" value :"+ value);
-            return value.get(0).alarm;
-        }
-        return "uuid not found";
-    }
 
-    public String retrieveVesSendStatusFromMap(String key){
+    public String retrieveFromMap(String key, String type){
         List<JsonAlarmStorage> value;
         log.info("retriving alarm condition from map");
         if (map.containsKey(key)) {
             value = map.get(key);
-            //System.out.println("Key : " + key +" value :"+ value);
-            return value.get(0).vesSendStatus;
+            if(type=="ALARM"){
+                return value.get(0).alarm;
+            }else if(type=="VES_STATUS"){
+                return value.get(0).vesSendStatus;
+            }
         }
-        return "uuid not found";
+        return null;
     }
 
     public JSONObject retrieveJsonFromMap(String key){
@@ -82,7 +75,6 @@ public class JsonStoreMap {
         log.info("retriving json from map");
         if (map.containsKey(key)) {
             value = map.get(key);
-            //System.out.println("Key : " + key +" value :"+ value);
             return value.get(0).json;
         }
         return null;
@@ -98,25 +90,25 @@ public class JsonStoreMap {
         {
             String key = i.next().toString();
             List<JsonAlarmStorage> value = map.get(key);
-            String value1=value.get(0).alarm+""+value.get(0).json.toString()    ; 
-          log.info("Key : " + key +" value :"+ value.get(0).alarm+""+value.get(0).json);
+            String value1=value.get(0).alarm+""+value.get(0).json.toString();
+            log.info("Key : " + key +" value :"+value1);
             JSONObject json = value.get(0).json;
             log.info(line);
-           log.info(json.get("event").toString());
+            log.info(json.get("event").toString());
             JSONObject obj = (JSONObject) json.get("event");
             list.add(obj);
         }
-       log.info(line);
+        log.info(line);
         eventList.put("eventList", list);
-       log.info(eventList.toString());
-       log.info(line);
+        log.info(eventList.toString());
+        log.info(line);
         return eventList;
     }
 
 
     @SuppressWarnings("rawtypes")
-    public void displayAllEntriesInMap(){
-        log.info("retrive all from map");
+    public void displayALLEntriesInMap(){
+        log.info("retrive all the entries from map");
         Iterator i = map.keySet().iterator();
         String mapValues;
         while(i.hasNext()){
@@ -134,34 +126,28 @@ public class JsonStoreMap {
     }
 
   @SuppressWarnings("rawtypes")
-public void deleteUsingAlarmCondition(String alarm){
-    Iterator it = map.entrySet().iterator();
-    while (it.hasNext())
-    {
-        Entry item = (Entry) it.next();
-        System.out.println(item.getKey());;
-        List<JsonAlarmStorage> value = map.get(item.getKey());
-        if(value.get(0).alarm == alarm)
-        {
-            it.remove();
-            log.info("removed..");
+    public void deleteUsingAlarmCondition(String alarm){
+        Iterator it = map.entrySet().iterator();
+        while (it.hasNext()){
+            Entry item = (Entry) it.next();
+            List<JsonAlarmStorage> value = map.get(item.getKey());
+            if(value.get(0).alarm == alarm){
+                it.remove();
+                log.info("removed..");
+            }
         }
+        log.info("removed");
     }
-    log.info("removed");
-}
-
-
-
 
     public void deleteAllFromMap(){
-        log.info("clearing map");
+       log.info("clearing map...");
         map.clear();
-        log.info("map cleared..");
+        log.info("map cleared...");
         log.info(map.toString());
     }
 
     public int totalEntriesInMap(){
-        log.info("Total entries in map", map.size());
+        log.info("Total entries in map",map.size());
         return map.size();
     }
 
