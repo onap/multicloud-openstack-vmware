@@ -14,46 +14,47 @@
 package org.onap.multicloud.openstack.vmware;
 
 public class VsphereEntity {
-    private String VsphereServerName;
-    private String VsphereUsername;
-    private String VsperePassword;
-    private String VsphereVMname;
-    private String PathVspherePython;
-    private String PythonOutputJson;
-    
-    public String getVsphereUsername() {
-        return VsphereUsername;
-   } 
-  
-    public void setVsphereUsername(String vsphereUsername) {
-        this.VsphereUsername = vsphereUsername;
-   } 
-  
-  public String getPythonOutputJson() {
-        return PythonOutputJson;
-    }
-    public void setPythonOutputJson(String pythonOutputJson) {
-        PythonOutputJson = pythonOutputJson;
-    }
-    public String getPathVspherePython() {
-        return PathVspherePython;
-    }
-    public void setPathVspherePython(String pathVspherePython) {
-        PathVspherePython = pathVspherePython;
-    }
-    public String getVsperePassword() {
-        return VsperePassword;
-    }
-    public void setVsperePassword(String vsperePassword) {
-        VsperePassword = vsperePassword;
-    }
-    public void setVsphereVMname(String vsphereVMname) {
-        VsphereVMname = vsphereVMname;
-    }
+    private String vsphereServerName;
+    private String vsphereUsername;
+    private String vsperePassword;
+    private String vsphereVMname;
+    private String pathVspherePython;
+    private String pythonOutputJson;
+
     public String getVsphereServerName() {
-        return VsphereServerName;
+            return vsphereServerName;
     }
     public void setVsphereServerName(String vsphereServerName) {
-        VsphereServerName = vsphereServerName;
+            this.vsphereServerName = vsphereServerName;
+    }
+    public String getVsphereUsername() {
+            return vsphereUsername;
+    }
+    public void setVsphereUsername(String vsphereUsername) {
+            this.vsphereUsername = vsphereUsername;
+    }
+    public String getVsperePassword() {
+            return vsperePassword;
+    }
+    public void setVsperePassword(String vsperePassword) {
+            this.vsperePassword = vsperePassword;
+    }
+    public String getVsphereVMname() {
+            return vsphereVMname;
+    }
+    public void setVsphereVMname(String vsphereVMname) {
+            this.vsphereVMname = vsphereVMname;
+    }
+    public String getPathVspherePython() {
+            return pathVspherePython;
+    }
+    public void setPathVspherePython(String pathVspherePython) {
+            this.pathVspherePython = pathVspherePython;
+    }
+    public String getPythonOutputJson() {
+            return pythonOutputJson;
+    }
+    public void setPythonOutputJson(String pythonOutputJson) {
+            this.pythonOutputJson = pythonOutputJson;
     }
 }

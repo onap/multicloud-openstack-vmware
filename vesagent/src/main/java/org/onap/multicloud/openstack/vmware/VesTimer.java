@@ -18,7 +18,6 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 class TimerExtend extends Timer{
 
     public TimerExtend(){
@@ -31,25 +30,23 @@ class TimerExtend extends Timer{
 }
 
 class TaskTimeout extends TimerTask{
-   private static JsonStoreMap map;
-   private final Logger log = LoggerFactory.getLogger(TaskTimeout.class);
-  @SuppressWarnings("static-access")
-   public TaskTimeout(JsonStoreMap map) {
-      TaskTimeout.map = map;
-   }
-   
-   public static void run1(){
-       VesTimer.timeoutCheck = true;
-       map.deleteAllFromMap();
-       VesTimer.hasStarted=false;
+    private static JsonStoreMap map;
+    private final Logger log = LoggerFactory.getLogger(TaskTimeout.class);
+    @SuppressWarnings("static-access")
+    public TaskTimeout(JsonStoreMap map) {
+        TaskTimeout.map = map;
     }
- @SuppressWarnings("resource")
- @Override
-  public void run() {
-      run1();
-   log.info("In Time out before deleting the entries from Map");
- 
-   }
+    public static void run1(){
+            VesTimer.timeoutCheck = true;
+            map.deleteAllFromMap();
+            VesTimer.hasStarted=false;
+    }
+    @SuppressWarnings("resource")
+    @Override
+    public void run() {
+             run1();
+             log.info("In Timed out run method, before deleting the entries from Map");
+    }
 }
 
 public class VesTimer {
@@ -60,8 +57,8 @@ public class VesTimer {
     private JsonStoreMap map;
     private final Logger log = LoggerFactory.getLogger(VesTimer.class);
     public VesTimer(JsonStoreMap map){
-       this.map = map;
-  }
+        this.map = map;
+    }
 
     public void startTimer(Integer duration){
         tt = new TimerExtend();
@@ -76,7 +73,7 @@ public class VesTimer {
     }
 
     public  boolean isTimerRunning(){
-        if(VesTimer.hasStarted == true){
+        if(VesTimer.hasStarted){
             log.info("timer started....");
             return true;
         }

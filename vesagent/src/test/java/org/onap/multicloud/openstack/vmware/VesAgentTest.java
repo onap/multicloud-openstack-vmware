@@ -183,23 +183,19 @@ public class VesAgent {
 */
 
 public class VesAgentTest {
-
     static VsphereDataEntity vsphereDataEntity = new VsphereDataEntity();
     static JsonStoreMap map = new JsonStoreMap();
     static List<JsonAlarmStorage> list;
     public static String output;
     String alarmCondition = "OFF"; // for checking alarm is raised or not
     String vesSendStatus = "new";  //vesSendStatus
-
      String filepath="src/test/resources/agent.properties";
      public Integer duration=120000;
      VsphereData vsphereData = new VsphereData();
      VsphereEntity vsphereEntity = new VsphereEntity();
      VesEntity vesEntity = new VesEntity();
      ReadPropertiesFile file = new ReadPropertiesFile();
-
 //    file.readProperties(vsphereEntity, vesEntity, filePath);
-       
        VESRestAPI vesRestAPI= new VESRestAPI();
        JSONObject eventObj = new JSONObject();
        JSONObject event = new JSONObject();
@@ -220,9 +216,7 @@ public JSONArray getFileAsJsonObject()
          Object obj =  parser.parse (fr);
          jsonArrayObj = (JSONArray) obj;
          System.out.println(jsonArrayObj.toJSONString());
-       
        }
-  
   catch(Exception e){
 System.out.println("Exception while opening the file");
   e.printStackTrace();
@@ -231,119 +225,94 @@ System.out.println("Exception while opening the file");
    //close the file
   if (fr != null) {
   try {
-                                                                                  fr.close();
-                                                                                    } catch (IOException e) 
-                                                                                  {
-                                                                                 System.out.println("Error closing file reader stream : " +e.toString());
-                                                                                   }
-                                                                                    }
-                                                                                           }
-      return jsonArrayObj;
+    fr.close();
+  } catch (IOException e){
+        System.out.println("Error closing file reader stream : " +e.toString());
+  }
+  }
+  }
+  return jsonArrayObj;
 }
 
 
 @Test
     //public void testSingleHeartBeat() throws ClientProtocolException, IOException, ParseException
     public void testSingleHeartBeat() throws Exception{
-            
        JSONArray jsonArrayObject = getFileAsJsonObject();
        String output = "true";
-
        for(int j = 0;j<=jsonArrayObject.size()-1;j++){
-
                  JSONObject js = (JSONObject) jsonArrayObject.get(j);
                   System.out.println("");
                   System.out.println(js.toJSONString());
-
-                            VsphereDataEntity entity = vsphereData.gettingVMInfo(js,vsphereDataEntity,vsphereEntity);
-                            String heartBeatStatus = vsphereDataEntity.getStatus();
-                            System.out.println(heartBeatStatus);
-                            String uuid_key = vsphereDataEntity.getSourceId();
-                         vsphereData.encodeJson(entity, event, eventObj, commonEventHeader, faultFields,map);
-                        list = vsphereData.listJsonAlarm2(event, alarmCondition,vesSendStatus);
-                        map.addToMap(uuid_key, list);
-                       
-                        vesRestAPI.publishAnyEventToVES(vesEntity,map, timer,uuid_key, list,duration,vesSendStatus);
-                                                                                        
-                      output="true";                                                                                         
-                                   }
-                                                                                        assertEquals ("true",output); 
-                                                                                                       
-}
-
+                  VsphereDataEntity entity = vsphereData.gettingVMInfo(js,vsphereDataEntity,vsphereEntity);
+                  String heartBeatStatus = vsphereDataEntity.getStatus();
+                  System.out.println(heartBeatStatus);
+                  String uuid_key = vsphereDataEntity.getSourceId();
+                  vsphereData.encodeJson(entity, event, eventObj, commonEventHeader, faultFields,map);
+                  list = vsphereData.listJsonAlarm(event, alarmCondition,vesSendStatus);
+                  map.addToMap(uuid_key, list);
+                  vesRestAPI.publishAnyEventToVES(vesEntity,map, timer,uuid_key, list,duration,vesSendStatus);
+                  output="true";
+       }
+       assertEquals ("true",output);
+   }
 @Test
-    //public void testmultipleHeartbeat() throws FileNotFoundException, IOException, ParseException
+       //public void testmultipleHeartbeat() throws FileNotFoundException, IOException, ParseException
     public void testmultipleHeartbeat() throws Exception{
-           
-
 	    String  outout  = "true";
         JSONArray jsonArrayObject = getFileAsJsonObject();
-
                for(int j = 0;j<=jsonArrayObject.size()-1;j++){
-   
                             JSONObject js = (JSONObject) jsonArrayObject.get(j);
                             System.out.println("");
                             System.out.println(js.toJSONString());
-
                             VsphereDataEntity entity = vsphereData.gettingVMInfo(js,vsphereDataEntity,vsphereEntity);
                             String heartBeatStatus = vsphereDataEntity.getStatus();
                             System.out.println(heartBeatStatus);
                             String uuid_key = vsphereDataEntity.getSourceId();
-                                                                                        
                          vsphereData.encodeJson(entity, event, eventObj, commonEventHeader, faultFields,map);
-                        list = vsphereData.listJsonAlarm2(event, alarmCondition,vesSendStatus);
+                        list = vsphereData.listJsonAlarm(event, alarmCondition,vesSendStatus);
                         map.addToMap(uuid_key, list);
                         map.updateMap(uuid_key, list);
-                        
                         map.updateMapBatch("failed");
-                       
-           JSONObject alarmJsonConstructArray = map.retrieveALLFromMapBatch();
-          vesRestAPI.publishBatchEventToVES(vesEntity, alarmJsonConstructArray, map, timer, uuid_key, list, duration , vesSendStatus);                   
-                            output ="true";                                                             
-                                                                                       } 
-                                                                                        assertEquals ("true",output); 
-                                                                                                        }
+                        JSONObject alarmJsonConstructArray = map.retrieveALLFromMapBatch();
+                        vesRestAPI.publishBatchEventToVES(vesEntity, alarmJsonConstructArray, map, timer, uuid_key, list, duration,vesSendStatus);                   
+                        output = "true";
+                       }
+                       assertEquals ("true",output);
+    }
 
 
 
 @Test
     //public void testmultipleHeartbeat() throws FileNotFoundException, IOException, ParseException
     public void testAlarmMapEntries() throws Exception{
-           
-
-	    String  outout  = "true";
-    file.readProperties(vsphereEntity, filepath);
+        String  outout  = "true";
+        file.readProperties(vsphereEntity,filepath);
         JSONArray jsonArrayObject = getFileAsJsonObject();
-
-               for(int j = 0;j<=jsonArrayObject.size()-1;j++){
-   
-                            JSONObject js = (JSONObject) jsonArrayObject.get(j);
-                            System.out.println("");
-                            System.out.println(js.toJSONString());
-
-                            VsphereDataEntity entity = vsphereData.gettingVMInfo(js,vsphereDataEntity,vsphereEntity);
-                            String heartBeatStatus = vsphereDataEntity.getStatus();
-                            System.out.println(heartBeatStatus);
-                            String uuid_key = vsphereDataEntity.getSourceId();
-          
-                              map.isJsonFound(uuid_key);
-                              map.retrieveAlarmConditionFromMap(uuid_key);
-                              map.retrieveALLFromMapBatch();
-                              map.retrieveJsonFromMap(uuid_key);
-                              map.retrieveVesSendStatusFromMap(uuid_key);
-                              map.displayAllEntriesInMap();
-                              map.deleteFromMap(uuid_key);
-                              map.deleteAllFromMap();
-                              map.deleteUsingAlarmCondition("AlarmOn");
-                              map.totalEntriesInMap();
-                              timer.isTimerRunning();
-                              timer.startTimer(5000);
-                              timer.stopTimer();
-                              timer.isTimeout();
-                              output ="true";                                                             
-                                                                                       } 
-                                                                                        assertEquals ("true",output); 
-                                                                                                        }
-
+        for(int j = 0;j<=jsonArrayObject.size()-1;j++){
+             JSONObject js = (JSONObject) jsonArrayObject.get(j);
+             System.out.println("");
+             System.out.println(js.toJSONString());
+             VsphereDataEntity entity = vsphereData.gettingVMInfo(js,vsphereDataEntity,vsphereEntity);
+             String heartBeatStatus = vsphereDataEntity.getStatus();
+             System.out.println(heartBeatStatus);
+             String uuid_key = vsphereDataEntity.getSourceId();
+             map.isJsonFound(uuid_key);
+             map.retrieveFromMap(uuid_key,"ALARM");
+             map.retrieveALLFromMapBatch();
+             map.retrieveJsonFromMap(uuid_key);
+             map.retrieveFromMap(uuid_key,"VES_STATUS");
+             map.displayALLEntriesInMap();
+             map.deleteFromMap(uuid_key);
+             map.deleteAllFromMap();
+             map.deleteUsingAlarmCondition("AlarmOn");
+             map.totalEntriesInMap();
+             timer.isTimerRunning();
+             timer.startTimer(5000);
+             timer.stopTimer();
+             timer.isTimeout();
+             output ="true";
+             }
+             assertEquals ("true",output);
+     }
 }
-
