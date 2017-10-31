@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a2f8d8d_bd61273b",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/JsonStoreMap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-10-31T08:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a2f8d8d_c98b1d67",
+      "revId": "dfced1dea8cb64c3d9a62fbb8d2ec91ef0f5298b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a2f8d8d_69f429f2",
         "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2017-10-30T05:24:09Z",
       "side": 1,
       "message": "pls note the indention here",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 23
+      },
+      "revId": "dfced1dea8cb64c3d9a62fbb8d2ec91ef0f5298b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_9d642b4a",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-10-31T08:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a2f8d8d_69f429f2",
       "range": {
         "startLine": 109,
         "startChar": 0,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "1a2f8d8d_7d5bbf87",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-10-31T08:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a2f8d8d_29de216e",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 1
+      },
+      "revId": "dfced1dea8cb64c3d9a62fbb8d2ec91ef0f5298b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a2f8d8d_09d92583",
         "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
         "patchSetId": 1
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "1a2f8d8d_5d5ec377",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VESRestAPI.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-10-31T08:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a2f8d8d_09d92583",
+      "revId": "dfced1dea8cb64c3d9a62fbb8d2ec91ef0f5298b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a2f8d8d_e9e7f93e",
         "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VesAgent.java",
         "patchSetId": 1
@@ -93,6 +177,30 @@
       "writtenOn": "2017-10-30T05:24:09Z",
       "side": 1,
       "message": "try to use spaces instead of tabs",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 16
+      },
+      "revId": "dfced1dea8cb64c3d9a62fbb8d2ec91ef0f5298b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_3d553750",
+        "filename": "vesagent/src/main/java/org/onap/multicloud/openstack/vmware/VesAgent.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1331
+      },
+      "writtenOn": "2017-10-31T08:27:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a2f8d8d_e9e7f93e",
       "range": {
         "startLine": 88,
         "startChar": 0,
