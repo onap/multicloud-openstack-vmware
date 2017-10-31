@@ -14,6 +14,7 @@ from vio.swagger.views.fakeplugin.fakeData.fakeResponse import \
     keystone_version2
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import list_projects
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import show_project
+from vio.swagger.views.fakeplugin.fakeData.fakeResponse import get_tenants
 
 
 class FakeProjects(APIView):
@@ -88,3 +89,11 @@ class FakeTokenV2(APIView):
 
         tokeninfo = keystone_tokenV2()
         return Response(data=tokeninfo, status=status.HTTP_200_OK)
+
+
+class FakeTenants(APIView):
+
+    def get(self, request, projectid=None):
+
+        data = get_tenants()
+        return Response(data=data, status=status.HTTP_200_OK)

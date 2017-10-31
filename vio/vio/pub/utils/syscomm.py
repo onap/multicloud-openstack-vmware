@@ -47,7 +47,10 @@ class Catalogs(object):
         self.ct = defaultdict(dict)
 
     def storeEndpoint(self, vimid, endpoints):
-        self.ct.setdefault(vimid, endpoints)
+        if vimid in self.ct:
+            self.ct[vimid].update(endpoints)
+        else:
+            self.ct.setdefault(vimid, endpoints)
 
     def getEndpointBy(self, vimid, serverType, interface='public'):
 

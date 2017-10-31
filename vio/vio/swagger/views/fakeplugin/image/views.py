@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import image_detail
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import list_image
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import image_schema
+from vio.swagger.views.fakeplugin.fakeData.fakeResponse import image_version
 
 false = "false"
 null = "null"
@@ -32,4 +33,12 @@ class FakeImageSchema(APIView):
 
     def get(self, request):
         data = image_schema()
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class FakeImageVersion(APIView):
+
+    def get(self, request):
+
+        data = image_version()
         return Response(data=data, status=status.HTTP_200_OK)
