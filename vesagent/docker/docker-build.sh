@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "WORKSPACE: ${WORKSPACE}"
 VERSION="1.0.0-SNAPSHOT"
+STAGING="1.0.0-STAGING"
 
 #
 # Copy configurations directory
@@ -32,16 +33,14 @@ fi
 
 if [  -d "${PY_DIR}" ]
 then
+    [ -d "${APP_DIR}/py" ] && rm -rf "${APP_DIR}/py"
+
+    cp -a ${PY_DIR} ${APP_DIR}
+
     echo "Remove all dummy & test scripts"
-    rm -f ${PY_DIR}/dummy*
-    rm -f ${PY_DIR}/test*
+    rm -f ${APP_DIR}/py/dummy*
+    rm -f ${APP_DIR}/py/test*
 fi
-
-APP_DIR=${WORKSPACE}/vesagent/docker/opt
-
-[ -d "${APP_DIR}/py" ] && rm -rf "${APP_DIR}/py"
-
-cp -a ${PY_DIR} ${APP_DIR}
 
 #
 # build the docker image. tag and then push to the remote repo
@@ -65,7 +64,7 @@ function build_image {
     # build the image
     echo "Start build docker image: ${IMAGE_NAME}"
     cd ${WORKSPACE}/vesagent/docker/
-    docker build ${BUILD_ARGS} -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest .
+    docker build ${BUILD_ARGS} -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${STAGING} .
 }
 
 function push_image {
@@ -73,6 +72,7 @@ function push_image {
     echo "Start push docker image: ${IMAGE_NAME}"
     docker push ${IMAGE_NAME}:${VERSION}
     docker push ${IMAGE_NAME}:latest
+    docker push ${IMAGE_NAME}:${STAGING}
 }
 
 build_image
