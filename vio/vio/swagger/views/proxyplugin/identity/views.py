@@ -51,7 +51,7 @@ class IdentityServer(BaseClient):
         try:
             res = self._request(url, method="GET", headers=headers)
             if res.status_code != status.HTTP_200_OK:
-                return Response(data={"error": res.content},
+                return Response(data={"error": res.data},
                                 status=res.status_code)
             res = res.data
             # replace keystone auth url with multicloud
@@ -283,6 +283,12 @@ class TokenView(BaseClient):
                 adminurl = deepcopy(item['adminURL']).split('/')
                 internalurl = deepcopy(item['internalURL']).split('/')
                 publicurl = deepcopy(item['publicURL']).split('/')
+                # VIO identity url use v3 as default even got token by v2,
+                # need change to v2.0
+                if cal['type'] == 'identity':
+                    adminurl[-1] = "v2.0"
+                    publicurl[-1] = "v2.0"
+                    internalurl[-1] = "v2.0"
                 adminurl = adminurl[0] + "//" + adminurl[2] + (
                     "/" + adminurl[3] if len(adminurl) > 3 else "")
                 internalurl = internalurl[0] + "//"+internalurl[2] + (
@@ -423,6 +429,12 @@ class TokenV2View(BaseClient):
                 adminurl = deepcopy(item['adminURL']).split('/')
                 internalurl = deepcopy(item['internalURL']).split('/')
                 publicurl = deepcopy(item['publicURL']).split('/')
+                # VIO identity url use v3 as default even got token by v2,
+                # need change to v2.0
+                if cal['type'] == 'identity':
+                    adminurl[-1] = "v2.0"
+                    publicurl[-1] = "v2.0"
+                    internalurl[-1] = "v2.0"
                 adminurl = adminurl[0] + "//" + adminurl[2] + (
                     "/" + adminurl[3] if len(adminurl) > 3 else "")
                 internalurl = internalurl[0] + "//" + internalurl[2] + (

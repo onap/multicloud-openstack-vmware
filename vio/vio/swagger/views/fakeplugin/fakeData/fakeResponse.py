@@ -737,6 +737,25 @@ def show_project(token, projectid=""):
     return data
 
 
+# used for keystonev2
+def get_tenants():
+
+    data = \
+        {
+            "tenants": [
+                {
+                    "id": Tenantid,
+                    "name": "admin",
+                    "description": "A description ...",
+                    "enabled": true
+                }
+            ],
+            "tenants_links": []
+        }
+
+    return data
+
+
 def get_serverdetail(token):
 
     data = {"servers": []}
@@ -1866,6 +1885,105 @@ def list_image():
         "first": "/v2/images"
     }
 
+    return data
+
+
+def image_version():
+
+    data = {
+        "versions": [
+            {
+                "id": "v2.6",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v2/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "EXPERIMENTAL"
+            },
+            {
+                "id": "v2.5",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v2/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "CURRENT"
+            },
+            {
+                "id": "v2.4",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v2/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "SUPPORTED"
+            },
+            {
+                "id": "v2.3",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v2/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "SUPPORTED"
+            },
+            {
+                "id": "v2.2",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v2/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "SUPPORTED"
+            },
+            {
+                "id": "v2.1",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v2/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "SUPPORTED"
+            },
+            {
+                "id": "v2.0",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v2/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "SUPPORTED"
+            },
+            {
+                "id": "v1.1",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v1/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "DEPRECATED"
+            },
+            {
+                "id": "v1.0",
+                "links": [
+                    {
+                        "href": "http://glance.openstack.example.org/v1/",
+                        "rel": "self"
+                    }
+                ],
+                "status": "DEPRECATED"
+            }
+        ]
+    }
     return data
 
 
