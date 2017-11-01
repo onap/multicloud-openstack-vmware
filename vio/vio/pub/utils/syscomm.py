@@ -89,4 +89,17 @@ def _walk_json(data, data2):
     return False
 
 
+def keystoneVersion(url=None, version="v3"):
+
+    tmp = url.split("/")
+    v = tmp[-1]
+    if v not in ["v2.0", "v3"]:
+        url += "/" + version
+    else:
+        tmp[-1] = version
+        url = "/".join(tmp)
+
+    return url
+
+
 catalog = Catalogs()
