@@ -18,6 +18,7 @@ from vio.pub.msapi import extsys
 from vio.pub.exceptions import VimDriverVioException
 from vio.pub.utils.syscomm import catalog
 from vio.pub.utils.syscomm import verifyKeystoneV2
+from vio.pub.utils.syscomm import keystoneVersion
 from vio.pub.config.config import MSB_SERVICE_PORT, MSB_SERVICE_IP
 import json
 import requests
@@ -109,11 +110,11 @@ class TokenView(BaseClient):
             return Response(data={"error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        keystoneURL = vim_info['url']
+        url = keystoneVersion(url=vim_info['url'], version="v3")
         logger.info("vimid(%(vimid)s) get keystone url %(url)s ",
-                    {"vimid": vimid, "url": keystoneURL})
+                    {"vimid": vimid, "url": url})
         try:
-            res = requests.get(url=keystoneURL, verify=False)
+            res = requests.get(url=url, verify=False)
             if res.status_code not in [status.HTTP_200_OK,
                                        status.HTTP_201_CREATED,
                                        status.HTTP_202_ACCEPTED]:
@@ -169,12 +170,7 @@ class TokenView(BaseClient):
             return Response(data={"error": "method not allowed"},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-        url = vim_info['url']
-        # keystone  version must be v3
-        if url.split('/')[-1] != "v3":
-            return Response(data={"error": "The keystone server is not v3"},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        url = keystoneVersion(url=vim_info['url'], version="v3")
         url += "/auth/tokens"
         headers = {"Content-Type": "application/json"}
         logger.info("vimid(%(vimid)s) request V3 token url %(url)s ",
@@ -251,9 +247,7 @@ class TokenView(BaseClient):
             return Response(data={"error": "method not allowed"},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
         # replace to v2.0
-        url = vim_info['url'].split('/')
-        url[-1] = 'v2.0'
-        url = "/".join(url)
+        url = keystoneVersion(url=vim_info["url"], version="v2.0")
         url += "/tokens"
         headers = {"Content-Type": "application/json"}
         logger.info("vimid(%(vimid)s) request V2 token url %(url)s ",
@@ -346,13 +340,8 @@ class TokenV2View(BaseClient):
             logging.exception("error %s" % e)
             return Response(data={"error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        keystoneURL = vim_info['url']
         # replace to v2.0
-        url = keystoneURL.split('/')
-        url[-1] = 'v2.0'
-        url = "/".join(url)
-
+        url = keystoneVersion(url=vim_info['url'], version="v2.0")
         logger.info("vimid(%(vimid)s) get keystoneV2 url %(url)s ",
                     {"vimid": vimid, "url": url})
         try:
@@ -398,9 +387,7 @@ class TokenV2View(BaseClient):
             return Response(data={"error": "method not allowed"},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
         # replace to v2.0
-        url = vim_info['url'].split('/')
-        url[-1] = 'v2.0'
-        url = "/".join(url)
+        url = keystoneVersion(url=vim_info['url'], version="v2.0")
         url += "/tokens"
         headers = {"Content-Type": "application/json"}
         logger.info("vimid(%(vimid)s) request V2 token url %(url)s ",
