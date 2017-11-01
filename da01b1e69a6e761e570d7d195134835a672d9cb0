@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a2f8d8d_62af9b95",
+        "filename": "vio/vio/pub/utils/syscomm.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1205
+      },
+      "writtenOn": "2017-11-01T08:05:28Z",
+      "side": 1,
+      "message": "don\u0027t add default value here, url should be a mandatory value.",
+      "range": {
+        "startLine": 92,
+        "startChar": 24,
+        "endLine": 92,
+        "endChar": 28
+      },
+      "revId": "da01b1e69a6e761e570d7d195134835a672d9cb0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
