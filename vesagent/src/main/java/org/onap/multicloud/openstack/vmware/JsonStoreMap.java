@@ -90,21 +90,34 @@ public class JsonStoreMap {
         {
             String key = i.next().toString();
             List<JsonAlarmStorage> value = map.get(key);
-            String value1=value.get(0).alarm+""+value.get(0).json.toString();
-            log.info("Key : " + key +" value :"+value1);
-            JSONObject json = value.get(0).json;
-            log.info(line);
-            log.info(json.get("event").toString());
-            JSONObject obj = (JSONObject) json.get("event");
-            list.add(obj);
+            if(value.get(0).vesSendStatus.equals("failed") || value.get(0).vesSendStatus.equals("new")){
+                String value1=value.get(0).alarm+""+value.get(0).json.toString();
+                log.info("Key : " + key +" value :"+value1);
+                JSONObject json = value.get(0).json;
+                log.info(json.get("event").toString());
+                JSONObject obj = (JSONObject) json.get("event");
+                list.add(obj);
+            }
         }
-        log.info(line);
         eventList.put("eventList", list);
         log.info(eventList.toString());
-        log.info(line);
         return eventList;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public boolean AnyVesEventSendFailed(){
+        log.info("If Any VES Event Exists for which Send Attempt Failed");
+        Iterator i = map.keySet().iterator();
+        while(i.hasNext())
+        {
+            String key = i.next().toString();
+            List<JsonAlarmStorage> value = map.get(key);
+            if(value.get(0).vesSendStatus.equals("failed")){
+                return true;
+            }
+        }
+        return false;
+    }
 
     @SuppressWarnings("rawtypes")
     public void displayALLEntriesInMap(){

@@ -19,20 +19,21 @@ package org.onap.multicloud.openstack.vmware;
 public class VesEntity {
     private String vesip;
     private Integer port;
-    private String vesUsername;
-    private String vesPassword;
+    //private String vesUsername;
+    //private String vesPassword;
     public String getVesip() {
 	    return vesip;
     }
     public void setVesip(String vesip) {
         this.vesip = vesip;
     }
-    public Integer getPort() {
+    public Integer getVesPort() {
         return port;
     }
-    public void setPort(Integer port) {
+    public void setVesPort(Integer port) {
         this.port = port;
     }
+/*
     public String getVesUsername() {
         return vesUsername;
     }
@@ -45,4 +46,5 @@ public class VesEntity {
     public void setVesPassword(String vesPassword) {
         this.vesPassword = vesPassword;
     }
+*/
 }

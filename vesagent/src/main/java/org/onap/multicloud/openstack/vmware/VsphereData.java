@@ -68,7 +68,7 @@ public class VsphereData {
         String eventId;
         String sourceId =vsphereDataEntity.getSourceId();
         Double faultFieldsVersion=2.0;
-        if (vsphereDataEntity.getStatus() !="green") {
+        if (!vsphereDataEntity.getStatus().equals("green")) {
             eventName="Fault_MultiCloud_VMFailure";
             priority="High";
             eventSeverity="CRITICAL" ;  //it should be in caps

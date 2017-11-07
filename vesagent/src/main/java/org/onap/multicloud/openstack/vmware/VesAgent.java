@@ -31,6 +31,7 @@ public class VesAgent {
    private static final String ERROR = "error";
    private static final Integer TIMERDURATION=360000;
    private static final String GREEN="green";
+
  private VesAgent(){
     }
     public static void main(String[] args) throws InterruptedException {
@@ -67,10 +68,6 @@ public class VesAgent {
                 if(file.readProperties(vsphereEntity,filePath) && getEnv(vsphereEntity, vesEntity))
                 {
                     VESRestAPI vesRestAPI= new VESRestAPI();
-                    JSONObject eventObj = new JSONObject();
-                    JSONObject event = new JSONObject();
-                    JSONObject commonEventHeader = new JSONObject();
-                    JSONObject faultFields = new JSONObject();
                     VesTimer timer = new VesTimer(map);
                    int i=0;
                    while(true)
@@ -92,21 +89,32 @@ public class VesAgent {
                         JSONArray jsonObject = (JSONArray) obj;
                         log.info(jsonObject.toString());
                         log.info("Iterating Json files-vms");
+                        count = 0;
                         for(int j = 0;j<=jsonObject.size()-1;j++){
-                            log.info("Is timer running: ",timer.isTimerRunning());
-                            log.info("Is timed out happen: ",timer.isTimeout());
+                            JSONObject event = new JSONObject();
+                            JSONObject eventObj = new JSONObject();
+                            JSONObject commonEventHeader = new JSONObject();
+                            JSONObject faultFields = new JSONObject();
+                            log.info("Is timer running: "+String.valueOf(timer.isTimerRunning()));
+                            log.info("Is timed out happen: "+String.valueOf(timer.isTimeout()));
                             JSONObject js = (JSONObject) jsonObject.get(j);
                             count++;
                             log.info("////////////////////////////////////////////////////////////////////////////");
-                            log.info("Total entries in map:  ",map.totalEntriesInMap());
-                            log.info("Count for checking vms :",count);
+                            log.info("Total entries in map:  "+String.valueOf(map.totalEntriesInMap()));
+                            log.info("Count for checking vms :"+String.valueOf(count));
                             VsphereDataEntity entity = vsphereData.gettingVMInfo(js,vsphereDataEntity,vsphereEntity);
+
+                            if(entity.getSourceId() == null || entity.getSourceId().length() == 0)
+                            {
+                                log.info("UUID for VM not found, VM entry not added in map");
+                                continue;
+                            }
                             String heartBeatStatus = vsphereDataEntity.getStatus();
                             String uuidKey = vsphereDataEntity.getSourceId();
                             log.info("Heart beat status of vm",heartBeatStatus);
-                            if(heartBeatStatus!=GREEN){
+                            if(!heartBeatStatus.equals(GREEN)){
                                 //encode json
-                                if(map.isJsonFound(uuidKey) && map.retrieveFromMap(uuidKey, "ALARM") == "ON"){
+                                if(map.isJsonFound(uuidKey) && map.retrieveFromMap(uuidKey, "ALARM").equals("ON")){
                                     log.info("Alarm ON already raised...");
                                 }
                                 else if(!map.isJsonFound(uuidKey)){
@@ -116,7 +124,7 @@ public class VesAgent {
                                     log.info("json, alarm and vesSend status:  "+list.get(0).json.toString()+" :"+list.get(0).alarm+" :"+list.get(0).vesSendStatus);
                                     map.addToMap(uuidKey, list);
 
-                                    if(map.totalEntriesInMap()>1)
+                                    if(map.AnyVesEventSendFailed())
                                     {
                                         JSONObject alarmJsonConstructArray = map.retrieveALLFromMapBatch();
                                         vesRestAPI.publishBatchEventToVES(vesEntity, alarmJsonConstructArray, map, timer, uuidKey, list, TIMERDURATION,vesSendStatus);                   
@@ -128,11 +136,11 @@ public class VesAgent {
                                     }
                                 }
                             }
-                            else if(heartBeatStatus == GREEN){                              /* if the alarm on entry is found in Map then check for the vesSendStatus
+                            else if(heartBeatStatus.equals(GREEN)){                              /* if the alarm on entry is found in Map then check for the vesSendStatus
                                *  IF the VesSendStatus ==failed for Alarm On
                                *   in the case remove the entries from MAP and
                                *   donot encode the alarm off and donot send it to VESCollector */
-                               if((map.isJsonFound(uuidKey) &&  map.retrieveFromMap(uuidKey, "ALARM") == "ON") && map.retrieveFromMap(uuidKey,"VES_STATUS")!="failed"){	
+                               if((map.isJsonFound(uuidKey) &&  map.retrieveFromMap(uuidKey, "ALARM").equals("ON")) && map.retrieveFromMap(uuidKey,"VES_STATUS")!="failed"){
                                     log.info("heart beat status is green, uuid found in map ");
                                     alarmCondition = "OFF";
                                     vsphereData.encodeJson(entity, event, eventObj, commonEventHeader, faultFields,map);
@@ -140,9 +148,9 @@ public class VesAgent {
                                     String json = event.toJSONString();
                                     map.addToMap(uuidKey, list);
 
-                                    if(map.totalEntriesInMap()>1){
-                                        //sending only entry having vesSendStatus = failed
+                                    if(map.AnyVesEventSendFailed()){
                                         JSONObject alarmJsonConstructArray = map.retrieveALLFromMapBatch();
+                                        //sending only entry having vesSendStatus = failed along with vesSendStatus = new
                                         vesRestAPI.publishBatchEventToVES(vesEntity, alarmJsonConstructArray, map, timer, json, list, TIMERDURATION,vesSendStatus);
                                     }
                                     else{
@@ -150,7 +158,7 @@ public class VesAgent {
                                     }
                                 }
                                 else{
-                                    log.info("ALarm ON not found, ves Send status is failed");
+                                    log.info("ALarm ON not found for the VM");
                                 }
                             }
                             Thread.sleep(2000);
@@ -211,7 +219,7 @@ public class VesAgent {
             vsphereEntity.setVsphereUsername(System.getenv("Vsphere_Username"));
             vsphereEntity.setVsperePassword(System.getenv("Vsphere_Password"));
             vesEntity.setVesip(System.getenv("VesCollector_Ip"));
-            vesEntity.setVesPassword(System.getenv("VesCollector_Port"));
+            vesEntity.setVesPort(Integer.parseInt(System.getenv("VesCollector_Port")));
             return true;
         }
     }catch(NullPointerException e){

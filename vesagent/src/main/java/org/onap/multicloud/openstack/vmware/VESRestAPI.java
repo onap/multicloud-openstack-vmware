@@ -43,15 +43,15 @@ public class VESRestAPI{
         try{
             eventType = anyEvent;
             log.info("inside publish any event  method");
-            sock = new Socket(ves.getVesip(), ves.getPort());
+            sock = new Socket(ves.getVesip(), ves.getVesPort());
             log.info(String.valueOf(sock.isConnected()));
             if(sock.isConnected()){
                 log.info("list "+list.get(0).json.toString());
                 client = new DefaultHttpClient();
                 /* check the vesStructure  whether each of the variable like ip address , portnumber , user name and password  contains something or is null */
                 if(vesEntitycredentialCheckSuccess(ves)){
-                    post = new HttpPost("http://"+ves.getVesip()+":"+ves.getPort()+"/eventListener/v5");
-                    log.info(ves.getPort().toString());
+                    post = new HttpPost("http://"+ves.getVesip()+":"+ves.getVesPort()+"/eventListener/v5");
+                    log.info(ves.getVesPort().toString());
                 }else{
                     log.info("Null");
                 }
@@ -85,13 +85,13 @@ public class VESRestAPI{
         try {
             eventType = batchEvent;
             log.info("inside publish batch event  method");
-            sock = new Socket(ves.getVesip(), ves.getPort());
+            sock = new Socket(ves.getVesip(), ves.getVesPort());
             if(sock.isConnected()){
                 log.info("Sending batch");
                 client = new DefaultHttpClient();
                 if(vesEntitycredentialCheckSuccess(ves))
                 {
-                     post = new HttpPost("http://"+ves.getVesip()+":"+ves.getPort()+"/eventListener/v5/eventBatch");
+                     post = new HttpPost("http://"+ves.getVesip()+":"+ves.getVesPort()+"/eventListener/v5/eventBatch");
                 }else{
                     log.info("Null");
                 }
@@ -128,7 +128,7 @@ public class VESRestAPI{
     }
 
     public boolean vesEntitycredentialCheckSuccess(VesEntity ves){
-        if(ves.getPort()==null || ves.getVesip()==null || ves.getVesPassword()==null || ves.getVesUsername()==null){
+        if(ves.getVesPort()==null || ves.getVesip()==null){
             return false;
         }
         return true;
