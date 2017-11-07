@@ -104,7 +104,7 @@ public class VesAgent {
                             String heartBeatStatus = vsphereDataEntity.getStatus();
                             String uuidKey = vsphereDataEntity.getSourceId();
                             log.info("Heart beat status of vm",heartBeatStatus);
-                            if(heartBeatStatus!=GREEN){
+                            if(!heartBeatStatus.equals(GREEN)){
                                 //encode json
                                 if(map.isJsonFound(uuidKey) && map.retrieveFromMap(uuidKey, "ALARM") == "ON"){
                                     log.info("Alarm ON already raised...");
@@ -128,7 +128,7 @@ public class VesAgent {
                                     }
                                 }
                             }
-                            else if(heartBeatStatus == GREEN){                              /* if the alarm on entry is found in Map then check for the vesSendStatus
+                            else if(heartBeatStatus.equals(GREEN)){                              /* if the alarm on entry is found in Map then check for the vesSendStatus
                                *  IF the VesSendStatus ==failed for Alarm On
                                *   in the case remove the entries from MAP and
                                *   donot encode the alarm off and donot send it to VESCollector */
@@ -150,7 +150,7 @@ public class VesAgent {
                                     }
                                 }
                                 else{
-                                    log.info("ALarm ON not found, ves Send status is failed");
+                                    log.info("ALarm ON not found for the VM");
                                 }
                             }
                             Thread.sleep(2000);
