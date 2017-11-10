@@ -60,11 +60,11 @@ public class VESRestAPI{
                 post.setHeader("Content-type", applicationJson);
                 HttpResponse response = client.execute(post);
                 log.info(response.getStatusLine().toString());
+                sock.close();
+                client.close();
                 if(vESCollectorSendStatus(response,map,uuidKey,list,timer,vesSendStatus)){
                     return true;
                 }
-                sock.close();
-                client.close();
             }
         }catch(Exception e){
             log.info("VES Collector connection refused, exception occured");
@@ -101,6 +101,8 @@ public class VESRestAPI{
                 post.addHeader("Accept", applicationJson);
                 HttpResponse response = client.execute(post);
                 log.info(response.getStatusLine().toString());
+                sock.close();
+                client.close();
                 if(!connectionRefused(response)){
                     return true;
                 }
@@ -108,8 +110,6 @@ public class VESRestAPI{
                     return true;
                 }
             }
-            sock.close();
-            client.close();
         }catch(Exception e){
             log.info("connection refused, exception occured");
             log.error("error",e);
@@ -135,7 +135,7 @@ public class VESRestAPI{
     }
 
 
-    public boolean vESCollectorSendStatus ( HttpResponse response,JsonStoreMap map,String uuidKey, List<JsonAlarmStorage> list,VesTimer timer,String vesSendStatus) throws ParseException { 
+    public boolean vESCollectorSendStatus ( HttpResponse response,JsonStoreMap map,String uuidKey, List<JsonAlarmStorage> list,VesTimer timer,String vesSendStatus) throws ParseException {
         JsonAlarmStorage store = list.get(0);
         log.info(String.valueOf(list.size()));
         log.info(store.alarm);
@@ -172,8 +172,14 @@ public class VESRestAPI{
                 log.info("timer is not running....");
             }
             return true;
+        }else if(response.getStatusLine().getStatusCode()>=400 && response.getStatusLine().getStatusCode()<600){
+            if(alarmStatus == "OFF" && vesSendStatus=="new"){
+                list.get(0).vesSendStatus = "failed";
+                map.updateMap(uuidKey, list);
+            }
+            return true;
         }else{
-            log.info("connection error !200");
+            log.info("connection error");
             return false;
         }
     }

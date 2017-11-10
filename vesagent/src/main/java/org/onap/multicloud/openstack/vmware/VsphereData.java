@@ -82,7 +82,7 @@ public class VsphereData {
         else {
             eventName="Fault_MultiCloud_VMFailureCleared";
             priority="Normal";
-            eventSeverity="Normal" ;
+            eventSeverity="NORMAL" ;
             alarmCondition="Vm_Restart";
             vfStatus="Active";
             specificProblem="AlarmOff";
