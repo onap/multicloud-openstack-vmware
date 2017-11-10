@@ -19,14 +19,15 @@
         <groupId>org.onap.oparent</groupId>
         <artifactId>oparent</artifactId>
         <version>0.1.1</version>
+        <relativePath>../oparent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.onap.multicloud.openstack.vmware.vio</groupId>
-    <artifactId>multicloud-vio-plugin</artifactId>
+    <groupId>org.onap.multicloud.openstack.vmware</groupId>
+    <artifactId>multicloud-openstack-vmware</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>multicloud-opentack-vmware-vio</name>
-    <description>multicloud vio</description>
+    <name>multicloud-openstack-vmware</name>
+    <description>multicloud openstack vmware</description>
     <properties>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
