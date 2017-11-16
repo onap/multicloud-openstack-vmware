@@ -16,14 +16,13 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.onap.oparent</groupId>
+        <groupId>org.onap.oparen</groupId>
         <artifactId>oparent</artifactId>
         <version>0.1.1</version>
-        <relativePath>../oparent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.onap.multicloud.openstack.vmware</groupId>
-    <artifactId>multicloud-openstack-vmware</artifactId>
+    <artifactId>multicloud-vio</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>multicloud-opentack-vmware</name>
@@ -35,5 +34,18 @@
         <nexusproxy>https://nexus.onap.org</nexusproxy>
     </properties>
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <nexusUrl>${nexusproxy}</nexusUrl>
+                    <stagingProfileId>176c31dfe190a</stagingProfileId>
+                    <serverId>ecomp-staging</serverId>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
