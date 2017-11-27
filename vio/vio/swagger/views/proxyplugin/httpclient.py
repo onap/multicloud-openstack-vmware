@@ -67,7 +67,8 @@ class BaseClient(APIView):
         for schema in list(self.session.adapters):
             self.session.mount(schema, TCPKeepAliveAdapter())
 
-    def buildRequest(self, request, vimid, tenantid="", tail=None):
+    def buildRequest(self, request, vimid, tenantid="", tail=None,
+                     method=None):
 
         headers = {}
         preUrl = catalog.getEndpointBy(
@@ -80,6 +81,18 @@ class BaseClient(APIView):
         headers["X-Subject-Token"] = token
         headers['Content-Type'] = request.META.get(
             "CONTENT_TYPE", "application/json")
+
+        if method == "GET":
+            # append parameters in url path
+            query = ""
+            for k, v in request.GET.items():
+                query += (k + "=" + v)
+                query += "&"
+
+            if query != "":
+                query = query[:-1]
+                endPointURL += "?" + query
+
         try:
             json_req = json.loads(request.body)
         except Exception:

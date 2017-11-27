@@ -13,9 +13,9 @@
 from vio.swagger.views.proxyplugin.httpclient import BaseClient
 
 
-class ImageServer(BaseClient):
+class DesignateServer(BaseClient):
 
-    serverType = "glance"
+    serverType = "designate"
 
     def get(self, request, vimid, other=None):
 

@@ -19,8 +19,10 @@ class HeatServer(BaseClient):
 
     def get(self, request, vimid, tenantid, other):
 
-        return self.send(request=request, method="GET",
-                         vimid=vimid, tenantid=tenantid, other=other)
+        (url, headers, _) = self.buildRequest(
+            request, vimid, tenantid=tenantid, tail=other, method="GET")
+
+        return self._request(url, method="GET", headers=headers)
 
     def post(self, request, vimid, tenantid, other):
 

@@ -38,16 +38,8 @@ class IdentityServer(BaseClient):
 
     def get(self, request, vimid, other=None):
 
-        (url, headers, _) = self.buildRequest(request, vimid, tail=other)
-
-        query = ""
-        for k, v in request.GET.items():
-            query += (k + "=" + v)
-            query += "&"
-
-        if query != "":
-            query = query[:-1]
-            url += "/?" + query
+        (url, headers, _) = self.buildRequest(request, vimid, tail=other,
+                                              method="GET")
 
         try:
             res = self._request(url, method="GET", headers=headers)
@@ -207,7 +199,7 @@ class TokenView(BaseClient):
                     vimEndpoints[i['name']][j['interface']] = ends
                     res = tmp.split("/")
                     if i['type'] in ['image', 'network',
-                                     'cloudformation', 'identity']:
+                                     'cloudformation', 'identity', 'dns']:
                         if i['type'] != 'identity':
                             res[2] = MSB_ADDRESS + "/multicloud-vio/v0/" + \
                                 vimid + "/" + i['name']
@@ -296,7 +288,7 @@ class TokenView(BaseClient):
                     vimEndpoints[cal['name']][key] = urlname
 
                 if cal['type'] in ['image', 'network',
-                                   'cloudformation', 'identity']:
+                                   'cloudformation', 'identity', 'dns']:
                     name = cal['name'] if cal['type'] != 'identity' \
                         else cal['type']
                     for i in ("adminURL", "internalURL", "publicURL"):
@@ -435,7 +427,7 @@ class TokenV2View(BaseClient):
                     vimEndpoints[cal['name']][key] = urlname
 
                 if cal['type'] in ['image', 'network',
-                                   'cloudformation', 'identity']:
+                                   'cloudformation', 'identity', 'dns']:
                     name = cal['name'] if cal['type'] != 'identity' \
                         else cal['type']
                     for i in ("adminURL", "internalURL", "publicURL"):

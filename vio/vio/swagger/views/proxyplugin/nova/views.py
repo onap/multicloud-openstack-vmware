@@ -20,15 +20,8 @@ class ComputeServer(BaseClient):
     def get(self, request, vimid, tenantid, other):
 
         (url, headers, _) = self.buildRequest(
-            request, vimid, tenantid=tenantid, tail=other)
-        query = ""
-        for k, v in request.GET.items():
-            query += (k + "=" + v)
-            query += "&"
+            request, vimid, tenantid=tenantid, tail=other, method="GET")
 
-        if query != "":
-            query = query[:-1]
-            url += "?" + query
         return self._request(url, method="GET", headers=headers)
 
     def post(self, request, vimid, tenantid, other):
