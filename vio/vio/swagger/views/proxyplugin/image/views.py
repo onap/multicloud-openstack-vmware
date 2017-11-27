@@ -17,7 +17,7 @@ class ImageServer(BaseClient):
 
     serverType = "glance"
 
-    def get(self, request, vimid, other):
+    def get(self, request, vimid, other=None):
 
         (url, headers, _) = self.buildRequest(request, vimid, tail=other)
 

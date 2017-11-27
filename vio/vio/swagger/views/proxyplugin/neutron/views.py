@@ -19,8 +19,17 @@ class NetWorkServer(BaseClient):
 
     def get(self, request, vimid, other=None):
 
-        return self.send(request=request, method="GET",
-                         vimid=vimid, other=other)
+        (url, headers, _) = self.buildRequest(request, vimid, tail=other)
+
+        query = ""
+        for k, v in request.GET.items():
+            query += (k + "=" + v)
+            query += "&"
+
+        if query != "":
+            query = query[:-1]
+            url += "?" + query
+        return self._request(url, method="GET", headers=headers)
 
     def post(self, request, vimid, other):
 

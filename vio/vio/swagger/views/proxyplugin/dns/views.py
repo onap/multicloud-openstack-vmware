@@ -13,14 +13,14 @@
 from vio.swagger.views.proxyplugin.httpclient import BaseClient
 
 
-class HeatServer(BaseClient):
+class DesignateServer(BaseClient):
 
-    serverType = "heat"
+    serverType = "designate"
 
-    def get(self, request, vimid, tenantid, other):
+    def get(self, request, vimid, other=None):
 
-        (url, headers, _) = self.buildRequest(
-            request, vimid, tenantid=tenantid, tail=other)
+        (url, headers, _) = self.buildRequest(request, vimid, tail=other)
+
         query = ""
         for k, v in request.GET.items():
             query += (k + "=" + v)
@@ -31,22 +31,22 @@ class HeatServer(BaseClient):
             url += "?" + query
         return self._request(url, method="GET", headers=headers)
 
-    def post(self, request, vimid, tenantid, other):
+    def post(self, request, vimid, other):
 
         return self.send(request=request, method="POST",
-                         vimid=vimid, tenantid=tenantid, other=other)
+                         vimid=vimid, other=other)
 
-    def put(self, request, vimid, tenantid, other):
-
-        return self.send(request=request, method="PUT",
-                         vimid=vimid, tenantid=tenantid, other=other)
-
-    def delete(self, request, vimid, tenantid, other):
-
-        return self.send(request=request, method="DELETE",
-                         vimid=vimid, tenantid=tenantid, other=other)
-
-    def patch(self, request, vimid, tenantid, other):
+    def patch(self, request, vimid, other):
 
         return self.send(request=request, method="PATCH",
-                         vimid=vimid, tenantid=tenantid, other=other)
+                         vimid=vimid, other=other)
+
+    def put(self, request, vimid, other):
+
+        return self.send(request=request, method="PUT",
+                         vimid=vimid, other=other)
+
+    def delete(self, request, vimid, other):
+
+        return self.send(request=request, method="DELETE",
+                         vimid=vimid, other=other)
