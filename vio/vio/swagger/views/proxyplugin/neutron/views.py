@@ -19,8 +19,11 @@ class NetWorkServer(BaseClient):
 
     def get(self, request, vimid, other=None):
 
-        return self.send(request=request, method="GET",
-                         vimid=vimid, other=other)
+        (url, headers, _) = self.buildRequest(request, vimid, tail=other,
+                                              method="GET")
+
+
+        return self._request(url, method="GET", headers=headers)
 
     def post(self, request, vimid, other):
 

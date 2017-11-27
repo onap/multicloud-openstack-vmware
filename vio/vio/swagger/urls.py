@@ -38,6 +38,7 @@ from vio.swagger.views.proxyplugin.image.views import ImageServer
 from vio.swagger.views.proxyplugin.neutron.views import NetWorkServer
 from vio.swagger.views.proxyplugin.volumn.views import VolumeServer
 from vio.swagger.views.proxyplugin.heat.views import HeatServer
+from vio.swagger.views.proxyplugin.dns.views import DesignateServer
 
 # Registry
 from vio.swagger.views.registry.views import Registry
@@ -274,6 +275,13 @@ urlpatterns = [
         r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/'
         r'nova/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
         ComputeServer.as_view()),
+
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/designate$',
+        DesignateServer.as_view()),
+
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/'
+        r'designate/(?P<other>(.*))$',
+        DesignateServer.as_view()),
 
     # Extensions
     url(
