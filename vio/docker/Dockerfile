@@ -17,7 +17,7 @@ RUN apt-get update && \
 
 
 RUN  cd /opt/ && \
-    wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=staging&g=org.onap.multicloud.openstack.vmware&a=multicloud-openstack-vmware&v=LATEST&e=zip' && \
+    wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware.vio&a=multicloud-vio-plugin&v=LATEST&e=zip' && \
     unzip multicloud-vio.zip && \
     rm -rf multicloud-vio.zip && \
     pip install -r vio/requirements.txt
