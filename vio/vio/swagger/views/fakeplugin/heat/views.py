@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import getAllStacks
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import showStack
+from vio.swagger.views.fakeplugin.fakeData.fakeResponse import showStackByID
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import createStack
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import deleteStack
 from vio.swagger.views.fakeplugin.fakeData.fakeResponse import \
@@ -56,8 +57,11 @@ class FakeHeatService(APIView):
         data = ""
         if stackName is None and stackID is None:
             data = getAllStacks(token=token)
-        elif stackName or stackID:
-            data = showStack(stack_id=stackID, token=token)
+        elif stackName and stackID:
+            data = showStackByID(stack_name=stackName,
+                                 stack_id=stackID, token=token)
+        elif stackName:
+            data = showStack(stack_name=stackName, token=token)
 
         if 'error' in data:
             return Response(data=data['error']['message'],

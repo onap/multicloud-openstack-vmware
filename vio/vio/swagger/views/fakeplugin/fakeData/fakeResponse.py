@@ -9,6 +9,7 @@ from datetime import timedelta
 import copy
 
 MSB_SERVER = MSB_SERVICE_IP + ":" + MSB_SERVICE_PORT
+API_NAMESPACE = "api/multicloud-vio/v0/vmware_fake/heat"
 
 Token = "gAAAAABZmlkS3H24i7446u41QoDMMEFi49sUbYiB2fqrZq00" \
         "TR92RDLxt4AWzHsBa36IeWeY_eVEnDWAjIuV" \
@@ -2276,8 +2277,10 @@ def getAllStacks(token):
                     "id": STACK_ID,
                     "links": [
                         {
-                            "href": "http://127.0.0.1:8004/v1/" + Tenantid +
-                                    "/stacks/" + STACK_NAME + "/" + STACK_ID,
+                            "href": "http://" + MSB_SERVER + "/"
+                                    + API_NAMESPACE + "/"
+                                    + Tenantid + "/stacks/" +
+                                    STACK_NAME + "/" + STACK_ID,
                             "rel": "self"
                         }
                     ],
@@ -2310,7 +2313,8 @@ def createStack(stack_name, token):
                 "id": STACK_ID,
                 "links": [
                     {
-                        "href": "http://127.0.0.1:8004/v1/"
+                        "href": "http://" + MSB_SERVER + "/"
+                                + API_NAMESPACE + "/"
                                 + Tenantid + "/stacks/" +
                                 stack_name + "/" + STACK_ID,
                         "rel": "self"
@@ -2341,8 +2345,9 @@ def createStackPreview(stack_name, token):
                 "id": "None",
                 "links": [
                     {
-                        "href": "http://127.0.0.1:8004/v1/" +
-                                Tenantid + "/stacks/" +
+                        "href": "http://" + MSB_SERVER + "/" +
+                                API_NAMESPACE + "/"
+                                + Tenantid + "/stacks/" +
                                 STACK_NAME + "/None",
                         "rel": "self"
                     }
@@ -2350,7 +2355,7 @@ def createStackPreview(stack_name, token):
                 "notification_topics": [],
                 "outputs": [],
                 "parameters": {
-                    "OS::project_id": "6e18cc2bdbeb48a5basad2dc499f6804",
+                    "OS::project_id": Tenantid,
                     "OS::stack_id": "None",
                     "OS::stack_name": "teststack",
                     "admin_user": "cloud-user",
@@ -2410,7 +2415,7 @@ def createStackPreview(stack_name, token):
                             "path": "/resources/the_sg_res",
                             "stack_id": "None",
                             "stack_name": "teststack",
-                            "tenant": "6e18cc2bdbeb48a5b3cad2dc499f6804"
+                            "tenant": Tenantid
                         },
                         "resource_name": "the_sg_res",
                         "resource_status": "COMPLETE",
@@ -2420,7 +2425,7 @@ def createStackPreview(stack_name, token):
                             "path": "",
                             "stack_id": "None",
                             "stack_name": "teststack",
-                            "tenant": "6e18cc2bdbeb48a5b3cad2dc499f6804"
+                            "tenant": Tenantid
                         },
                         "stack_name": STACK_NAME,
                         "updated_time": "2017-10-31T15:12:36Z"
@@ -2480,7 +2485,7 @@ def createStackPreview(stack_name, token):
                             "path": "/resources/hello_world",
                             "stack_id": "None",
                             "stack_name": "teststack",
-                            "tenant": "6e18cc2bdbeb48a3433cad2dc499sdf32234"
+                            "tenant": Tenantid
                         },
                         "resource_name": "hello_world",
                         "resource_status": "COMPLETE",
@@ -2490,13 +2495,13 @@ def createStackPreview(stack_name, token):
                             "path": "",
                             "stack_id": "None",
                             "stack_name": "teststack",
-                            "tenant": "6e18cc2bdbeb48a3433cad2dc499sdf32234"
+                            "tenant": Tenantid
                         },
                         "stack_name": "teststack",
                         "updated_time": "2017-10-31T15:12:36Z"
                     }
                 ],
-                "stack_name": "test_stack",
+                "stack_name": STACK_NAME,
                 "stack_owner": null,
                 "tags": null,
                 "template_description":
@@ -2520,10 +2525,22 @@ def deleteStack(stack_id, token):
     return ""
 
 
-def showStack(stack_id, token):
+def showStackByID(stack_id, stack_name, token):
+    if token != Token:
+        return {"error": {"message": "unauthorization", "code": 401}}
+    if stack_id != STACK_ID or stack_name != STACK_NAME:
+        return {"error": {"message": "stack not found", "code": 404}}
+    else:
+        return showStack(stack_name, token)
+
+
+def showStack(stack_name, token):
 
     if token != Token:
         return {"error": {"message": "unauthorization", "code": 401}}
+
+    if stack_name != STACK_NAME:
+        return {"error": {"message": "stack not found", "code": 404}}
 
     data = \
         {
@@ -2536,17 +2553,17 @@ def showStack(stack_id, token):
                 "id": STACK_ID,
                 "links": [
                     {
-                        "href": "http://127.0.0.1:8004/v1/"
-                                "eb1c63a4f77141548385f113a28f0f52/stacks/"
-                                "simple_stack/"
-                                "3095aefc-09fb-4bc7-b1f0-f21a304e864c",
+                        "href": "http://" + MSB_SERVER + "/"
+                                + API_NAMESPACE + "/"
+                                + Tenantid + "/stacks/" + STACK_NAME
+                                + "/"+STACK_ID,
                         "rel": "self"
                     }
                 ],
                 "notification_topics": [],
                 "outputs": [],
                 "parameters": {
-                    "OS::project_id": "3ab5b02f-a01f-4f95-afa1-e254afc4a435",
+                    "OS::project_id": Tenantid,
                     "OS::stack_id": STACK_ID,
                     "OS::stack_name": STACK_NAME
                 },
