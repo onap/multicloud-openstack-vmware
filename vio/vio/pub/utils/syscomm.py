@@ -13,6 +13,8 @@
 import inspect
 import json
 from collections import defaultdict
+from rest_framework import status
+
 
 keystoneV2Json = \
     {
@@ -24,6 +26,10 @@ keystoneV2Json = \
             }
         }
     }
+
+
+SUCCESS_STATE = [status.HTTP_200_OK, status.HTTP_201_CREATED, status.HTTP_202_ACCEPTED]
+
 
 
 def fun_name():

@@ -19,6 +19,7 @@ from vio.pub.exceptions import VimDriverVioException
 from vio.pub.utils.syscomm import catalog
 from vio.pub.utils.syscomm import verifyKeystoneV2
 from vio.pub.utils.syscomm import keystoneVersion
+from vio.pub.utils.syscomm import SUCCESS_STATE
 from vio.pub.config.config import MSB_SERVICE_PORT, MSB_SERVICE_IP
 import json
 import requests
@@ -31,6 +32,37 @@ logger = logging.getLogger(__name__)
 
 MSB_ADDRESS = MSB_SERVICE_IP + ":" + MSB_SERVICE_PORT + "/api"
 
+NO_TENANTID_SERVICE_TYPE = ['image', 'network', 'cloudformation', 'identity', 'dns']
+
+
+
+class IdentityVersionLink(BaseClient):
+
+    serverType = 'keystone'
+
+    def get(self, request, vimid):
+        (url, headers, _) = self.buildRequest(request, vimid, tail=None,
+                                              method="GET")
+
+        try:
+            res = self._request(url, method="GET", headers=headers)
+            if res.status_code != status.HTTP_200_OK:
+                return Response(data={"error": res.data},
+                                status=res.status_code)
+            res = res.data
+            # replace keystone endpoint url with multicloud
+            # endpoint url, the default version is V3
+            res['version']['links'][0]['href'] = \
+                    "http://" + MSB_ADDRESS + "/multicloud-vio/v0/" \
+                    + vimid + "/identity"
+
+        except Exception as e:
+            logging.exception("error %s" % e)
+            return Response(data={"error": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(data=res, status=status.HTTP_200_OK)
+
 
 class IdentityServer(BaseClient):
 
@@ -41,25 +73,7 @@ class IdentityServer(BaseClient):
         (url, headers, _) = self.buildRequest(request, vimid, tail=other,
                                               method="GET")
 
-        try:
-            res = self._request(url, method="GET", headers=headers)
-            if res.status_code != status.HTTP_200_OK:
-                return Response(data={"error": res.data},
-                                status=res.status_code)
-            res = res.data
-            # replace keystone auth url with multicloud
-            # identity url
-            if other is None:
-                res['version']['links'][0]['href'] = \
-                    "http://" + MSB_ADDRESS + "/multicloud-vio/v0/" \
-                    + vimid + "/identity"
-
-        except Exception as e:
-            logging.exception("error %s" % e)
-            return Response(data={"error": str(e)},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response(data=res, status=status.HTTP_200_OK)
+        return self._request(url, method="GET", headers=headers)
 
     def patch(self, request, vimid, other):
 
@@ -107,9 +121,7 @@ class TokenView(BaseClient):
                     {"vimid": vimid, "url": url})
         try:
             res = requests.get(url=url, verify=False)
-            if res.status_code not in [status.HTTP_200_OK,
-                                       status.HTTP_201_CREATED,
-                                       status.HTTP_202_ACCEPTED]:
+            if res.status_code not in SUCCESS_STATE:
                 return Response(data={"error": res.content},
                                 status=res.status_code)
             res = res.json()
@@ -145,8 +157,10 @@ class TokenView(BaseClient):
 
         url_path = request.get_full_path()
 
+        # if request boy formatter match  token v2,
+        # It change to use v2 authorization.
         if verifyKeystoneV2(create_req):
-            return self._keystoneV2Token(url_path, vimid,
+            return _keystoneV2Token(url_path, vimid,
                                          create_req=create_req)
 
         try:
@@ -171,9 +185,7 @@ class TokenView(BaseClient):
         try:
             res = requests.post(url=url, data=json.dumps(create_req),
                                 headers=headers, verify=False)
-            if res.status_code not in [status.HTTP_200_OK,
-                                       status.HTTP_201_CREATED,
-                                       status.HTTP_202_ACCEPTED]:
+            if res.status_code not in SUCCESS_STATE:
                 return Response(data={"error": res.content},
                                 status=res.status_code)
 
@@ -198,8 +210,7 @@ class TokenView(BaseClient):
                     ends = ends[0] + "//" + ends[2] + version
                     vimEndpoints[i['name']][j['interface']] = ends
                     res = tmp.split("/")
-                    if i['type'] in ['image', 'network',
-                                     'cloudformation', 'identity', 'dns']:
+                    if i['type'] in NO_TENANTID_SERVICE_TYPE:
                         if i['type'] != 'identity':
                             res[2] = MSB_ADDRESS + "/multicloud-vio/v0/" + \
                                 vimid + "/" + i['name']
@@ -224,93 +235,7 @@ class TokenView(BaseClient):
         Res['X-Subject-Token'] = resHeader['X-Subject-Token']
         return Res
 
-    def _keystoneV2Token(self, url, vimid=None, create_req=None):
 
-        try:
-            vim_info = extsys.get_vim_by_id(vimid)
-        except VimDriverVioException as e:
-            return Response(data={'error': str(e)}, status=e.status_code)
-        except Exception as e:
-            logging.exception("error %s" % e)
-            return Response(data={"error": str(e)},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        if url[url.rfind("identity"):] != "identity/v3/tokens":
-            return Response(data={"error": "method not allowed"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        # replace to v2.0
-        url = keystoneVersion(url=vim_info["url"], version="v2.0")
-        url += "/tokens"
-        headers = {"Content-Type": "application/json"}
-        logger.info("vimid(%(vimid)s) request V2 token url %(url)s ",
-                    {"vimid": vimid, "url": url})
-
-        try:
-            res = requests.post(url=url, data=json.dumps(create_req),
-                                headers=headers, verify=False)
-            if res.status_code not in [status.HTTP_200_OK,
-                                       status.HTTP_201_CREATED,
-                                       status.HTTP_202_ACCEPTED]:
-                return Response(data={"error": res.content},
-                                status=res.status_code)
-            tokenInfo = res.json()
-        except Exception as e:
-            logging.exception("error %s" % e)
-            return Response(data={'error': str(e)},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        try:
-
-            tenantid = tokenInfo['access']['token']['tenant']['id']
-            vimEndpoints = defaultdict(dict)
-            for cal in tokenInfo['access']['serviceCatalog']:
-                # endpoint urls
-                item = cal['endpoints'][0]
-                adminurl = deepcopy(item['adminURL']).split('/')
-                internalurl = deepcopy(item['internalURL']).split('/')
-                publicurl = deepcopy(item['publicURL']).split('/')
-                # VIO identity url use v3 as default even got token by v2,
-                # need change to v2.0
-                if cal['type'] == 'identity':
-                    adminurl[-1] = "v2.0"
-                    publicurl[-1] = "v2.0"
-                    internalurl[-1] = "v2.0"
-                adminurl = adminurl[0] + "//" + adminurl[2] + (
-                    "/" + adminurl[3] if len(adminurl) > 3 else "")
-                internalurl = internalurl[0] + "//"+internalurl[2] + (
-                    "/" + internalurl[3] if len(internalurl) > 3 else "")
-                publicurl = publicurl[0] + "//"+publicurl[2] + (
-                    "/" + publicurl[3] if len(publicurl) > 3 else "")
-
-                for (key, urlname) in zip(('admin', 'internal', 'public'),
-                                          (adminurl, internalurl,
-                                           publicurl)):
-                    vimEndpoints[cal['name']][key] = urlname
-
-                if cal['type'] in ['image', 'network',
-                                   'cloudformation', 'identity', 'dns']:
-                    name = cal['name'] if cal['type'] != 'identity' \
-                        else cal['type']
-                    for i in ("adminURL", "internalURL", "publicURL"):
-                        item[i] = "http://" + MSB_ADDRESS + \
-                                  "/multicloud-vio/v0/" + vimid + "/" + name
-                else:
-                    for i in ("adminURL", "internalURL", "publicURL"):
-                        item[i] = "http://" + MSB_ADDRESS + \
-                                  "/multicloud-vio/v0/" + vimid + \
-                                  "/" + cal["name"] + "/"+tenantid
-
-        except Exception as e:
-            logging.exception("error %s" % e)
-            return Response(data={'error': str(e)},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        logger.info("vimid(%(vimid)s) service enpoints %(endpoint)s ", {
-                    "vimid": vimid, "endpoint": vimEndpoints})
-
-        catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
-        Res = Response(data=tokenInfo, status=status.HTTP_200_OK)
-        return Res
 
 
 class TokenV2View(BaseClient):
@@ -338,9 +263,7 @@ class TokenV2View(BaseClient):
                     {"vimid": vimid, "url": url})
         try:
             res = requests.get(url=url, verify=False)
-            if res.status_code not in [status.HTTP_200_OK,
-                                       status.HTTP_201_CREATED,
-                                       status.HTTP_202_ACCEPTED]:
+            if res.status_code not in SUCCESS_STATE:
                 return Response(data={"error": res.content},
                                 status=res.status_code)
             res = res.json()
@@ -366,88 +289,90 @@ class TokenV2View(BaseClient):
 
         url_path = request.get_full_path()
 
-        try:
-            vim_info = extsys.get_vim_by_id(vimid)
-        except VimDriverVioException as e:
-            return Response(data={'error': str(e)}, status=e.status_code)
-        except Exception as e:
-            logging.exception("error %s" % e)
-            return Response(data={"error": str(e)},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return _keystoneV2Token(url=url_path,vimid=vimid,create_req=create_req)
 
-        if url_path[url_path.rfind("identity"):] != "identity/v2.0/tokens":
-            return Response(data={"error": "method not allowed"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        # replace to v2.0
-        url = keystoneVersion(url=vim_info['url'], version="v2.0")
-        url += "/tokens"
-        headers = {"Content-Type": "application/json"}
-        logger.info("vimid(%(vimid)s) request V2 token url %(url)s ",
-                    {"vimid": vimid, "url": url})
 
-        try:
-            res = requests.post(url=url, data=json.dumps(create_req),
-                                headers=headers, verify=False)
-            if res.status_code not in [status.HTTP_200_OK,
-                                       status.HTTP_201_CREATED,
-                                       status.HTTP_202_ACCEPTED]:
-                return Response(data={"error": res.content},
+def _keystoneV2Token(url, vimid=None, create_req=None):
+
+    try:
+        vim_info = extsys.get_vim_by_id(vimid)
+    except VimDriverVioException as e:
+        return Response(data={'error': str(e)}, status=e.status_code)
+    except Exception as e:
+        logging.exception("error %s" % e)
+        return Response(data={"error": str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    if url[url.rfind("identity"):]  not in  ["identity/v3/tokens", "identity/v2.0/tokens"]:
+        return Response(data={"error": "method not allowed"},
+                        status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    # replace to v2.0
+    url = keystoneVersion(url=vim_info["url"], version="v2.0")
+    url += "/tokens"
+    headers = {"Content-Type": "application/json"}
+    logger.info("vimid(%(vimid)s) request V2 token url %(url)s ",
+                {"vimid": vimid, "url": url})
+
+    try:
+        res = requests.post(url=url, data=json.dumps(create_req),
+                            headers=headers, verify=False)
+        if res.status_code not in SUCCESS_STATE:
+            return Response(data={"error": res.content},
                                 status=res.status_code)
-            tokenInfo = res.json()
-        except Exception as e:
-            logging.exception("error %s" % e)
-            return Response(data={'error': str(e)},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        tokenInfo = res.json()
+    except Exception as e:
+        logging.exception("error %s" % e)
+        return Response(data={'error': str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        try:
-            tenantid = tokenInfo['access']['token']['tenant']['id']
-            vimEndpoints = defaultdict(dict)
-            for cal in tokenInfo['access']['serviceCatalog']:
-                # endpoint urls
-                item = cal['endpoints'][0]
-                adminurl = deepcopy(item['adminURL']).split('/')
-                internalurl = deepcopy(item['internalURL']).split('/')
-                publicurl = deepcopy(item['publicURL']).split('/')
-                # VIO identity url use v3 as default even got token by v2,
-                # need change to v2.0
-                if cal['type'] == 'identity':
-                    adminurl[-1] = "v2.0"
-                    publicurl[-1] = "v2.0"
-                    internalurl[-1] = "v2.0"
-                adminurl = adminurl[0] + "//" + adminurl[2] + (
-                    "/" + adminurl[3] if len(adminurl) > 3 else "")
-                internalurl = internalurl[0] + "//" + internalurl[2] + (
-                    "/" + internalurl[3] if len(internalurl) > 3 else "")
-                publicurl = publicurl[0] + "//" + publicurl[2] + (
-                    "/" + publicurl[3] if len(publicurl) > 3 else "")
+    try:
 
-                for (key, urlname) in zip(('admin', 'internal', 'public'),
-                                          (adminurl, internalurl,
-                                           publicurl)):
-                    vimEndpoints[cal['name']][key] = urlname
+        tenantid = tokenInfo['access']['token']['tenant']['id']
+        vimEndpoints = defaultdict(dict)
+        for cal in tokenInfo['access']['serviceCatalog']:
+            # endpoint urls
+            item = cal['endpoints'][0]
+            adminurl = deepcopy(item['adminURL']).split('/')
+            internalurl = deepcopy(item['internalURL']).split('/')
+            publicurl = deepcopy(item['publicURL']).split('/')
+            # VIO identity url use v3 as default even got token by v2,
+            # need change to v2.0
+            if cal['type'] == 'identity':
+                adminurl[-1] = "v2.0"
+                publicurl[-1] = "v2.0"
+                internalurl[-1] = "v2.0"
+            adminurl = adminurl[0] + "//" + adminurl[2] + (
+                "/" + adminurl[3] if len(adminurl) > 3 else "")
+            internalurl = internalurl[0] + "//"+internalurl[2] + (
+                "/" + internalurl[3] if len(internalurl) > 3 else "")
+            publicurl = publicurl[0] + "//"+publicurl[2] + (
+                "/" + publicurl[3] if len(publicurl) > 3 else "")
 
-                if cal['type'] in ['image', 'network',
-                                   'cloudformation', 'identity', 'dns']:
-                    name = cal['name'] if cal['type'] != 'identity' \
-                        else cal['type']
-                    for i in ("adminURL", "internalURL", "publicURL"):
-                        item[i] = "http://" + MSB_ADDRESS + \
-                                  "/multicloud-vio/v0/" + vimid + "/" + name
-                else:
-                    for i in ("adminURL", "internalURL", "publicURL"):
-                        item[i] = "http://" + MSB_ADDRESS + \
-                                  "/multicloud-vio/v0/" + vimid + \
-                                  "/" + cal["name"] + "/" + tenantid
+            for (key, urlname) in zip(('admin', 'internal', 'public'),
+                                        (adminurl, internalurl,
+                                        publicurl)):
+                vimEndpoints[cal['name']][key] = urlname
 
-        except Exception as e:
-            logging.exception("error %s" % e)
-            return Response(data={'error': str(e)},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            if cal['type'] in NO_TENANTID_SERVICE_TYPE:
+                name = cal['name'] if cal['type'] != 'identity' \
+                    else cal['type']
+                for i in ("adminURL", "internalURL", "publicURL"):
+                    item[i] = "http://" + MSB_ADDRESS + \
+                                "/multicloud-vio/v0/" + vimid + "/" + name
+            else:
+                for i in ("adminURL", "internalURL", "publicURL"):
+                    item[i] = "http://" + MSB_ADDRESS + \
+                                "/multicloud-vio/v0/" + vimid + \
+                                "/" + cal["name"] + "/"+tenantid
 
-        logger.info("vimid(%(vimid)s) service enpoints %(endpoint)s ", {
-            "vimid": vimid, "endpoint": vimEndpoints})
+    except Exception as e:
+        logging.exception("error %s" % e)
+        return Response(data={'error': str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
-        Res = Response(data=tokenInfo, status=status.HTTP_200_OK)
+    logger.info("vimid(%(vimid)s) service enpoints %(endpoint)s ", {
+                    "vimid": vimid, "endpoint": vimEndpoints})
 
-        return Res
+    catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
+    Res = Response(data=tokenInfo, status=status.HTTP_200_OK)
+    return Res
