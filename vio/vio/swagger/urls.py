@@ -33,12 +33,16 @@ from vio.swagger.views.port.views import CreatePortView, DeletePortView
 from vio.swagger.views.proxyplugin.identity.views import TokenView
 from vio.swagger.views.proxyplugin.identity.views import TokenV2View
 from vio.swagger.views.proxyplugin.identity.views import IdentityServer
+from vio.swagger.views.proxyplugin.identity.views import IdentityVersionLink
 from vio.swagger.views.proxyplugin.nova.views import ComputeServer
 from vio.swagger.views.proxyplugin.image.views import ImageServer
+from vio.swagger.views.proxyplugin.image.views import ImageVersionLink
 from vio.swagger.views.proxyplugin.neutron.views import NetWorkServer
+from vio.swagger.views.proxyplugin.neutron.views import NetworkVersionLink
 from vio.swagger.views.proxyplugin.volumn.views import VolumeServer
 from vio.swagger.views.proxyplugin.heat.views import HeatServer
 from vio.swagger.views.proxyplugin.dns.views import DesignateServer
+from vio.swagger.views.proxyplugin.dns.views import DesignateVersionLink
 
 # Registry
 from vio.swagger.views.registry.views import Registry
@@ -234,11 +238,14 @@ urlpatterns = [
         r'/identity/v2.0/tokens$',
         TokenV2View.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity$',
-        IdentityServer.as_view()),
+        IdentityVersionLink.as_view()),
     # handler the rest of identity requests
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/'
         r'identity/(?P<other>(.*))$',
         IdentityServer.as_view()),
+
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/glance$',
+        ImageVersionLink.as_view()),
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/'
         r'glance/(?P<other>(.*))$',
@@ -260,7 +267,7 @@ urlpatterns = [
         VolumeServer.as_view()),
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/neutron$',
-        NetWorkServer.as_view()),
+        NetworkVersionLink.as_view()),
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/'
         r'neutron/(?P<other>(.*))$',
@@ -277,7 +284,7 @@ urlpatterns = [
         ComputeServer.as_view()),
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/designate$',
-        DesignateServer.as_view()),
+        DesignateVersionLink.as_view()),
 
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/'
         r'designate/(?P<other>(.*))$',

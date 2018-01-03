@@ -10,7 +10,47 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
+import logging
+from rest_framework import status
+from rest_framework.response import Response
 from vio.swagger.views.proxyplugin.httpclient import BaseClient
+from vio.pub.config.config import MSB_SERVICE_PORT, MSB_SERVICE_IP
+
+
+logger = logging.getLogger(__name__)
+
+
+MSB_ADDRESS = MSB_SERVICE_IP + ":" + MSB_SERVICE_PORT + "/api"
+
+
+class ImageVersionLink(BaseClient):
+
+    serverType = 'glance'
+
+    def get(self, request, vimid):
+        (url, headers, _) = self.buildRequest(request, vimid, tail=None,
+                                              method="GET")
+
+        try:
+            res = self._request(url, method="GET", headers=headers)
+            res = res.data
+            # replace glance endpoint url with multicloud
+            # endpoint url.
+            # Look: this may contains many version
+            for item in res['versions']:
+
+                version = item['id']
+                version = version[:2] if len(version) > 2 else version
+                item['links'][0]['href'] = \
+                    "http://" + MSB_ADDRESS + "/multicloud-vio/v0/" \
+                    + vimid + "/glance//" + version + "/"
+
+        except Exception as e:
+            logging.exception("error %s" % e)
+            return Response(data={"error": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # MARK: this response status is 301
+        return Response(data=res, status=status.HTTP_300_MULTIPLE_CHOICES)
 
 
 class ImageServer(BaseClient):
