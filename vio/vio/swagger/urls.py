@@ -48,6 +48,9 @@ from vio.swagger.views.proxyplugin.dns.views import DesignateVersionLink
 from vio.swagger.views.registry.views import Registry
 from vio.swagger.views.registry.views import UnRegistry
 
+# Capacity Check
+from vio.swagger.views.capacity.views import CapacityCheck
+
 # Extensions
 from vio.swagger.views.extensions.views import Extensions
 
@@ -228,6 +231,10 @@ urlpatterns = [
         Registry.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)$',
         UnRegistry.as_view()),
+ 
+    # CapacityCheck
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/capacity_check$',
+        CapacityCheck.as_view()),
 
     #   proxy
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',
