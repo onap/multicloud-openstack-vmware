@@ -24,7 +24,7 @@ class OperateHypervisor(OperateNova):
     def get_hypervisor(self, data, hypervisor, **kwargs):
         try:
             return self.request('get_hypervisor', data,
-                                project_id=data['project_id'],
+                                project_id=data.get('project_id'),
                                 hypervisor=hypervisor,
                                 **kwargs)
         except exceptions.ResourceNotFound:
@@ -33,7 +33,7 @@ class OperateHypervisor(OperateNova):
     def list_hypervisors(self, data, **query):
         try:
             return self.request('list_hypervisors', data,
-                                project_id=data['project_id'],
+                                project_id=data.get('project_id'),
                                 **query)
         except exceptions.ResourceNotFound:
             return None
