@@ -32,6 +32,8 @@
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <sonar.dynamicAnalysis>true</sonar.dynamicAnalysis>
+        <sonar.language>py</sonar.language>
         <nexusproxy>https://nexus.onap.org</nexusproxy>
     </properties>
     <build>
