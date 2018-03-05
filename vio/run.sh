@@ -23,8 +23,12 @@ sed -i "s/AAI_PASSWORD =.*/AAI_PASSWORD = \"${AAI_PASSWORD}\"/g" vio/pub/config/
 
 nohup python manage.py runserver 0.0.0.0:9004 2>&1 &
 
-while [ ! -f logs/runtime_vio.log ]; do
+logDir="/var/log/onap/multicloiud/vio"
+if [ ! -x  $logDir  ]; then
+   mkdir -p $logDir
+fi
+while [ ! -f  $logDir/vio.log ]; do
     sleep 1
 done
 
-tail -F logs/runtime_vio.log
+tail -F $logDir/vio.log
