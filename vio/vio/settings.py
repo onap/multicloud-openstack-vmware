@@ -12,7 +12,8 @@
 
 import os
 import sys
-
+from logging import config
+from onaplogging import monkey; monkey.patch_all()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -83,36 +84,12 @@ TIME_ZONE = 'UTC'
 
 STATIC_URL = '/static/'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format': '%(asctime)s:[%(name)s]:[%(filename)s]-[%(lineno)d]\
-             [%(levelname)s]:%(message)s',
-        },
-    },
-    'filters': {
-    },
-    'handlers': {
-        'vio_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/runtime_vio.log'),
-            'formatter': 'standard',
-            'maxBytes': 1024 * 1024 * 50,
-            'backupCount': 5,
-        },
-    },
 
-    'loggers': {
-        'vio': {
-            'handlers': ['vio_handler'],
-            'level': 'DEBUG',
-            'propagate': False
-        },
-    }
-}
+LOGGING_CONFIG = None
+# yaml configuration of logging
+LOGGING_FILE = os.path.join(BASE_DIR, 'vio/pub/config/log.yml')
+config.yamlConfig(filepath=LOGGING_FILE, watchDog=True)
+
 
 if 'test' in sys.argv:
     from vio.pub.config import config
