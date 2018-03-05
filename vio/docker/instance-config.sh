@@ -40,3 +40,9 @@ cat vio/vio/pub/config/config.py
 
 sed -i "s/sip=.*/sip=$SERVICE_IP/g" vio/run.sh
 sed -i "s/sip=.*/sip=$SERVICE_IP/g" vio/stop.sh
+
+# Create log directory
+logDir="/var/log/onap/multicloud/vio"
+if [ ! -x  $logDir  ]; then
+       mkdir -p $logDir
+fi

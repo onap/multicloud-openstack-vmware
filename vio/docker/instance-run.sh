@@ -16,7 +16,7 @@
 cd ./vio
 ./run.sh
 
-while [ ! -f logs/runtime_vio.log ]; do
+while [ ! -f /var/log/onap/multicloud/vio/vio.log ]; do
     sleep 1
 done
-tail -F logs/runtime_vio.log
+tail -F /var/log/onap/multicloud/vio/vio.log

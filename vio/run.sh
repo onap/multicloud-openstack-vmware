@@ -21,12 +21,12 @@ sed -i "s/AAI_SCHEMA_VERSION =.*/AAI_SCHEMA_VERSION = \"${AAI_SCHEMA_VERSION}\"/
 sed -i "s/AAI_USERNAME =.*/AAI_USERNAME = \"${AAI_USERNAME}\"/g" vio/pub/config/config.py
 sed -i "s/AAI_PASSWORD =.*/AAI_PASSWORD = \"${AAI_PASSWORD}\"/g" vio/pub/config/config.py
 
+
+
+logDir="/var/log/onap/multicloud/vio"
+
 nohup python manage.py runserver 0.0.0.0:9004 2>&1 &
 
-logDir="/var/log/onap/multicloiud/vio"
-if [ ! -x  $logDir  ]; then
-   mkdir -p $logDir
-fi
 while [ ! -f  $logDir/vio.log ]; do
     sleep 1
 done
