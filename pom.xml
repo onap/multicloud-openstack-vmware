@@ -33,8 +33,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <nexusproxy>https://nexus.onap.org</nexusproxy>
-        <sonar.sources>.</sonar.sources>
-        <sonar.junit.reportsPath>xunit-results.xml</sonar.junit.reportsPath>
+
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.sources>vio/vio</sonar.sources>
+        <!--<sonar.junit.reportsPath>xunit-results.xml</sonar.junit.reportsPath>-->
         <sonar.python.coverage.reportPath>vio/coverage.xml</sonar.python.coverage.reportPath>
         <sonar.language>py</sonar.language>
         <sonar.pluginName>Python</sonar.pluginName>
@@ -42,5 +44,28 @@
         <sonar.exclusions>tests/*,setup.py</sonar.exclusions>
     </properties>
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <executions>
+                        <execution>
+                            <id>tox-test</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>exec</goal>
+                            </goals>
+                            
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <executable>
+                            ${session.executionRootDirectory}/sonar.sh
+                        </executable>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
