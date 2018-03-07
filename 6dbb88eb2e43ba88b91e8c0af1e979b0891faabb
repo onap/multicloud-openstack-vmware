@@ -22,6 +22,30 @@
       "revId": "6dbb88eb2e43ba88b91e8c0af1e979b0891faabb",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_39d591e4",
+        "filename": "sonar.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1945
+      },
+      "writtenOn": "2018-03-07T08:50:01Z",
+      "side": 1,
+      "message": "Thanks, still I don\u0027t know why maven build doesn\u0027t run this script",
+      "parentUuid": "5a93c517_797a3925",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 2
+      },
+      "revId": "6dbb88eb2e43ba88b91e8c0af1e979b0891faabb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
