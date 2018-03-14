@@ -80,3 +80,25 @@ class CapacityCheckTest(unittest.TestCase):
         resp = self.view.post(req, "openstack_regionone")
         self.assertEqual(status.HTTP_200_OK, resp.status_code)
         self.assertEqual({"result": True}, resp.data)
+
+    @mock.patch.object(OperateLimits, "OperateLimits")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_check_capacity_nova_limits_failed(
+            self, mock_get_vim, mock_limit):
+        mock_get_vim.return_value = VIM_INFO
+        req = mock.Mock()
+        req.body = """{
+            "vCPU": 1,
+            "Memory": 1,
+            "Storage": 500
+        }"""
+        oplimits = mock.Mock()
+        absolute = mock.Mock(
+            total_cores=1, total_cores_used=1,
+            total_ram=128*1024, total_ram_used=4*1024)
+        oplimits.get_limits.return_value = mock.Mock(absolute=absolute)
+        mock_limit.return_value = oplimits
+
+        resp = self.view.post(req, "openstack_regionone")
+        self.assertEqual(status.HTTP_200_OK, resp.status_code)
+        self.assertEqual({"result": False}, resp.data)
