@@ -17,10 +17,12 @@ from oslo_service import service # noqa
 import sys # noqa
 
 from vio.api_v2 import service as api_service # noqa
+from vio.api_v2.api_definition import utils
 
 
 def main():
     try:
+        utils.get_definition_list()
         api_server = api_service.WSGIService()
         launcher = service.launch(cfg.CONF,
                                   api_server,

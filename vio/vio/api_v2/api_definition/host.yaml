@@ -1,0 +1,59 @@
+---
+  swagger: "2.0"
+  info: 
+    version: "1.0.0"
+    title: "Multi Cloud Host"
+    description: "Definition of Host API"
+    termsOfService: "http://swagger.io/terms/"
+  schemes: 
+    - "http"
+  produces: 
+    - "application/json"
+  paths: 
+    /{vimid}/{tenantid}/hosts/{hostid}:
+      parameters:
+        - type: string
+          name: vimid
+          in: path
+          required: true
+        - type: string
+          format: uuid
+          name: tenantid
+          in: path
+          required: true
+        - type: string
+          name: hostid
+          in: path
+          required: true
+      get: 
+        produces: 
+          - "application/json"
+        responses: 
+          "200":
+            schema: 
+                $ref: "#/definitions/host"
+      vim_path: "{nova_endpoint}/os-hypervisors"
+  definitions: 
+      host:
+        vim_resource: hypervisor
+        properties:
+          name:
+            type: string
+            required: true
+            source: hypervisor.name
+          cpu:
+            type: integer
+            minimal: 1
+            source: hypervisor.vcpus
+            action: copy
+            required: true
+          disk_gb:
+            type: integer
+            minimal: 0
+            source: hypervisor.local_disk_size
+            required: true
+          memory_mb:
+            type: integer
+            minimal: 0
+            source: hypervisor.memory_size
+            required: true
