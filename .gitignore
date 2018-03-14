@@ -5,3 +5,9 @@
 target/
 logs/*.log
 *.pyc
+
+# Test related files
+vio/.coverage
+vio/.tox/
+vio/logs/*.log
+vio/test-reports/
