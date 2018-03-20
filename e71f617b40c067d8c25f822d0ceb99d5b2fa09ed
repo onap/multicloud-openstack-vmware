@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Huang Haibin <haibin.huang@intel.com>
+Code-Review+2: Liang Ke <lokyse@163.com>
+Submitted-by: Liang Ke <lokyse@163.com>
+Submitted-at: Tue, 20 Mar 2018 09:26:18 +0000
+Reviewed-on: https://gerrit.onap.org/r/35955
+Project: multicloud/openstack/vmware
+Branch: refs/heads/master
