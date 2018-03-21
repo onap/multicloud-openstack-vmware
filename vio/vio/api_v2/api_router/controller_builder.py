@@ -10,10 +10,54 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from keystoneauth1.identity import v2 as keystone_v2
+from keystoneauth1.identity import v3 as keystone_v3
+from keystoneauth1 import session
 import pecan
 from pecan import rest
 
 from vio.api_v2.api_definition import utils
+from vio.pub import exceptions
+from vio.pub.msapi import extsys
+
+
+def _get_vim_auth_session(vim_id, tenant_id):
+    """ Get the auth session to backend VIM """
+
+    try:
+        vim = extsys.get_vim_by_id(vim_id)
+    except exceptions.VimDriverVioException as e:
+        return pecan.abort(500, str(e))
+
+    params = {
+        "auth_url": vim["url"],
+        "username": vim["userName"],
+        "password": vim["password"],
+    }
+
+    # tenantid takes precedence over tenantname
+    if tenant_id:
+        params["tenant_id"] = tenant_id
+    else:
+        # input tenant name takes precedence over the default one
+        # from AAI data store
+        params["tenant_name"] = (tenant_name if tenant_name else vim['tenant'])
+
+    if '/v2' in params["auth_url"]:
+        auth = keystone_v2.Password(**params)
+    else:
+        params["user_domain_name"] = vim["domain"]
+        params["project_domain_name"] = vim["domain"]
+
+        if 'tenant_id' in params:
+            params["project_id"] = params.pop("tenant_id")
+        if 'tenant_name' in params:
+            params["project_name"] = params.pop("tenant_name")
+        if '/v3' not in params["auth_url"]:
+            params["auth_url"] = params["auth_url"] + "/v3",
+        auth = keystone_v3.Password(**params)
+
+    return session.Session(auth=auth)
 
 
 def _convert_vim_res_to_mc_res(vim_resource, res_properties):
@@ -35,6 +79,9 @@ def _build_api_controller(api_meta):
     # tenantid.
     path = path.split("/")[3]
     controller_name = path.upper() + "Controller"
+    delimiter = path_meta["vim_path"].find("/", 1)
+    service_type = path_meta["vim_path"][1:delimiter]
+    resource_url = path_meta["vim_path"][delimiter:]
 
     # Assume that only one resource
     name, resource_meta = api_meta['definitions'].items()[0]
@@ -46,38 +93,13 @@ def _build_api_controller(api_meta):
         @pecan.expose("json")
         def _get(self, vim_id, tenant_id, resource_id):
             """ General GET """
-            # TODO(xiaohhui): Get VIM resource from backend VIM by using
-            # vim_path and stored authentication info.
-            fake_vim_resource = {
-                "hypervisor": {
-                    "status": "enabled",
-                    "service": {
-                        "host": "compute01",
-                        "disabled_reason": None,
-                        "id": 7
-                    },
-                    "vcpus_used": 113,
-                    "hypervisor_type": "VMware vCenter Server",
-                    "local_gb_used": 1987,
-                    "vcpus": 48,
-                    "hypervisor_hostname": "domain-c202.22bfc05c-da55-4ba",
-                    "memory_mb_used": 185538,
-                    "memory_mb": 196516,
-                    "current_workload": 0,
-                    "state": "up",
-                    "host_ip": "10.154.9.173",
-                    "cpu_info": "",
-                    "running_vms": 35,
-                    "free_disk_gb": 4156,
-                    "hypervisor_version": 6000000,
-                    "disk_available_least": None,
-                    "local_gb": 6143,
-                    "free_ram_mb": 10978,
-                    "id": 1
-                }
-            }
 
-            mc_res = _convert_vim_res_to_mc_res(fake_vim_resource,
+            session = _get_vim_auth_session(vim_id, tenant_id)
+            service = {'service_type': service_type,
+                       'interface': 'public'}
+            full_url = resource_url + "/%s" % resource_id
+            resp = session.get(full_url, endpoint_filter=service)
+            mc_res = _convert_vim_res_to_mc_res(resp.json(),
                                                 resource_properties)
             return {"vimName": vim_id,
                     name: mc_res,
