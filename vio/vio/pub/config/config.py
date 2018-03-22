@@ -43,19 +43,3 @@ FORWARDED_FOR_FIELDS = ["HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED_HOST",
 # DB_NAME = 'multivimvio'
 # DB_USER = 'root'
 # DB_PASSWD = 'password'
-
-# [register]
-REG_TO_MSB_WHEN_START = False
-REG_TO_MSB_REG_URL = "/api/microservices/v1/services"
-REG_TO_MSB_REG_PARAM = {
-    "serviceName": "multicloud-vio",
-    "version": "v0",
-    "url": "/api/multicloud-vio/v0",
-    "protocol": "REST",
-    "visualRange": "1",
-    "nodes": [{
-        "ip": "127.0.0.1",
-        "port": "9004",
-        "ttl": 0
-    }]
-}

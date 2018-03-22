@@ -11,18 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 from django.conf.urls import include, url
-from vio.pub.config.config import REG_TO_MSB_WHEN_START
-from vio.pub.config.config import REG_TO_MSB_REG_URL
-from vio.pub.config.config import REG_TO_MSB_REG_PARAM
 
 urlpatterns = [
     url(r'^', include('vio.swagger.urls')),
     url(r'^', include('vio.samples.urls')),
 ]
-
-# regist to MSB when startup
-if REG_TO_MSB_WHEN_START:
-    import json
-    from vio.pub.utils.restcall import req_by_msb
-    req_by_msb(REG_TO_MSB_REG_URL, "POST",
-               json.JSONEncoder().encode(REG_TO_MSB_REG_PARAM))
