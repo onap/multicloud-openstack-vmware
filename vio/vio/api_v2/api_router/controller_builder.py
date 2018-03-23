@@ -10,6 +10,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+import json
 from keystoneauth1.identity import v2 as keystone_v2
 from keystoneauth1.identity import v3 as keystone_v3
 from keystoneauth1 import session
@@ -91,6 +92,27 @@ def _convert_vim_res_to_mc_res(vim_resource, res_properties):
     return mc_resource
 
 
+def _convert_mc_res_to_vim_res(mc_resource, res_properties):
+    vim_resource = {}
+    for key in res_properties:
+        vim_res, attr = res_properties[key]["source"].split('.')
+
+        if key not in mc_resource:
+            if res_properties[key].get("required"):
+                raise Exception("Required field %s is missed in MultiCloud "
+                                "resource %s", (key, mc_resource))
+            else:
+                # None required fields missed, just skip.
+                continue
+
+        action = res_properties[key].get("action", "copy")
+        # TODO(xiaohhui): Actions should be in constants.
+        if action == "copy":
+            vim_resource[attr] = mc_resource[key]
+
+    return vim_resource
+
+
 def _build_api_controller(api_meta):
     # Assume that only one path
     path, path_meta = api_meta['paths'].items()[0]
@@ -146,6 +168,32 @@ def _build_api_controller(api_meta):
                     "vimid": vim_id}
 
         controller_meta["get_all"] = _get_all
+
+    if "post" in path_meta:
+        # Add post method to controller
+        @pecan.expose("json")
+        def _post(self, vim_id, tenant_id):
+            """ General POST """
+            session = _get_vim_auth_session(vim_id, tenant_id)
+            service = {'service_type': service_type,
+                       'interface': 'public'}
+            vim_res = _convert_mc_res_to_vim_res(pecan.request.json_body,
+                                                 resource_properties)
+
+            req_body = json.JSONEncoder().encode(
+                {resource_meta['vim_resource']: vim_res})
+            resp = session.post(resource_url,
+                                data=req_body,
+                                endpoint_filter=service)
+            mc_res = _convert_vim_res_to_mc_res(resp.json(),
+                                                resource_properties)
+            mc_res.update({"vimName": vim_id,
+                           "vimId": vim_id,
+                           "tenantId": tenant_id,
+                           "returnCode": 0})
+            return mc_res
+
+        controller_meta["post"] = _post
 
     return path, type(controller_name, (rest.RestController,), controller_meta)
 

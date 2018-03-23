@@ -36,6 +36,13 @@
                 type: "array"
                 items:
                   $ref: "#/definitions/network"
+      post:
+        produces:
+          - "application/json"
+        responses:
+          "200":
+            schema:
+                $ref: "#/definitions/network"
       vim_path: "/network/v2.0/networks"
   definitions:
       network:
@@ -49,12 +56,10 @@
             source: network.name
           id:
             type: string
-            required: true
             source: network.id
           status:
             type: string
             source: network.status
-            required: true
           segmentationId:
             type: string
             source: network.provider:segmentation_id
@@ -70,7 +75,6 @@
           tenantId:
             type: string
             source: network.tenant_id
-            required: true
           shared:
             type: boolean
             source: network.shared
