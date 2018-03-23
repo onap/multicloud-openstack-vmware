@@ -53,6 +53,19 @@ def _get_vim_auth_session(vim_id, tenant_id):
     return session.Session(auth=auth)
 
 
+def _convert_default_value(default):
+    if default == "None":
+        return None
+
+    if default == "true":
+        return True
+
+    if default == "false":
+        return False
+
+    return default
+
+
 def _convert_vim_res_to_mc_res(vim_resource, res_properties):
     mc_resource = {}
     for key in res_properties:
@@ -63,6 +76,10 @@ def _convert_vim_res_to_mc_res(vim_resource, res_properties):
                 raise Exception("Required field %s is missed in VIM "
                                 "resource %s", (attr, vim_resource))
             else:
+                if "default" in res_properties[key]:
+                    mc_resource[key] = _convert_default_value(
+                        res_properties[key]["default"])
+
                 # None required fields missed, just skip.
                 continue
 
