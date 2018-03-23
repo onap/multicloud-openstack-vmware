@@ -102,3 +102,11 @@ class OperateImage(baseclient):
         except Exception:
             pass
         return image
+
+    def create_vim_image_file(self, vimid, tenantid, file_name,
+                              file_dest, image_type):
+
+        image = self.glance(self.param).create_image_file(file_name,
+                                                          image_type)
+        self.glance(self.param).upload_image(open(file_dest), image)
+        return image
