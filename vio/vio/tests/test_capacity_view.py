@@ -102,3 +102,10 @@ class CapacityCheckTest(unittest.TestCase):
         resp = self.view.post(req, "openstack_regionone")
         self.assertEqual(status.HTTP_200_OK, resp.status_code)
         self.assertEqual({"result": False}, resp.data)
+
+    def test_check_capacity_invalid_input(self):
+        req = mock.Mock()
+        req.body = "hello world"
+
+        resp = self.view.post(req, "openstack_regionone")
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, resp.status_code)
