@@ -150,34 +150,42 @@ class CreateImageFileView(APIView):
         except VimDriverVioException as e:
             return Response(data={'error': str(e)}, status=e.status_code)
 
+        vim_rsp = image_utils.vim_formatter(vim_info, tenantid)
         image_instance = OperateImage.OperateImage(vim_info)
 
-        image_file = request.FILES['file']
+        try:
+            image_file = request.FILES['file']
 
-        random_name = ''.join(random.sample(
-                                        string.ascii_letters
-                                        + string.digits, 4))
-        file_name = image_file.name[:image_file.name.rfind('.')]
-        + "_" + random_name
-        + image_file.name[image_file.name.find('.'):]
+            random_name = ''.join(random.sample(
+                                            string.ascii_letters
+                                            + string.digits, 4))
+            file_name = image_file.name[:image_file.name.rfind('.')]
+            + "_" + random_name
+            + image_file.name[image_file.name.find('.'):]
 
-        file_dest = sys.path[0] + '/images/' + file_name
-        with open(file_dest, 'wb+') as temp_file:
-            for chunk in image_file.chunks():
-                temp_file.write(chunk)
-        temp_file.close()
+            file_dest = sys.path[0] + '/images/' + file_name
+            with open(file_dest, 'wb+') as temp_file:
+                for chunk in image_file.chunks():
+                    temp_file.write(chunk)
+            temp_file.close()
 
-        image_type = image_file.name[image_file.name.find('.') + 1:]
+            image_type = image_file.name[image_file.name.find('.') + 1:]
+
+        except Exception as e:
+            return Response(data={'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         try:
-            image_instance.create_vim_image_file(vimid, tenantid,
-                                                 file_name[:
-                                                           file_name.rfind(
-                                                            '.')],
-                                                 file_dest,
-                                                 image_type)
+            image = image_instance.create_vim_image_file(
+                vimid, tenantid,
+                file_name[:file_name.rfind('.')],
+                file_dest,
+                image_type)
+            rsp = image_utils.image_formatter(image)
+            rsp.update(vim_rsp)
+            rsp['returnCode'] = '1'
 
-            return Response(data={'status': 'upload OK'},
+            return Response(data={'status': rsp},
                             status=status.HTTP_201_CREATED)
         except Exception as e:
             if hasattr(e, "http_status"):
