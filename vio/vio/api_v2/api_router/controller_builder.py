@@ -57,6 +57,15 @@ def _convert_vim_res_to_mc_res(vim_resource, res_properties):
     mc_resource = {}
     for key in res_properties:
         vim_res, attr = res_properties[key]["source"].split('.')
+
+        if attr not in vim_resource[vim_res]:
+            if res_properties[key].get("required"):
+                raise Exception("Required field %s is missed in VIM "
+                                "resource %s", (attr, vim_resource))
+            else:
+                # None required fields missed, just skip.
+                continue
+
         action = res_properties[key].get("action", "copy")
         # TODO(xiaohhui): Actions should be in constants.
         if action == "copy":
@@ -86,7 +95,6 @@ def _build_api_controller(api_meta):
         @pecan.expose("json")
         def _get(self, vim_id, tenant_id, resource_id):
             """ General GET """
-
             session = _get_vim_auth_session(vim_id, tenant_id)
             service = {'service_type': service_type,
                        'interface': 'public'}
@@ -100,6 +108,27 @@ def _build_api_controller(api_meta):
                     "vimid": vim_id}
 
         controller_meta["get"] = _get
+
+    if "get_all" in path_meta:
+        # Add get_all method to controller
+        @pecan.expose("json")
+        def _get_all(self, vim_id, tenant_id):
+            """ General GET all """
+            session = _get_vim_auth_session(vim_id, tenant_id)
+            service = {'service_type': service_type,
+                       'interface': 'public'}
+            resp = session.get(resource_url, endpoint_filter=service)
+            vim_res = resp.json()[resource_meta['plural_vim_resource']]
+            mc_res = [_convert_vim_res_to_mc_res(
+                          {resource_meta['vim_resource']: v},
+                          resource_properties)
+                      for v in vim_res]
+            return {"vimName": vim_id,
+                    resource_meta['plural']: mc_res,
+                    "tenantId": tenant_id,
+                    "vimid": vim_id}
+
+        controller_meta["get_all"] = _get_all
 
     return path, type(controller_name, (rest.RestController,), controller_meta)
 
