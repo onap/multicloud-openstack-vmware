@@ -110,3 +110,8 @@ class OperateImage(baseclient):
                                                           image_type)
         self.glance(self.param).upload_image(open(file_dest), image)
         return image
+
+    def download_vim_image(self, image):
+
+        image_data = self.glance(self.param).download_image(image)
+        return image_data

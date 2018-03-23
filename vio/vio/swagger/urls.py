@@ -21,6 +21,7 @@ from vio.swagger.views.tenant.views import ListTenantsView
 from vio.swagger.views.image.views import CreateListImagesView
 from vio.swagger.views.image.views import GetDeleteImageView
 from vio.swagger.views.image.views import CreateImageFileView
+from vio.swagger.views.image.views import GetImageFileView
 from vio.swagger.views.volume.views import CreateListVolumeView
 from vio.swagger.views.volume.views import GetDeleteVolumeView
 from vio.swagger.views.server.views import ListServersView, GetServerView
@@ -102,6 +103,10 @@ urlpatterns = [
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z_-]+)/images/file$',
         CreateImageFileView.as_view()),
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
+        r'(?P<tenantid>[0-9a-zA-Z_-]+)/images/file/'
+        r'(?P<imageid>[0-9a-zA-Z_-]+)$',
+        GetImageFileView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z_-]+)/volumes$',
         CreateListVolumeView.as_view()),

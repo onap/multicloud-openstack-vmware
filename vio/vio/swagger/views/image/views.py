@@ -185,3 +185,48 @@ class CreateImageFileView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GetImageFileView(APIView):
+
+    def post(self, request, vimid, tenantid, imageid):
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+            vim_info['tenant'] = tenantid
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+
+        try:
+            req_body = json.loads(request.body)
+        except Exception as e:
+            return Response(data={'error': 'Fail to decode request body.'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        image_instance = OperateImage.OperateImage(vim_info)
+        try:
+            image = image_instance.find_vim_image(imageid)
+        except Exception as e:
+            return Response(data={'error': 'the image does not exist'},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            image_data = image_instance.download_vim_image(image)
+
+            imagePath = req_body.get('imagePath')
+            if imagePath[-1:] is not '/':
+                imagePath += '/'
+            file_name = "%s%s.%s" % (imagePath, image.name, image.disk_format)
+            image_file = open(file_name, 'w+')
+
+            for chunk in image_data:
+                image_file.write(chunk)
+            image_file.close()
+
+            return Response(data={'status': imagePath[-1:]},
+                            status=status.HTTP_200_OK)
+
+        except Exception as e:
+            if hasattr(e, "http_status"):
+                return Response(data={'error': str(e)}, status=e.http_status)
+            else:
+                return Response(data={'error': str(e)},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
