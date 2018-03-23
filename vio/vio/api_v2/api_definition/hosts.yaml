@@ -27,27 +27,46 @@
           "200":
             schema:
                 $ref: "#/definitions/host"
+      get_all:
+        produces:
+          - "application/json"
+        responses:
+          "200":
+            schema:
+                type: "array"
+                items:
+                  $ref: "#/definitions/host"
       vim_path: "/compute/os-hypervisors"
   definitions:
       host:
+        plural_vim_resource: "hypervisors"
+        vim_resource: "hypervisor"
+        plural: "hosts"
         properties:
           name:
             type: string
             required: true
             source: hypervisor.hypervisor_hostname
+          id:
+            type: string
+            required: true
+            source: hypervisor.id
+          status:
+            type: string
+            source: hypervisor.status
+          state:
+            type: string
+            source: hypervisor.state
           cpu:
             type: integer
             minimal: 1
             source: hypervisor.vcpus
             action: copy
-            required: true
           disk_gb:
             type: integer
             minimal: 0
             source: hypervisor.local_gb
-            required: true
           memory_mb:
             type: integer
             minimal: 0
             source: hypervisor.memory_mb
-            required: true

@@ -35,6 +35,10 @@ class V0_Controller(rest.RestController):
         """ Placeholder for sub controllers. """
         pecan.abort(405)
 
+    def get_all(self, vim_id, tenant_id):
+        """ Placeholder for sub controllers. """
+        pecan.abort(405)
+
 
 pecan.route(V0_Controller, "swagger.json", swagger_json.SwaggerJson())
 

@@ -10,6 +10,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+import json
 from keystoneauth1.identity import v2 as keystone_v2
 from keystoneauth1.identity import v3 as keystone_v3
 from keystoneauth1 import session
@@ -53,16 +54,63 @@ def _get_vim_auth_session(vim_id, tenant_id):
     return session.Session(auth=auth)
 
 
+def _convert_default_value(default):
+    if default == "None":
+        return None
+
+    if default == "true":
+        return True
+
+    if default == "false":
+        return False
+
+    return default
+
+
 def _convert_vim_res_to_mc_res(vim_resource, res_properties):
     mc_resource = {}
     for key in res_properties:
         vim_res, attr = res_properties[key]["source"].split('.')
+
+        if attr not in vim_resource[vim_res]:
+            if res_properties[key].get("required"):
+                raise Exception("Required field %s is missed in VIM "
+                                "resource %s", (attr, vim_resource))
+            else:
+                if "default" in res_properties[key]:
+                    mc_resource[key] = _convert_default_value(
+                        res_properties[key]["default"])
+
+                # None required fields missed, just skip.
+                continue
+
         action = res_properties[key].get("action", "copy")
         # TODO(xiaohhui): Actions should be in constants.
         if action == "copy":
             mc_resource[key] = vim_resource[vim_res][attr]
 
     return mc_resource
+
+
+def _convert_mc_res_to_vim_res(mc_resource, res_properties):
+    vim_resource = {}
+    for key in res_properties:
+        vim_res, attr = res_properties[key]["source"].split('.')
+
+        if key not in mc_resource:
+            if res_properties[key].get("required"):
+                raise Exception("Required field %s is missed in MultiCloud "
+                                "resource %s", (key, mc_resource))
+            else:
+                # None required fields missed, just skip.
+                continue
+
+        action = res_properties[key].get("action", "copy")
+        # TODO(xiaohhui): Actions should be in constants.
+        if action == "copy":
+            vim_resource[attr] = mc_resource[key]
+
+    return vim_resource
 
 
 def _build_api_controller(api_meta):
@@ -86,7 +134,6 @@ def _build_api_controller(api_meta):
         @pecan.expose("json")
         def _get(self, vim_id, tenant_id, resource_id):
             """ General GET """
-
             session = _get_vim_auth_session(vim_id, tenant_id)
             service = {'service_type': service_type,
                        'interface': 'public'}
@@ -100,6 +147,66 @@ def _build_api_controller(api_meta):
                     "vimid": vim_id}
 
         controller_meta["get"] = _get
+
+    if "get_all" in path_meta:
+        # Add get_all method to controller
+        @pecan.expose("json")
+        def _get_all(self, vim_id, tenant_id):
+            """ General GET all """
+            session = _get_vim_auth_session(vim_id, tenant_id)
+            service = {'service_type': service_type,
+                       'interface': 'public'}
+            resp = session.get(resource_url, endpoint_filter=service)
+            vim_res = resp.json()[resource_meta['plural_vim_resource']]
+            mc_res = [_convert_vim_res_to_mc_res(
+                          {resource_meta['vim_resource']: v},
+                          resource_properties)
+                      for v in vim_res]
+            return {"vimName": vim_id,
+                    resource_meta['plural']: mc_res,
+                    "tenantId": tenant_id,
+                    "vimid": vim_id}
+
+        controller_meta["get_all"] = _get_all
+
+    if "post" in path_meta:
+        # Add post method to controller
+        @pecan.expose("json")
+        def _post(self, vim_id, tenant_id):
+            """ General POST """
+            session = _get_vim_auth_session(vim_id, tenant_id)
+            service = {'service_type': service_type,
+                       'interface': 'public'}
+            vim_res = _convert_mc_res_to_vim_res(pecan.request.json_body,
+                                                 resource_properties)
+
+            req_body = json.JSONEncoder().encode(
+                {resource_meta['vim_resource']: vim_res})
+            resp = session.post(resource_url,
+                                data=req_body,
+                                endpoint_filter=service)
+            mc_res = _convert_vim_res_to_mc_res(resp.json(),
+                                                resource_properties)
+            mc_res.update({"vimName": vim_id,
+                           "vimId": vim_id,
+                           "tenantId": tenant_id,
+                           "returnCode": 0})
+            return mc_res
+
+        controller_meta["post"] = _post
+
+    if "delete" in path_meta:
+        # Add delete method to controller
+        @pecan.expose("json")
+        def _delete(self, vim_id, tenant_id, resource_id):
+            """ General DELETE """
+            session = _get_vim_auth_session(vim_id, tenant_id)
+            service = {'service_type': service_type,
+                       'interface': 'public'}
+            full_url = resource_url + "/%s" % resource_id
+            session.delete(full_url, endpoint_filter=service)
+
+        controller_meta["delete"] = _delete
 
     return path, type(controller_name, (rest.RestController,), controller_meta)
 
