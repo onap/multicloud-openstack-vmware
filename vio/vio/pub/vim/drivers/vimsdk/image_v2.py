@@ -65,3 +65,10 @@ class GlanceClient(base.DriverBase):
     def upload_image(self, data, image):
         image.data = data
         image.upload(self.session)
+
+    @sdk.translate_exception
+    def create_image_file(self,  file_name, image_type):
+
+        img = self._proxy._create(_image.Image, disk_format=image_type,
+                                  container_format='bare', name=file_name)
+        return img
