@@ -72,3 +72,8 @@ class GlanceClient(base.DriverBase):
         img = self._proxy._create(_image.Image, disk_format=image_type,
                                   container_format='bare', name=file_name)
         return img
+
+    @sdk.translate_exception
+    def download_image(self, image):
+        img = image.download(self.session, stream=True)
+        return img
