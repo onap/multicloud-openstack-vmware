@@ -195,6 +195,19 @@ def _build_api_controller(api_meta):
 
         controller_meta["post"] = _post
 
+    if "delete" in path_meta:
+        # Add delete method to controller
+        @pecan.expose("json")
+        def _delete(self, vim_id, tenant_id, resource_id):
+            """ General DELETE """
+            session = _get_vim_auth_session(vim_id, tenant_id)
+            service = {'service_type': service_type,
+                       'interface': 'public'}
+            full_url = resource_url + "/%s" % resource_id
+            session.delete(full_url, endpoint_filter=service)
+
+        controller_meta["delete"] = _delete
+
     return path, type(controller_name, (rest.RestController,), controller_meta)
 
 

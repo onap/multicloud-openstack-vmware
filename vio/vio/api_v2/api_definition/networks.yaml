@@ -43,6 +43,8 @@
           "200":
             schema:
                 $ref: "#/definitions/network"
+      delete:
+         responses: "204"
       vim_path: "/network/v2.0/networks"
   definitions:
       network:
