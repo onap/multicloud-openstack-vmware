@@ -11,12 +11,33 @@
 #    limitations under the License.
 
 import pecan
+from pecan import rest
 
-from vio.swagger import utils
+from vio.api_v2.api_router import controller_builder
+from vio.api_v2.api_router import swagger_json
 
 
-class V0_Controller(object):
+class V0_Controller(rest.RestController):
 
-    @pecan.expose('json', route="swagger.json")
-    def swagger_json(self):
-        return utils.get_swagger_json_data()
+    def get(self, vim_id, tenant_id):
+        """ Placeholder for sub controllers. """
+        pecan.abort(405)
+
+    def put(self, vim_id, tenant_id):
+        """ Placeholder for sub controllers. """
+        pecan.abort(405)
+
+    def post(self, vim_id, tenant_id):
+        """ Placeholder for sub controllers. """
+        pecan.abort(405)
+
+    def delete(self, vim_id, tenant_id):
+        """ Placeholder for sub controllers. """
+        pecan.abort(405)
+
+
+pecan.route(V0_Controller, "swagger.json", swagger_json.SwaggerJson())
+
+
+# Insert API stem from yaml files.
+controller_builder.insert_dynamic_controller(V0_Controller)
