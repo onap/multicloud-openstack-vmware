@@ -59,3 +59,14 @@ class TestAAIClient(unittest.TestCase):
         }
         self.view.add_flavors(flavors)
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_add_images(self, mock_call):
+        images = {
+            "images": [{
+                "name": "ubuntu-16.04",
+                "id": "image-id"
+            }]
+        }
+        self.view.add_images(images)
+        mock_call.assert_called_once()
