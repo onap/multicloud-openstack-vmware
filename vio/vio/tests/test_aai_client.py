@@ -97,3 +97,17 @@ class TestAAIClient(unittest.TestCase):
         }
         self.view.add_pservers(pservers)
         self.assertEqual(mock_call.call_count, 2)
+
+    @mock.patch.object(restcall, "call_req")
+    def test_del_tenants(self, mock_call):
+        mock_call.return_value = [0]
+        rsp = {
+            "tenants": {
+                "tenant": [{
+                    "tenant-id": "tenant-id",
+                    "resource-version": "version-1"
+                }]
+            }
+        }
+        self.view._del_tenants(rsp)
+        mock_call.assert_called_once()
