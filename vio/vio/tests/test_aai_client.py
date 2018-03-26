@@ -40,3 +40,22 @@ class TestAAIClient(unittest.TestCase):
         tenants = {"tenants": [{"name": "admin", "id": "admin-id"}]}
         self.view.add_tenants(tenants)
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_add_flavors(self, mock_call):
+        flavors = {
+            "flavors": [{
+                "name": "m1.small",
+                "id": "1",
+                "vcpus": 1,
+                "ram": 512,
+                "disk": 10,
+                "ephemeral": 0,
+                "swap": 0,
+                "is_public": True,
+                "links": [{"href": "http://fake-url"}],
+                "is_disabled": False
+            }]
+        }
+        self.view.add_flavors(flavors)
+        mock_call.assert_called_once()
