@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_c0ec5792",
+        "filename": "vio/vio/swagger/views/image/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1889
+      },
+      "writtenOn": "2018-03-26T06:29:58Z",
+      "side": 1,
+      "message": "Hi Bin Sun,\n\nThe spec is not detailed enough on how the image name are specified in the upload image request. And it is very clear that how that information should be specified between consumers of this API and multicloud plugin. e.g. you are expecting consumers to specify the file content with key of \u0027file\u0027 and the file pathname will be suffixed with the image type.\n\nCould you update your design spec with those rules imposed on consumers ?\nThanks",
+      "range": {
+        "startLine": 155,
+        "startChar": 8,
+        "endLine": 181,
+        "endChar": 59
+      },
+      "revId": "5d459650895007d8062369f2d9d4d4734832cdef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
