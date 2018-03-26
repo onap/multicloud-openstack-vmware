@@ -27,3 +27,10 @@ class TestAAIClient(unittest.TestCase):
         ret = self.view.get_vim(get_all=True)
         expect_ret = {"cloudOwner": "vmware"}
         self.assertEqual(expect_ret, ret)
+
+    @mock.patch.object(restcall.AAIClient, "get_vim")
+    @mock.patch.object(restcall, "call_req")
+    def test_update_identity_url(self, mock_call, mock_getvim):
+        mock_getvim.return_value = {}
+        self.view.update_identity_url()
+        mock_call.assert_called_once()
