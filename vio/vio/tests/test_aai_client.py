@@ -34,3 +34,9 @@ class TestAAIClient(unittest.TestCase):
         mock_getvim.return_value = {}
         self.view.update_identity_url()
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_add_tenants(self, mock_call):
+        tenants = {"tenants": [{"name": "admin", "id": "admin-id"}]}
+        self.view.add_tenants(tenants)
+        mock_call.assert_called_once()
