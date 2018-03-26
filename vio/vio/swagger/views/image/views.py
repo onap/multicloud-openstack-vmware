@@ -209,6 +209,7 @@ class GetImageFileView(APIView):
         except Exception as e:
             return Response(data={'error': 'Fail to decode request body.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        vim_rsp = image_utils.vim_formatter(vim_info, tenantid)
         image_instance = OperateImage.OperateImage(vim_info)
         try:
             image = image_instance.find_vim_image(imageid)
@@ -229,7 +230,11 @@ class GetImageFileView(APIView):
                 image_file.write(chunk)
             image_file.close()
 
-            return Response(data={'status': 'donwload OK'},
+            rsp = image_utils.image_formatter(image)
+            rsp.update(vim_rsp)
+            rsp['returnCode'] = '1'
+
+            return Response(data={'status': rsp},
                             status=status.HTTP_200_OK)
 
         except Exception as e:
