@@ -72,7 +72,7 @@ class CapacityCheck(APIView):
     def post(self, request, vimid):
         try:
             requirement = json.loads(request.body)
-        except json.JSONDecodeError as ex:
+        except ValueError as ex:
             return Response(data={'error': str(ex)},
                             status=status.HTTP_400_BAD_REQUEST)
         try:
