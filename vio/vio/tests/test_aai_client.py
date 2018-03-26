@@ -70,3 +70,15 @@ class TestAAIClient(unittest.TestCase):
         }
         self.view.add_images(images)
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_add_networks(self, mock_call):
+        networks = {
+            "networks": [{
+                "name": "net-1",
+                "id": "net-id",
+                "segmentationId": 144
+            }]
+        }
+        self.view.add_networks(networks)
+        mock_call.assert_called_once()
