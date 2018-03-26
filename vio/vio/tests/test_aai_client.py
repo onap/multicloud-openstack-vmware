@@ -82,3 +82,18 @@ class TestAAIClient(unittest.TestCase):
         }
         self.view.add_networks(networks)
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_add_pservers(self, mock_call):
+        pservers = {
+            "hypervisors": [{
+                "name": "compute-1",
+                "vcpus": 100,
+                "local_disk_size": 1000,
+                "memory_size": 10240,
+                "host_ip": "10.0.0.7",
+                "id": "compute-1-id"
+            }]
+        }
+        self.view.add_pservers(pservers)
+        self.assertEqual(mock_call.call_count, 2)
