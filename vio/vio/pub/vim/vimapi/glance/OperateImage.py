@@ -15,13 +15,11 @@ import logging
 import threading
 import urllib2
 
-
 from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.baseclient import baseclient
 from vio.swagger import image_utils
 
 logger = logging.getLogger(__name__)
-
 
 running_threads = {}
 running_thread_lock = threading.Lock()
@@ -108,10 +106,47 @@ class OperateImage(baseclient):
 
         image = self.glance(self.param).create_image_file(file_name,
                                                           image_type)
-        self.glance(self.param).upload_image(open(file_dest), image)
+        upload_image_file_thread = imagefileThread(vimid, tenantid,
+                                                   image, file_dest)
+        logger.debug("launch thread to upload image: %s" % image.id)
+        running_thread_lock.acquire()
+        running_threads[image.id] = image.id
+        running_thread_lock.release()
+        try:
+            upload_image_file_thread.start()
+        except Exception:
+            pass
         return image
 
     def download_vim_image(self, image):
 
         image_data = self.glance(self.param).download_image(image)
         return image_data
+
+
+class imagefileThread(threading.Thread):
+    def __init__(self, vimid, tenantid, image, file_dest):
+
+        threading.Thread.__init__(self)
+        self.imageid = image.id
+        self.vimid = vimid
+        self.tenantid = tenantid
+        self.image = image
+        self.file_dest = file_dest
+
+    def run(self):
+
+        logger.debug("start imagethread")
+        self.transfer_image_file(self.vimid, self.tenantid,
+                                 self.image, self.file_dest)
+        running_thread_lock.acquire()
+        running_threads.pop(self.imageid)
+        running_thread_lock.release()
+
+    def transfer_image_file(self, vimid, tenantid, image, file_dest):
+        logger.debug("Image----transfer_image")
+        vim_info = extsys.get_vim_by_id(vimid)
+        vim_info['tenant'] = tenantid
+        param = image_utils.sdk_param_formatter(vim_info)
+        client = baseclient()
+        client.glance(param).upload_image(open(file_dest), image)
