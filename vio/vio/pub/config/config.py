@@ -37,6 +37,10 @@ REDIS_PASSWD = ''
 SERVICE_NAME = "multicloud-vio"
 FORWARDED_FOR_FIELDS = ["HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED_HOST",
                         "HTTP_X_FORWARDED_SERVER"]
+
+# [Local Config]
+API_SERVER_PORT = 9004
+
 # [mysql]
 # DB_IP = '127.0.0.1'
 # DB_PORT = 3306
