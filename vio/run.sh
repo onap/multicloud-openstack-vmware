@@ -20,12 +20,14 @@ sed -i "s/AAI_PORT =.*/AAI_PORT = \"${AAI_PORT}\"/g" vio/pub/config/config.py
 sed -i "s/AAI_SCHEMA_VERSION =.*/AAI_SCHEMA_VERSION = \"${AAI_SCHEMA_VERSION}\"/g" vio/pub/config/config.py
 sed -i "s/AAI_USERNAME =.*/AAI_USERNAME = \"${AAI_USERNAME}\"/g" vio/pub/config/config.py
 sed -i "s/AAI_PASSWORD =.*/AAI_PASSWORD = \"${AAI_PASSWORD}\"/g" vio/pub/config/config.py
-
+sed -i "s/MR_ADDR =.*/MR_ADDR = \"${MR_ADDR}\"/g" vio/pub/config/config.py
+sed -i "s/MR_PORT =.*/MR_PORT = \"${MR_PORT}\"/g" vio/pub/config/config.py
 
 
 logDir="/var/log/onap/multicloud/vio"
 
 nohup python manage.py runserver 0.0.0.0:9004 2>&1 &
+nohup python vio/event_listener/server.py 2>&1 &
 
 while [ ! -f  $logDir/vio.log ]; do
     sleep 1
