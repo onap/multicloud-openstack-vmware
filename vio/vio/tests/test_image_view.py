@@ -48,3 +48,24 @@ class TestGetDeleteImageView(unittest.TestCase):
             mock.Mock(), "vmware_nova", "tenant1", "image1")
         self.assertEqual(204, resp.status_code)
         mock_delimg.assert_called_once()
+
+
+class TestCreateListImagesView(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.CreateListImagesView()
+
+    @mock.patch.object(OperateImage.OperateImage, "get_vim_images")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_get(self, mock_getvim, mock_getimgs):
+        mock_getvim.return_value = {
+            "tenant": "tenant-id"
+        }
+        img = mock.Mock()
+        img.to_dict.return_value = {
+            "id": "image-id"
+        }
+        mock_getimgs.return_value = [img]
+        resp = self.view.get(
+            mock.Mock(query_params=[]), "vmware_nova", "tenant1")
+        self.assertEqual(200, resp.status_code)
