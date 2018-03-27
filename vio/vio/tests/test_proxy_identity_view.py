@@ -33,3 +33,8 @@ class TestIdentityServer(unittest.TestCase):
     def test_patch(self, mock_send):
         self.view.patch(mock.Mock(), "openstack_regionone", None)
         mock_send.assert_called_once()
+
+    @mock.patch.object(BaseClient, "send")
+    def test_post(self, mock_send):
+        self.view.post(mock.Mock(), "openstack_regionone", None)
+        mock_send.assert_called_once()
