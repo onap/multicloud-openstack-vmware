@@ -43,3 +43,8 @@ class TestIdentityServer(unittest.TestCase):
     def test_delete(self, mock_send):
         self.view.delete(mock.Mock(), "openstack_regionone", None)
         mock_send.assert_called_once()
+
+    @mock.patch.object(BaseClient, "send")
+    def test_head(self, mock_send):
+        self.view.head(mock.Mock(), "openstack_regionone", None)
+        mock_send.assert_called_once()
