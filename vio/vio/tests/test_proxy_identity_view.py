@@ -168,3 +168,30 @@ class TestTokenView(unittest.TestCase):
         mock_post.return_value = res
         resp = self.view.post(req, "vmware_nova")
         self.assertEqual(200, resp.status_code)
+
+
+class TestTokenV2View(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.TokenV2View()
+
+    @mock.patch("requests.get")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_get_v2(self, mock_getvim, mock_get):
+        req = mock.Mock()
+        req.get_full_path.return_value = "identity/v2.0"
+        mock_getvim.return_value = {
+            "url": "http://onap.org/identity/v3"
+        }
+        res = mock.Mock()
+        res.status_code = 200
+        res.json.return_value = {
+            "version": {
+                "links": [{
+                    "href": ""
+                }]
+            }
+        }
+        mock_get.return_value = res
+        resp = self.view.get(req, "vmware_nova")
+        self.assertEqual(resp.status_code, 200)
