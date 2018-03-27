@@ -13,6 +13,7 @@
 import mock
 import unittest
 
+from vio.pub.msapi import extsys
 from vio.swagger.views.proxyplugin.httpclient import BaseClient
 from vio.swagger.views.proxyplugin.identity import views
 
@@ -48,3 +49,27 @@ class TestIdentityServer(unittest.TestCase):
     def test_head(self, mock_send):
         self.view.head(mock.Mock(), "openstack_regionone", None)
         mock_send.assert_called_once()
+
+
+class TestTokenView(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.TokenView()
+
+    @mock.patch("requests.get")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_get_v3(self, mock_getvim, mock_req):
+        req = mock.Mock()
+        req.get_full_path.return_value = "identity/v3"
+        res = mock.Mock()
+        res.status_code = 200
+        res.json.return_value = {
+            "version": {
+                "links": [{
+                    "href": ""
+                }]
+            }
+        }
+        mock_req.return_value = res
+        resp = self.view.get(req, "vmware_nova")
+        self.assertEqual(resp.status_code, 200)
