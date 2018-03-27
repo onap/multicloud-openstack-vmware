@@ -80,3 +80,14 @@ class TestTokenView(unittest.TestCase):
         req.get_full_path.return_value = "identity/v2.0"
         resp = self.view.get(req, "vmware_nova")
         self.assertEqual(resp.status_code, 405)
+
+    @mock.patch.object(BaseClient, "buildRequest")
+    @mock.patch.object(BaseClient, "_request")
+    def test_delete(self, mock_req, mock_build):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_SUBJECT_TOKEN": "aaa"
+        }
+        mock_build.return_value = ("http://onap.org", {}, None)
+        self.view.delete(req, "openstack_regionone")
+        mock_req.assert_called_once()
