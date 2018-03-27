@@ -141,10 +141,11 @@ def _build_api_controller(api_meta):
             resp = session.get(full_url, endpoint_filter=service)
             mc_res = _convert_vim_res_to_mc_res(resp.json(),
                                                 resource_properties)
-            return {"vimName": vim_id,
-                    name: mc_res,
-                    "tenantId": tenant_id,
-                    "vimid": vim_id}
+            mc_res.update({"vimName": vim_id,
+                           "vimId": vim_id,
+                           "tenantId": tenant_id,
+                           "returnCode": 0})
+            return mc_res
 
         controller_meta["get"] = _get
 
