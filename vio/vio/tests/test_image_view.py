@@ -37,3 +37,14 @@ class TestGetDeleteImageView(unittest.TestCase):
         resp = self.view.get(mock.Mock(), "vmware_nova", "tenant1", "image1")
         self.assertEqual(200, resp.status_code)
         self.assertEqual("image-id", resp.data.get('id'))
+
+    @mock.patch.object(OperateImage.OperateImage, "delete_vim_image")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_delete(self, mock_getvim, mock_delimg):
+        mock_getvim.return_value = {
+            "tenant": "tenant-id"
+        }
+        resp = self.view.delete(
+            mock.Mock(), "vmware_nova", "tenant1", "image1")
+        self.assertEqual(204, resp.status_code)
+        mock_delimg.assert_called_once()
