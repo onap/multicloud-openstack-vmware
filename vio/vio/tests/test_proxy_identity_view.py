@@ -73,3 +73,10 @@ class TestTokenView(unittest.TestCase):
         mock_req.return_value = res
         resp = self.view.get(req, "vmware_nova")
         self.assertEqual(resp.status_code, 200)
+
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_get_v2(self, mock_getvim):
+        req = mock.Mock()
+        req.get_full_path.return_value = "identity/v2.0"
+        resp = self.view.get(req, "vmware_nova")
+        self.assertEqual(resp.status_code, 405)
