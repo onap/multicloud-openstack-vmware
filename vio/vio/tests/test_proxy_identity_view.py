@@ -124,3 +124,47 @@ class TestTokenView(unittest.TestCase):
         mock_post.return_value = res
         resp = self.view.post(req, "vmware_nova")
         self.assertEqual(200, resp.status_code)
+
+    @mock.patch("requests.post")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_post_v2(self, mock_getvim,  mock_post):
+        req = mock.Mock()
+        req.get_full_path.return_value = "identity/v2.0/tokens"
+        req.body = """{
+            "auth": {
+                "tenantName": "tenant-name",
+                "passwordCredentials": {
+                    "username": "admin",
+                    "password": "pass"
+                }
+            }
+        }"""
+        mock_getvim.return_value = {
+            "url": "http://onap.org/identity/v2.0/tokens"
+        }
+        res = mock.Mock()
+        res.status_code = 200
+        res.headers = [("X-Subject-Token", "fake-token")]
+        res.json.return_value = {
+            "access": {
+                "token": {
+                    "value": "token-value",
+                    "tenant": {
+                        "id": "tenant-id"
+                    },
+                },
+                "serviceCatalog": [{
+                    "type": "volume",
+                    "id": "3e4941704e9941a582b157ac7203ec1b",
+                    "name": "cinder",
+                    "endpoints": [{
+                        "adminURL": "http://onap.org/api/multicloud/v0/xxx",
+                        "internalURL": "http://onap.org/api/multicloud/v0/xxx",
+                        "publicURL": "http://onap.org/api/multicloud/v0/xxx"
+                    }]
+                }]
+            }
+        }
+        mock_post.return_value = res
+        resp = self.view.post(req, "vmware_nova")
+        self.assertEqual(200, resp.status_code)
