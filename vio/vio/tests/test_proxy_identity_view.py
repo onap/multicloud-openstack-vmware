@@ -239,3 +239,26 @@ class TestTokenV2View(unittest.TestCase):
         mock_post.return_value = res
         resp = self.view.post(req, "vmware_nova")
         self.assertEqual(200, resp.status_code)
+
+
+class TestIdentityVersionLink(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.IdentityVersionLink()
+
+    @mock.patch.object(BaseClient, "buildRequest")
+    @mock.patch.object(BaseClient, "_request")
+    def test_get(self, mock_req, mock_build):
+        mock_build.return_value = ("http://onap.org", {}, None)
+        res = mock.Mock()
+        res.status_code = 200
+        res.data = {
+            "version": {
+                "links": [{
+                    "href": ""
+                }]
+            }
+        }
+        mock_req.return_value = res
+        resp = self.view.get(mock.Mock(), "vmware_nova")
+        self.assertEqual(200, resp.status_code)
