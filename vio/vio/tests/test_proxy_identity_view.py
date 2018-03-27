@@ -91,3 +91,36 @@ class TestTokenView(unittest.TestCase):
         mock_build.return_value = ("http://onap.org", {}, None)
         self.view.delete(req, "openstack_regionone")
         mock_req.assert_called_once()
+
+    @mock.patch("requests.post")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_post_v3(self, mock_getvim,  mock_post):
+        req = mock.Mock()
+        req.get_full_path.return_value = "identity/v3/auth/tokens"
+        req.body = "{}"
+        mock_getvim.return_value = {
+            "url": "http://onap.org/identity/v3/auth/tokens"
+        }
+        res = mock.Mock()
+        res.status_code = 200
+        res.headers = [("X-Subject-Token", "fake-token")]
+        res.json.return_value = {
+            "token": {
+                "value": "token-value",
+                "project": {
+                    "id": "project-id"
+                },
+                "catalog": [{
+                    "type": "volume",
+                    "id": "3e4941704e9941a582b157ac7203ec1b",
+                    "name": "cinder",
+                    "endpoints": [{
+                        "url": "http://onap.org/api/multicloud/v0/xxx",
+                        "interface": "public"
+                    }]
+                }]
+            }
+        }
+        mock_post.return_value = res
+        resp = self.view.post(req, "vmware_nova")
+        self.assertEqual(200, resp.status_code)
