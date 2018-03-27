@@ -125,3 +125,17 @@ class TestAAIClient(unittest.TestCase):
         }
         self.view._del_flavors(rsp)
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_del_images(self, mock_call):
+        mock_call.return_value = [0]
+        rsp = {
+            "images": {
+                "image": [{
+                    "image-id": "fake-id",
+                    "resource-version": "fake-version"
+                }]
+            }
+        }
+        self.view._del_images(rsp)
+        mock_call.assert_called_once()
