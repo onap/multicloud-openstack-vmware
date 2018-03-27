@@ -153,3 +153,17 @@ class TestAAIClient(unittest.TestCase):
         }
         self.view._del_networks(rsp)
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_del_azs(self, mock_call):
+        mock_call.return_value = [0]
+        rsp = {
+            "availability-zones": {
+                "availability-zone": [{
+                    "availability-zone-name": "fake-name",
+                    "resource-version": "fake-version"
+                }]
+            }
+        }
+        self.view._del_azs(rsp)
+        mock_call.assert_called_once()
