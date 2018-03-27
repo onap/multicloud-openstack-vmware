@@ -16,10 +16,14 @@ from keystoneauth1.identity import v3 as keystone_v3
 from keystoneauth1 import session
 import pecan
 from pecan import rest
+import re
 
 from vio.api_v2.api_definition import utils
 from vio.pub import exceptions
 from vio.pub.msapi import extsys
+
+
+OBJ_IN_ARRAY = "(\w+)\[(\d+)\]\.(\w+)"
 
 
 def _get_vim_auth_session(vim_id, tenant_id):
@@ -67,27 +71,35 @@ def _convert_default_value(default):
     return default
 
 
+def _property_exists(resource, attr, required=False):
+    if attr not in resource:
+        if required:
+            raise Exception("Required field %s is missed in VIM "
+                            "resource %s", (attr, resource))
+        else:
+            return False
+
+    return True
+
+
 def _convert_vim_res_to_mc_res(vim_resource, res_properties):
     mc_resource = {}
     for key in res_properties:
-        vim_res, attr = res_properties[key]["source"].split('.')
-
-        if attr not in vim_resource[vim_res]:
-            if res_properties[key].get("required"):
-                raise Exception("Required field %s is missed in VIM "
-                                "resource %s", (attr, vim_resource))
+        vim_res, attr = res_properties[key]["source"].split('.', 1)
+        # action = res_properties[key].get("action", "copy")
+        if re.match(OBJ_IN_ARRAY, attr):
+            attr, index, sub_attr = re.match(OBJ_IN_ARRAY, attr).groups()
+            if _property_exists(vim_resource[vim_res], attr):
+                mc_resource[key] = (
+                    vim_resource[vim_res][attr][int(index)][sub_attr])
+        else:
+            if _property_exists(vim_resource[vim_res], attr,
+                                res_properties[key].get("required")):
+                mc_resource[key] = vim_resource[vim_res][attr]
             else:
                 if "default" in res_properties[key]:
                     mc_resource[key] = _convert_default_value(
                         res_properties[key]["default"])
-
-                # None required fields missed, just skip.
-                continue
-
-        action = res_properties[key].get("action", "copy")
-        # TODO(xiaohhui): Actions should be in constants.
-        if action == "copy":
-            mc_resource[key] = vim_resource[vim_res][attr]
 
     return mc_resource
 
@@ -95,20 +107,20 @@ def _convert_vim_res_to_mc_res(vim_resource, res_properties):
 def _convert_mc_res_to_vim_res(mc_resource, res_properties):
     vim_resource = {}
     for key in res_properties:
-        vim_res, attr = res_properties[key]["source"].split('.')
-
-        if key not in mc_resource:
-            if res_properties[key].get("required"):
-                raise Exception("Required field %s is missed in MultiCloud "
-                                "resource %s", (key, mc_resource))
-            else:
-                # None required fields missed, just skip.
-                continue
-
-        action = res_properties[key].get("action", "copy")
-        # TODO(xiaohhui): Actions should be in constants.
-        if action == "copy":
-            vim_resource[attr] = mc_resource[key]
+        vim_res, attr = res_properties[key]["source"].split('.', 1)
+        # action = res_properties[key].get("action", "copy")
+        if re.match(OBJ_IN_ARRAY, attr):
+            attr, index, sub_attr = re.match(OBJ_IN_ARRAY, attr).groups()
+            if _property_exists(mc_resource, key):
+                vim_resource[attr] = vim_resource.get(attr, [])
+                if vim_resource[attr]:
+                    vim_resource[attr][0].update({sub_attr: mc_resource[key]})
+                else:
+                    vim_resource[attr].append({sub_attr: mc_resource[key]})
+        else:
+            if _property_exists(mc_resource, key,
+                                res_properties[key].get("required")):
+                vim_resource[attr] = mc_resource[key]
 
     return vim_resource
 
