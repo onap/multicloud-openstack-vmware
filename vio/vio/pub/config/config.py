@@ -29,8 +29,8 @@ AAI_USERNAME = 'AAI'
 AAI_PASSWORD = 'AAI'
 
 # [DMaaP]
-MR_ADDR = "127.0.0.1"
-MR_PORT = "3904"
+MR_ADDR = '127.0.0.1'
+MR_PORT = '3904'
 
 # [MDC]
 SERVICE_NAME = "multicloud-vio"
