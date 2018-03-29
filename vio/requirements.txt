@@ -27,3 +27,11 @@ onappylog>=1.0.6
 
 # for event
 oslo_messaging
+
+# for pecan framework
+pecan>=1.2.1
+oslo.concurrency>=3.21.0
+oslo.config>=4.11.0
+oslo.service>=1.25.0
+eventlet>=0.20.0
+PyYAML>=3.1.0
