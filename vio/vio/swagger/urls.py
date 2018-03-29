@@ -65,6 +65,8 @@ from vio.swagger.views.fakeplugin.image.views import FakeImage
 from vio.swagger.views.fakeplugin.image.views import FakeImageVersion
 from vio.swagger.views.fakeplugin.image.views import FakeImageDetail
 from vio.swagger.views.fakeplugin.image.views import FakeImageSchema
+from vio.swagger.views.fakeplugin.image.views import FakeImageDownload
+from vio.swagger.views.fakeplugin.image.views import FakeImageUpload
 from vio.swagger.views.fakeplugin.nova.views import FakeNovaServer
 from vio.swagger.views.fakeplugin.nova.views import FakeNovaHypervisors
 from vio.swagger.views.fakeplugin.nova.views import FakeNovaAggregate
@@ -210,6 +212,11 @@ urlpatterns = [
         FakeImageDetail.as_view()),
     url(r'^api/multicloud-vio/v0/vmware_fake/glance/v2/images',
         FakeImage.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/glance/v2/image/file/'
+        r'(?P<imageid>[0-9a-z-A-Z\-\_]+)$',
+        FakeImageDownload.as_view()),
+    url(r'^api/multicloud-vio/v0/vmware_fake/glance/v2/image/file$',
+        FakeImageUpload.as_view()),
     url(r'^api/multicloud-vio/v0/vmware_fake/glance/version',
         FakeImageVersion.as_view()),
     url(r'^api/multicloud-vio/v0/vmware_fake/neutron$',
