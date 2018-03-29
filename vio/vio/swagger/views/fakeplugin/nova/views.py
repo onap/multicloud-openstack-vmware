@@ -140,3 +140,13 @@ class FakeFlavorList(APIView):
 
         data = list_flavors()
         return Response(data=data, status=status.HTTP_200_OK)
+
+
+class FakeCapacity(APIView):
+
+    def post(self, request):
+
+        data = {
+            "result": True
+        }
+        return Response(data=data, status=status.HTTP_200_OK)

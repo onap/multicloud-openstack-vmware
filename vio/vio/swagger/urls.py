@@ -67,6 +67,7 @@ from vio.swagger.views.fakeplugin.image.views import FakeImageDetail
 from vio.swagger.views.fakeplugin.image.views import FakeImageSchema
 from vio.swagger.views.fakeplugin.image.views import FakeImageDownload
 from vio.swagger.views.fakeplugin.image.views import FakeImageUpload
+from vio.swagger.views.fakeplugin.nova.views import FakeCapacity
 from vio.swagger.views.fakeplugin.nova.views import FakeNovaServer
 from vio.swagger.views.fakeplugin.nova.views import FakeNovaHypervisors
 from vio.swagger.views.fakeplugin.nova.views import FakeNovaAggregate
@@ -92,6 +93,9 @@ urlpatterns = [
     url(r'^api/multicloud-vio/v0/vmware_fake/neutron/networks/'
         r'(?P<netid>[0-9a-z-A-Z]+)$',
         FakeNeutronDetail.as_view()),
+
+    url(r'^api/multicloud-vio/v0/vmware_fake/capacity_check$',
+        FakeCapacity.as_view()),
 
     # vio
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
