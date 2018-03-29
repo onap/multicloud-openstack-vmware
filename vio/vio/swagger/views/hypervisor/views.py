@@ -27,6 +27,17 @@ from vio.swagger import nova_utils
 class HostView(APIView):
 
     def get(self, request, vimid, tenantid, hostname):
+        if vimid == "vmware_fake":
+            return Response(data={
+                'vimid': vimid,
+                'vimName': vimid,
+                'tenantId': tenantid,
+                'memory_mb': 196516,
+                'name': "domain-c202.22bfc05c-da55-4ba6-ba93-08d9a067138e",
+                'disk_gb': 6143,
+                'cpu': 48
+                }, status=status.HTTP_200_OK)
+
         try:
             vim_info = extsys.get_vim_by_id(vimid)
         except VimDriverVioException as e:

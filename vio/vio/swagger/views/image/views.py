@@ -28,6 +28,20 @@ from vio.pub.exceptions import VimDriverVioException
 class GetDeleteImageView(APIView):
 
     def get(self, request, vimid, tenantid, imageid):
+        if vimid == "vmware_fake":
+            return Response(data={
+                "vimid": vimid,
+                "vimName": vimid,
+                "tenantId": tenantid,
+                "status": "active",
+                "name": "ubuntu-16.04-server-cloudimg-amd64",
+                "visibility": "public",
+                "id": "170641db-78cd-49a3-8bab-4cfa3d6ef131",
+                "size": 10737418240,
+                "imageType": "vmdk",
+                "containerFormat": "bare"
+            }, status=status.HTTP_200_OK)
+
         try:
             vim_info = extsys.get_vim_by_id(vimid)
             vim_info['tenant'] = tenantid

@@ -77,6 +77,22 @@ class CreateNetworkView(APIView):
 class DeleteNetworkView(APIView):
 
     def get(self, request, vimid, tenantid, networkid):
+        if vimid == "vmware_fake":
+            return Response(data={
+                "vimid": vimid,
+                "vimName": vimid,
+                "tenantId": tenantid,
+                "status": "ACTIVE",
+                "segmentationId": None,
+                "name": "oam_onap_AQYG",
+                "physicalNetwork": None,
+                "shared": False,
+                "routerExternal": False,
+                "networkType": None,
+                "vlanTransparent": False,
+                "id": "0085970f-a214-4da2-a449-75acfb813fec"
+            }, status=status.HTTP_200_OK)
+
         logger.info("Enter %s, method is %s, vim_id is %s",
                     syscomm.fun_name(), request.method, vimid)
         net = OperateNetwork.OperateNetwork()
