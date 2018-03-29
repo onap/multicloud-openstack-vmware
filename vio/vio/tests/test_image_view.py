@@ -69,3 +69,25 @@ class TestCreateListImagesView(unittest.TestCase):
         resp = self.view.get(
             mock.Mock(query_params=[]), "vmware_nova", "tenant1")
         self.assertEqual(200, resp.status_code)
+
+    @mock.patch.object(OperateImage.OperateImage, "get_vim_image")
+    @mock.patch.object(OperateImage.OperateImage, "get_vim_images")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_post(self, mock_getvim, mock_getimgs, mock_getimg):
+        mock_getvim.return_value = {
+            "tenant": "tenant-id"
+        }
+        img = mock.Mock()
+        img.id = "image-id"
+        img.name = "image-a"
+        img.to_dict.return_value = {
+            "id": "image-id",
+            "name": "image-a"
+        }
+        mock_getimgs.return_value = [img]
+        req = mock.Mock()
+        req.body = """{
+            "name": "image-a"
+        }"""
+        resp = self.view.post(req, "vmware_nova", "tenant1")
+        self.assertEqual(200, resp.status_code)
