@@ -24,5 +24,10 @@ class SampleList(APIView):
     """
 
     def get(self, request, format=None):
+
         logger.debug("get")
-        return Response({"status": "active"})
+        output = ""
+        with open("/var/log/onap/multicloud/vio/vio.log","r") as f:
+            lines = f.readlines()
+            output = lines[-1]
+        return Response({"status": "active", "logs":output})
