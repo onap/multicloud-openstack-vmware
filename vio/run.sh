@@ -26,11 +26,16 @@ sed -i "s/MR_PORT =.*/MR_PORT = \"${MR_PORT}\"/g" vio/pub/config/config.py
 
 logDir="/var/log/onap/multicloud/vio"
 
-nohup python manage.py runserver 0.0.0.0:9004 2>&1 &
-nohup python vio/event_listener/server.py 2>&1 &
+if [ "$WEB_FRAMEWORK" == "pecan" ]
+then
+    python multivimbroker/scripts/api.py
+else
+    # nohup python manage.py runserver 0.0.0.0:9004 2>&1 &
+    nohup uwsgi --http :9004 --module vio.wsgi --master --processes 4 &
+    nohup python vio/event_listener/server.py 2>&1 &
 
-while [ ! -f  $logDir/vio.log ]; do
-    sleep 1
-done
-
+    while [ ! -f  $logDir/vio.log ]; do
+        sleep 1
+    done
 tail -F $logDir/vio.log
+fi
