@@ -32,7 +32,7 @@ then
 else
     # nohup python manage.py runserver 0.0.0.0:9004 2>&1 &
     nohup uwsgi --http :9004 --module vio.wsgi --master --processes 4 &
-    nohup python vio/event_listener/server.py 2>&1 &
+    nohup python -m vio.event_listener.server 2>&1 &
 
     while [ ! -f  $logDir/vio.log ]; do
         sleep 1

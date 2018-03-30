@@ -9,10 +9,8 @@ import ConfigParser
 import json
 import os
 import requests
-import sys
-sys.path.append("..")
-from pub.config.config import MR_ADDR # noqa
-from pub.config.config import MR_PORT # noqa
+from vio.pub.config.config import MR_ADDR
+from vio.pub.config.config import MR_PORT
 
 
 LOG = logging.getLogger(__name__)
