@@ -170,12 +170,12 @@ class CreateImageFileView(APIView):
         try:
             image_file = request.FILES['file']
 
-            random_name = ''.join(random.sample(
-                                            string.ascii_letters
-                                            + string.digits, 4))
-            file_name = image_file.name[:image_file.name.rfind('.')]
-            + "_" + random_name
-            + image_file.name[image_file.name.find('.'):]
+            random_name = ''.join(
+                random.sample(string.ascii_letters + string.digits, 4))
+
+            file_name = image_file.name[:image_file.name.rfind('.')] + \
+                "_" + random_name + image_file.name[
+                                        image_file.name.find('.'):]
 
             file_dest = sys.path[0] + '/images/' + file_name
             with open(file_dest, 'wb+') as temp_file:
