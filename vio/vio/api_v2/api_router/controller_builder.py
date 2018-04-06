@@ -27,7 +27,7 @@ OBJ_IN_ARRAY = "(\w+)\[(\d+)\]\.(\w+)"
 
 
 def _get_vim_auth_session(vim_id, tenant_id):
-    """ Get the auth session to backend VIM """
+    """ Get the auth session to the given backend VIM """
 
     try:
         vim = extsys.get_vim_by_id(vim_id)
@@ -136,13 +136,13 @@ def _build_api_controller(api_meta):
     service_type = path_meta["vim_path"][1:delimiter]
     resource_url = path_meta["vim_path"][delimiter:]
 
-    # Assume that only one resource
+    # Assume there is only one resource.
     name, resource_meta = api_meta['definitions'].items()[0]
     resource_properties = resource_meta['properties']
 
     controller_meta = {}
     if "get" in path_meta:
-        # Add get method to controller.
+        # Add the get method to controller.
         @pecan.expose("json")
         def _get(self, vim_id, tenant_id, resource_id):
             """ General GET """
@@ -162,7 +162,7 @@ def _build_api_controller(api_meta):
         controller_meta["get"] = _get
 
     if "get_all" in path_meta:
-        # Add get_all method to controller
+        # Add the get_all method to controller.
         @pecan.expose("json")
         def _get_all(self, vim_id, tenant_id):
             """ General GET all """
@@ -183,7 +183,7 @@ def _build_api_controller(api_meta):
         controller_meta["get_all"] = _get_all
 
     if "post" in path_meta:
-        # Add post method to controller
+        # Add the post method to controller.
         @pecan.expose("json")
         def _post(self, vim_id, tenant_id):
             """ General POST """
@@ -209,7 +209,7 @@ def _build_api_controller(api_meta):
         controller_meta["post"] = _post
 
     if "delete" in path_meta:
-        # Add delete method to controller
+        # Add the delete method to controller.
         @pecan.expose("json")
         def _delete(self, vim_id, tenant_id, resource_id):
             """ General DELETE """
