@@ -71,3 +71,17 @@ class TestFakeImageVersion(unittest.TestCase):
         }
         resp = self.view.get(mock.Mock())
         self.assertEqual(200, resp.status_code)
+
+
+class TestFakeImageDownload(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeImageDownload()
+
+    @mock.patch.object(fakeResponse, "image_detail")
+    def test_get(self, mock_image_version):
+        mock_image_version.return_value = {
+            "id": "1234abcd"
+        }
+        resp = self.view.get(mock.Mock(), "1234abcd")
+        self.assertEqual(200, resp.status_code)
