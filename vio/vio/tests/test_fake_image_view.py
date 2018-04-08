@@ -43,3 +43,17 @@ class TestFakeImage(unittest.TestCase):
         }
         resp = self.view.get(mock.Mock())
         self.assertEqual(200, resp.status_code)
+
+
+class TestFakeImageSchema(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeImageSchema()
+
+    @mock.patch.object(fakeResponse, "image_schema")
+    def test_get(self, mock_image_schema):
+        mock_image_schema.return_value = {
+            "name": "image"
+        }
+        resp = self.view.get(mock.Mock())
+        self.assertEqual(200, resp.status_code)
