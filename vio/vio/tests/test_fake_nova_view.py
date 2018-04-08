@@ -40,3 +40,13 @@ class TestFakeNovaServer(unittest.TestCase):
         }
         resp = self.view.get(req, "abcd", Server)
         self.assertEqual(200, resp.status_code)
+
+    @mock.patch.object(fakeResponse, "delete_server")
+    def test_delete_server(self, mock_delete_server):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_delete_server.return_value = {}
+        resp = self.view.delete(req, "abcd", Server)
+        self.assertEqual(204, resp.status_code)
