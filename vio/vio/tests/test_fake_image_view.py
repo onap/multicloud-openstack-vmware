@@ -85,3 +85,21 @@ class TestFakeImageDownload(unittest.TestCase):
         }
         resp = self.view.get(mock.Mock(), "1234abcd")
         self.assertEqual(200, resp.status_code)
+
+
+class TestFakeImageUpload(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeImageUpload()
+
+    @mock.patch.object(fakeResponse, "upload_image")
+    def test_get(self, mock_upload_image):
+        mock_upload_image.return_value = {
+            "id": "1234abcd"
+        }
+        req = mock.Mock()
+        req.body = """{
+            "name": "abcd"
+        }"""
+        resp = self.view.post(req)
+        self.assertEqual(201, resp.status_code)
