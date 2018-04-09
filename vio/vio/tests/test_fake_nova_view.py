@@ -58,7 +58,7 @@ class TestFakeNovaHypervisors(unittest.TestCase):
         self.view = views.FakeNovaHypervisors()
 
     @mock.patch.object(fakeResponse, "get_oshypervisor")
-    def test_get_server(self, mock_get_oshypervisor):
+    def test_get_hypervisor(self, mock_get_oshypervisor):
         req = mock.Mock()
         req.META = {
             "HTTP_X_AUTH_TOKEN": Token
@@ -76,7 +76,7 @@ class TestFakeNovaAggregate(unittest.TestCase):
         self.view = views.FakeNovaAggregate()
 
     @mock.patch.object(fakeResponse, "get_osaggregates")
-    def test_get_server(self, mock_get_osaggregates):
+    def test_get_aggregate(self, mock_get_osaggregates):
         req = mock.Mock()
         req.META = {
             "HTTP_X_AUTH_TOKEN": Token
@@ -94,7 +94,7 @@ class TestFakeNovaServerDetail(unittest.TestCase):
         self.view = views.FakeNovaServerDetail()
 
     @mock.patch.object(fakeResponse, "get_serverdetail")
-    def test_get_server(self, mock_get_serverdetail):
+    def test_get_server_detail(self, mock_get_serverdetail):
         req = mock.Mock()
         req.META = {
             "HTTP_X_AUTH_TOKEN": Token
@@ -112,7 +112,7 @@ class TestFakeFlavorDetail(unittest.TestCase):
         self.view = views.FakeFlavorDetail()
 
     @mock.patch.object(fakeResponse, "get_flavors")
-    def test_get_server(self, mock_get_flavors):
+    def test_get_flavor_detail(self, mock_get_flavors):
         req = mock.Mock()
         req.META = {
             "HTTP_X_AUTH_TOKEN": Token
@@ -121,4 +121,32 @@ class TestFakeFlavorDetail(unittest.TestCase):
             "flavors": "1234abcd"
         }
         resp = self.view.get(req, "abcd", "1234")
+        self.assertEqual(200, resp.status_code)
+
+
+class TestFakeFlavorList(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeFlavorList()
+
+    @mock.patch.object(fakeResponse, "list_flavors")
+    def test_get_flavor_list(self, mock_list_flavors):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_list_flavors.return_value = {
+            "flavors": "1234abcd"
+        }
+        resp = self.view.get(req, "abcd")
+        self.assertEqual(200, resp.status_code)
+
+
+class TestFakeCapacity(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeCapacity()
+
+    def test_get_capacity(self):
+        resp = self.view.post(mock.Mock())
         self.assertEqual(200, resp.status_code)
