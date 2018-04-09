@@ -50,3 +50,21 @@ class TestFakeNovaServer(unittest.TestCase):
         mock_delete_server.return_value = {}
         resp = self.view.delete(req, "abcd", Server)
         self.assertEqual(204, resp.status_code)
+
+
+class TestFakeNovaHypervisors(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeNovaHypervisors()
+
+    @mock.patch.object(fakeResponse, "get_oshypervisor")
+    def test_get_server(self, mock_get_oshypervisor):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_get_oshypervisor.return_value = {
+            "hypervisor": "1234abcd"
+        }
+        resp = self.view.get(req, "abcd")
+        self.assertEqual(200, resp.status_code)
