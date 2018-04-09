@@ -140,3 +140,13 @@ class TestFakeFlavorList(unittest.TestCase):
         }
         resp = self.view.get(req, "abcd")
         self.assertEqual(200, resp.status_code)
+
+
+class TestFakeCapacity(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeCapacity()
+
+    def test_get_capacity(self):
+        resp = self.view.post(mock.Mock())
+        self.assertEqual(200, resp.status_code)
