@@ -104,3 +104,21 @@ class TestFakeNovaServerDetail(unittest.TestCase):
         }
         resp = self.view.get(req, "abcd")
         self.assertEqual(200, resp.status_code)
+
+
+class TestFakeFlavorDetail(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeFlavorDetail()
+
+    @mock.patch.object(fakeResponse, "get_flavors")
+    def test_get_server(self, mock_get_flavors):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_get_flavors.return_value = {
+            "flavors": "1234abcd"
+        }
+        resp = self.view.get(req, "abcd", "1234")
+        self.assertEqual(200, resp.status_code)
