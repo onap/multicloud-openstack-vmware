@@ -86,3 +86,21 @@ class TestFakeNovaAggregate(unittest.TestCase):
         }
         resp = self.view.get(req, "abcd")
         self.assertEqual(200, resp.status_code)
+
+
+class TestFakeNovaServerDetail(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeNovaServerDetail()
+
+    @mock.patch.object(fakeResponse, "get_serverdetail")
+    def test_get_server(self, mock_get_serverdetail):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_get_serverdetail.return_value = {
+            "servers": "1234abcd"
+        }
+        resp = self.view.get(req, "abcd")
+        self.assertEqual(200, resp.status_code)
