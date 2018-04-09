@@ -68,3 +68,21 @@ class TestFakeNovaHypervisors(unittest.TestCase):
         }
         resp = self.view.get(req, "abcd")
         self.assertEqual(200, resp.status_code)
+
+
+class TestFakeNovaAggregate(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeNovaAggregate()
+
+    @mock.patch.object(fakeResponse, "get_osaggregates")
+    def test_get_server(self, mock_get_osaggregates):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_get_osaggregates.return_value = {
+            "osaggregates": "1234abcd"
+        }
+        resp = self.view.get(req, "abcd")
+        self.assertEqual(200, resp.status_code)
