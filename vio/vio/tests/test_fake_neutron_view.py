@@ -40,7 +40,7 @@ class TestakeNeutron(unittest.TestCase):
         self.assertEqual(200, resp.status_code)
 
 
-class TesFakeNeutronNetwork(unittest.TestCase):
+class TestFakeNeutronNetwork(unittest.TestCase):
 
     def setUp(self):
         self.view = views.FakeNeutronNetwork()
@@ -55,4 +55,22 @@ class TesFakeNeutronNetwork(unittest.TestCase):
             "network": "net1"
         }
         resp = self.view.get(req)
+        self.assertEqual(200, resp.status_code)
+
+
+class TestFakeNeutronDetail(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeNeutronDetail()
+
+    @mock.patch.object(fakeResponse, "neutron_detail")
+    def test_get_neutron_detail(self, mock_neutron_detail):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_neutron_detail.return_value = {
+            "network": "net1"
+        }
+        resp = self.view.get(req, "1234abcd")
         self.assertEqual(200, resp.status_code)
