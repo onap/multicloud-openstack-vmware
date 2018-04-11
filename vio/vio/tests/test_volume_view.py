@@ -16,6 +16,7 @@ import unittest
 from vio.pub.msapi import extsys
 from vio.swagger.views.volume import views
 from vio.pub.vim.vimapi.cinder import OperateVolume
+from vio.pub.vim.vimapi.glance import OperateImage
 
 
 class TestGetDeleteVolumeView(unittest.TestCase):
@@ -141,9 +142,37 @@ class TestCreateListVolumeView(unittest.TestCase):
         mock_getvol.return_value = vol
         mock_getvols.return_value = [vol]
         req = mock.Mock()
-        req.body = {
-            "vol-name"
-        }
-        ret = self.view.get(
-            mock.Mock(query_params=[]), "vmware_nova", "tenant1")
+        req.body = """{
+            "name": "vol-name"
+        }"""
+        ret = self.view.post(req, "vmware_nova", "tenant1")
         self.assertEqual(200, ret.status_code)
+
+    @mock.patch.object(OperateImage.OperateImage, "find_vim_image")
+    @mock.patch.object(OperateVolume.OperateVolume, "create_vim_volume")
+    @mock.patch.object(OperateVolume.OperateVolume, "get_vim_volumes")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_post_from_image(self, mock_getvim, mock_getvols,
+                             mock_createvol, mock_findimg):
+        mock_getvim.return_value = {
+            "tenant": "tenant-id"
+        }
+        mock_findimg.return_value = mock.Mock(id="image-id")
+        vol = mock.Mock()
+        vol.attachments = []
+        vol.id = "vol-id"
+        vol.name = "vol-name"
+        vol.created_at = "create time"
+        vol.status = "ok"
+        vol.volume_type = "vmdk"
+        vol.size = 1
+        vol.availability_zone = "nova"
+        mock_createvol.return_value = vol
+        mock_getvols.return_value = []
+        req = mock.Mock()
+        req.body = """{
+            "name": "vol-name",
+            "imageId": "image-id"
+        }"""
+        ret = self.view.post(req, "vmware_nova", "tenant1")
+        self.assertEqual(202, ret.status_code)
