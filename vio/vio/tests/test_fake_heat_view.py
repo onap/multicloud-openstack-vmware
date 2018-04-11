@@ -91,3 +91,15 @@ class TestFakeHeatService(unittest.TestCase):
         }
         resp = self.view.post(req, "1234abcd")
         self.assertEqual(201, resp.status_code)
+
+    @mock.patch.object(fakeResponse, "deleteStack")
+    def test_delete_heat_stacks(self, mock_deleteStack):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_deleteStack.return_value = {
+            ""
+        }
+        resp = self.view.delete(req, "1234abcd", STACK_NAME, STACK_ID)
+        self.assertEqual(204, resp.status_code)
