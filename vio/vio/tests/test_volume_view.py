@@ -51,3 +51,13 @@ class TestGetDeleteVolumeView(unittest.TestCase):
         mock_getvol.side_effect = [Exception("error here")]
         ret = self.view.get(mock.Mock(), "vmware_nova", "tenant1", "vol-1")
         self.assertEqual(500, ret.status_code)
+
+    @mock.patch.object(OperateVolume.OperateVolume, "delete_vim_volume")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_delete(self, mock_getvim, mock_delvol):
+        mock_getvim.return_value = {
+            "tenant": "tenant-id"
+        }
+        mock_delvol.return_value = None
+        ret = self.view.delete(mock.Mock(), "vmware_nova", "tenant1", "vol-1")
+        self.assertEqual(204, ret.status_code)
