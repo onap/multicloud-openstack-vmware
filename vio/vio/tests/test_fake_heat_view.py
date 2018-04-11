@@ -48,7 +48,7 @@ class TestFakeHeatServicePreview(unittest.TestCase):
     def setUp(self):
         self.view = views.FakeHeatServicePreview()
 
-    @mock.patch.object(fakeResponse, "upload_image")
+    @mock.patch.object(fakeResponse, "createStackPreview")
     def test_create_service_preview(self, mock_createStackPreview):
         req = mock.Mock()
         req.META = {
@@ -78,3 +78,16 @@ class TestFakeHeatService(unittest.TestCase):
         }
         resp = self.view.get(req, "1234abcd", STACK_NAME, STACK_ID)
         self.assertEqual(200, resp.status_code)
+
+    @mock.patch.object(fakeResponse, "createStack")
+    def test_create_service_preview(self, mock_createStack):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        req.body = json.dumps({"stack_name": STACK_NAME})
+        mock_createStack.return_value = {
+            "stack": "stack1"
+        }
+        resp = self.view.post(req, "1234abcd")
+        self.assertEqual(201, resp.status_code)
