@@ -176,3 +176,28 @@ class TestCreateListVolumeView(unittest.TestCase):
         }"""
         ret = self.view.post(req, "vmware_nova", "tenant1")
         self.assertEqual(202, ret.status_code)
+
+    @mock.patch.object(OperateVolume.OperateVolume, "get_vim_volumes")
+    @mock.patch.object(OperateVolume.OperateVolume, "get_vim_volume")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_post_fail(self, mock_getvim, mock_getvol, mock_getvols):
+        mock_getvim.return_value = {
+            "tenant": "tenant-id"
+        }
+        vol = mock.Mock()
+        vol.attachments = []
+        vol.id = "vol-id"
+        vol.name = "vol-name"
+        vol.created_at = "create time"
+        vol.status = "ok"
+        vol.volume_type = "vmdk"
+        vol.size = 1
+        vol.availability_zone = "nova"
+        mock_getvol.side_effect = [Exception("error")]
+        mock_getvols.return_value = [vol]
+        req = mock.Mock()
+        req.body = """{
+            "name": "vol-name"
+        }"""
+        ret = self.view.post(req, "vmware_nova", "tenant1")
+        self.assertEqual(500, ret.status_code)
