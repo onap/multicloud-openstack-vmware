@@ -60,3 +60,21 @@ class TestFakeHeatServicePreview(unittest.TestCase):
         }
         resp = self.view.post(req, "1234abcd")
         self.assertEqual(201, resp.status_code)
+
+
+class TestFakeHeatService(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeHeatService()
+
+    @mock.patch.object(fakeResponse, "getAllStacks")
+    def test_get_heat_stacks(self, mock_getAllStacks):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        mock_getAllStacks.return_value = {
+            "stack": "1234abcd"
+        }
+        resp = self.view.get(req, "1234abcd", STACK_NAME, STACK_ID)
+        self.assertEqual(200, resp.status_code)
