@@ -38,3 +38,17 @@ class TestFakeProjects(unittest.TestCase):
         }
         resp = self.view.get(req, "1234abcd")
         self.assertEqual(200, resp.status_code)
+
+
+class TestFakeToken(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeToken()
+
+    @mock.patch.object(fakeResponse, "keystone_version")
+    def test_get_token(self, mock_keystone_version):
+        mock_keystone_version.return_value = {
+            "version": "v2"
+        }
+        resp = self.view.get(mock.Mock())
+        self.assertEqual(200, resp.status_code)
