@@ -49,7 +49,7 @@ class TestFakeToken(unittest.TestCase):
     @mock.patch.object(fakeResponse, "keystone_version")
     def test_get_token(self, mock_keystone_version):
         mock_keystone_version.return_value = {
-            "version": "v2"
+            "version": "v3"
         }
         resp = self.view.get(mock.Mock())
         self.assertEqual(200, resp.status_code)
@@ -65,3 +65,17 @@ class TestFakeToken(unittest.TestCase):
             "token": {"value": Token}}
         resp = self.view.post(req)
         self.assertEqual(201, resp.status_code)
+
+
+class TestFakeTokenV2(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeTokenV2()
+
+    @mock.patch.object(fakeResponse, "keystone_version2")
+    def test_get_tokenV2(self, mock_keystone_version2):
+        mock_keystone_version2.return_value = {
+            "version": "v2"
+        }
+        resp = self.view.get(mock.Mock())
+        self.assertEqual(200, resp.status_code)
