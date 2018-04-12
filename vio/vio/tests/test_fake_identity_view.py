@@ -79,3 +79,15 @@ class TestFakeTokenV2(unittest.TestCase):
         }
         resp = self.view.get(mock.Mock())
         self.assertEqual(200, resp.status_code)
+
+    @mock.patch("requests.post")
+    @mock.patch.object(fakeResponse, "keystone_tokenV2")
+    def test_create_token(self, mock_keystone_tokenV2,  mock_post):
+        req = mock.Mock()
+        req.get_full_path.return_value = "identity/v2.0/tokens"
+        req.body = json.dumps(
+            {"auth": {"scope": {"project": {"id": "1234abcd"}}}})
+        mock_keystone_tokenV2.return_value = {
+            "token": {"value": Token}}
+        resp = self.view.post(req)
+        self.assertEqual(200, resp.status_code)
