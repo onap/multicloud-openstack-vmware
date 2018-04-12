@@ -12,6 +12,7 @@
 
 import mock
 import unittest
+import json
 
 from vio.swagger.views.fakeplugin.identity import views
 from vio.swagger.views.fakeplugin.fakeData import fakeResponse
@@ -52,3 +53,15 @@ class TestFakeToken(unittest.TestCase):
         }
         resp = self.view.get(mock.Mock())
         self.assertEqual(200, resp.status_code)
+
+    @mock.patch("requests.post")
+    @mock.patch.object(fakeResponse, "keystone_token")
+    def test_create_token(self, mock_keystone_token,  mock_post):
+        req = mock.Mock()
+        req.get_full_path.return_value = "identity/v3/auth/tokens"
+        req.body = json.dumps(
+            {"auth": {"scope": {"project": {"id": "1234abcd"}}}})
+        mock_keystone_token.return_value = {
+            "token": {"value": Token}}
+        resp = self.view.post(req)
+        self.assertEqual(201, resp.status_code)
