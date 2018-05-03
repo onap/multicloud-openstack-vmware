@@ -45,9 +45,9 @@ class LogContextMiddleware(object):
 
         ReqeustID = request.META.get("HTTP_X_TRANSACTIONID", None)
         if ReqeustID is None:
-            ReqeustID = uuid.uuid3(uuid.NAMESPACE_URL, SERVICE_NAME)
+            ReqeustID = str(uuid.uuid3(uuid.NAMESPACE_URL, SERVICE_NAME))
         MDC.put("requestID", ReqeustID)
-        InovocationID = uuid.uuid3(uuid.NAMESPACE_DNS, SERVICE_NAME)
+        InovocationID = str(uuid.uuid4())
         MDC.put("invocationID", InovocationID)
         MDC.put("serviceName", SERVICE_NAME)
         MDC.put("serviceIP", self._getLastIp(request))
