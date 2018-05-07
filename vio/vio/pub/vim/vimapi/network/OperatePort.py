@@ -58,8 +58,13 @@ class OperatePort(BaseNet):
             subnet = network.subnet_get(body['subnetId'])
             body['subnetId'] = subnet.id
         if "ip" in body:
-            body['fixed_ips'] = [{'subnet_id': body.pop('subnetId'),
-                                  "ip_address": body.pop('ip')}]
+            ips = body.pop("ip").split(",")
+            body['fixed_ips'] = []
+            subnet_id = body.pop('subnetId')
+            for ip in ips:
+                body['fixed_ips'].append({
+                    'subnet_id': subnet_id,
+                    "ip_address": ip})
         else:
             body['fixed_ips'] = [{'subnet_id': body.pop('subnetId')}]
         port = network.port_create(**body)
