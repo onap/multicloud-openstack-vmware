@@ -26,7 +26,7 @@ def prepare():
 '''
 below items must be added into vio nova.conf then restart nova services:
 notification_driver=messaging
-notification_topics= notifications_test
+notification_topics= notification_test
 notify_on_state_change=vm_and_task_state
 notify_on_any_change=True
 instance_usage_audit=True
@@ -53,14 +53,18 @@ class NotificationEndPoint():
             'compute.instance.unpause.start',
             'compute.instance.pause.start',
             'compute.instance.power_off.start',
+            'compute.instance.power_off.end',
+            'compute.instance.power_on.start',
+            'compute.instance.power_on.end',
             'compute.instance.reboot.start',
+            'compute.instance.reboot.end',
             'compute.instance.create.start'
         }
 
-        status = payload.get('state_description')
-        if status != '' and event_type in VM_EVENTS:
+        if event_type in VM_EVENTS:
             url = 'http://%s:%s/events/test' % (MR_ADDR, MR_PORT)
             headers = {'Content-type': 'application/json'}
+            payload['event_type'] = event_type
             requests.post(url, json.dumps(payload), headers=headers)
 
         LOG.info(event_type)
@@ -73,7 +77,7 @@ class NotificationEndPoint():
 class Server(object):
 
     def __init__(self):
-        self.topic = 'notifications_test'
+        self.topic = 'notification_test'
         self.server = None
         prepare()
 
