@@ -71,13 +71,6 @@ REST_FRAMEWORK = {
     )
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-}
-
 
 TIME_ZONE = 'UTC'
 
@@ -95,11 +88,6 @@ config.yamlConfig(filepath=LOGGING_FILE, watchDog=True)
 
 if 'test' in sys.argv:
     from vio.pub.config import config
-    DATABASES = {}
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:',
-    }
     REST_FRAMEWORK = {}
     import platform
 
