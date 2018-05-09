@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a93c517_8fffa565",
+        "filename": "vio/vio/pub/vim/vimapi/nova/OperateServers.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2018-05-09T07:10:46Z",
+      "side": 1,
+      "message": "This solution might also override this configuration, better take a thorough tests.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 60
+      },
+      "revId": "867ec0c8a092a525a423e0dc5044b7e206a448c7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_cf092d96",
         "filename": "vio/vio/pub/vim/vimapi/nova/OperateServers.py",
         "patchSetId": 3
