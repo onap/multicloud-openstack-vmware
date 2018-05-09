@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_cf092d96",
+        "filename": "vio/vio/pub/vim/vimapi/nova/OperateServers.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2018-05-09T07:08:27Z",
+      "side": 1,
+      "message": "You might have to try this in local env and see if this could work or not, I remember that user_data need base64 encode.",
+      "range": {
+        "startLine": 117,
+        "startChar": 31,
+        "endLine": 117,
+        "endChar": 42
+      },
+      "revId": "867ec0c8a092a525a423e0dc5044b7e206a448c7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
