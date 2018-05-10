@@ -68,7 +68,9 @@ class Registry(APIView):
 
         rsp = {"flavors": []}
         for flavor in flavors:
-            rsp['flavors'].append(flavor[0].to_dict())
+            flavor_info = flavor[0].to_dict()
+            flavor_info.update(flavor[1].to_dict())
+            rsp['flavors'].append(flavor_info)
         return rsp
 
     def _get_networks(self, auth_info):
