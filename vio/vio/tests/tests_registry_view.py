@@ -105,14 +105,17 @@ class RegistryViewTest(unittest.TestCase):
 
             def to_dict(self):
                 return {"name": self.name, "id": self.id}
+
         f1 = Flavor(1, "f1")
         f2 = Flavor(2, "f2")
-        flavors = [[f1], [f2]]
+        extra_specs = mock.Mock(extra_specs={})
+        flavors = [[f1, extra_specs], [f2, extra_specs]]
         mock_flavors.return_value = flavors
         auth = {"name": "user", "tenant": "t1", "auth_url": "url"}
 
         self.assertEqual(
-            {'flavors': [{'id': 1, 'name': 'f1'}, {'id': 2, 'name': 'f2'}]},
+            {'flavors': [{'id': 1, 'name': 'f1', "extra_specs": {}},
+                         {'id': 2, 'name': 'f2', "extra_specs": {}}]},
             self.reg._get_flavors(auth))
 
     @mock.patch.object(OperateFlavors, 'list_flavors')
