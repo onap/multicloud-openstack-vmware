@@ -140,6 +140,7 @@ class AAIClient(object):
         }
         self.cloud_owner = cloud_owner
         self.cloud_region = cloud_region
+        self._vim_info = None
 
     def get_vim(self, get_all=False):
         resource = ("/cloud-infrastructure/cloud-regions/cloud-region"
@@ -203,6 +204,7 @@ class AAIClient(object):
                                        self.cloud_region))
         resource = ("/cloud-infrastructure/cloud-regions/cloud-region"
                     "/%s/%s" % (self.cloud_owner, self.cloud_region))
+        logger.debug("Updating identity url %s" % vim)
         call_req(self.base_url, self.username, self.password,
                  rest_no_auth, resource, "PUT",
                  content=json.dumps(vim),
@@ -214,6 +216,7 @@ class AAIClient(object):
                         "%s/%s/tenants/tenant/%s" % (
                             self.cloud_owner, self.cloud_region, tenant['id']))
             body = {'tenant-name': tenant['name']}
+            logger.debug("Adding tenants to cloud region")
             call_req(self.base_url, self.username, self.password,
                      rest_no_auth, resource, "PUT",
                      content=json.dumps(body),
@@ -235,6 +238,14 @@ class AAIClient(object):
                 'flavor-selflink': flavor['links'][0]['href'],
                 'flavor-disabled': flavor['is_disabled']
             }
+            # Handle extra specs
+            # if (flavor['name'].find('onap.') == 0):
+            #     hpa_capabilities = self._get_hpa_capabilities(
+            #         flavor)
+            #     body['hpa-capabilities'] = {
+            #         'hpa-capability': hpa_capabilities}
+
+            logger.debug("Adding flavors to cloud region")
             call_req(self.base_url, self.username, self.password,
                      rest_no_auth, resource, "PUT",
                      content=json.dumps(body),
@@ -260,6 +271,7 @@ class AAIClient(object):
                 # TODO replace this with image proxy endpoint
                 'image-selflink': "",
             }
+            logger.debug("Adding images to cloud region")
             call_req(self.base_url, self.username, self.password,
                      rest_no_auth, resource, "PUT",
                      content=json.dumps(body),
@@ -276,6 +288,7 @@ class AAIClient(object):
                 'network-name': network['name'],
                 'cvlan-tag': network['segmentationId'] or 0,
             }
+            logger.debug("Adding networks to cloud region")
             call_req(self.base_url, self.username, self.password,
                      rest_no_auth, resource, "PUT",
                      content=json.dumps(body),
@@ -306,6 +319,7 @@ class AAIClient(object):
                 'pserver-id': hypervisor['id'],
                 # 'internet-topology'
             }
+            logger.debug("Adding pservers")
             call_req(self.base_url, self.username, self.password,
                      rest_no_auth, resource, "PUT",
                      content=json.dumps(body),
@@ -332,6 +346,7 @@ class AAIClient(object):
                     }
                 ]
             }
+            logger.debug("Connecting pservers and cloud region")
             call_req(self.base_url, self.username, self.password,
                      rest_no_auth, resource, "PUT",
                      content=json.dumps(body),
@@ -430,3 +445,293 @@ class AAIClient(object):
                     status_code=400,
                     content="Failed to delete availability zone %s: %s." % (
                         az['availability-zone-name'], resp[1]))
+
+    def _get_hpa_capabilities(self, flavor):
+        hpa_caps = []
+
+        # Basic capabilties
+        caps_dict = self._get_hpa_basic_capabilities(flavor)
+        if len(caps_dict) > 0:
+            logger.debug("basic_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
+        # cpupining capabilities
+        caps_dict = self._get_cpupinning_capabilities(flavor['extra_specs'])
+        if len(caps_dict) > 0:
+            logger.debug("cpupining_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
+        # cputopology capabilities
+        caps_dict = self._get_cputopology_capabilities(flavor['extra_specs'])
+        if len(caps_dict) > 0:
+            logger.debug("cputopology_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
+        # hugepages capabilities
+        caps_dict = self._get_hugepages_capabilities(flavor['extra_specs'])
+        if len(caps_dict) > 0:
+            logger.debug("hugepages_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
+        # numa capabilities
+        caps_dict = self._get_numa_capabilities(flavor['extra_specs'])
+        if len(caps_dict) > 0:
+            logger.debug("numa_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
+        # storage capabilities
+        caps_dict = self._get_storage_capabilities(flavor)
+        if len(caps_dict) > 0:
+            logger.debug("storage_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+        
+        # CPU instruction set extension capabilities
+        caps_dict = self._get_instruction_set_capabilities(extra_specs)
+        if len(caps_dict) > 0:
+            logger.debug("instruction_set_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+        
+        # PCI passthrough capabilities
+        caps_dict = self._get_pci_passthrough_capabilities(extra_specs)
+        if len(caps_dict) > 0:
+            logger.debug("pci_passthrough_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
+        # ovsdpdk capabilities
+        caps_dict = self._get_ovsdpdk_capabilities()
+        if len(caps_dict) > 0:
+            logger.debug("ovsdpdk_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
+        return hpa_caps
+
+    def _get_hpa_basic_capabilities(self, flavor):
+        basic_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        basic_capability['hpa-capability-id'] = str(feature_uuid)
+        basic_capability['hpa-feature'] = 'basicCapabilities'
+        basic_capability['architecture'] = 'generic'
+        basic_capability['hpa-version'] = 'v1'
+
+        basic_capability['hpa-feature-attributes'] = []
+        basic_capability['hpa-feature-attributes'].append({
+            'hpa-attribute-key': 'numVirtualCpu',
+            'hpa-attribute-value': str({'value': str(flavor['vcpus']) })})
+        basic_capability['hpa-feature-attributes'].append({
+            'hpa-attribute-key': 'virtualMemSize',
+            'hpa-attribute-value': str({'value': str(
+                flavor['ram']), 'unit':'MB'})})
+
+        return basic_capability
+
+    def _get_cpupinning_capabilities(self, extra_specs):
+        cpupining_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        if (extra_specs.has_key('hw:cpu_policy') or
+                extra_specs.has_key('hw:cpu_thread_policy')):
+            cpupining_capability['hpa-capability-id'] = str(feature_uuid)
+            cpupining_capability['hpa-feature'] = 'cpuPinning'
+            cpupining_capability['architecture'] = 'generic'
+            cpupining_capability['hpa-version'] = 'v1'
+
+            cpupining_capability['hpa-feature-attributes'] = []
+            if extra_specs.has_key('hw:cpu_thread_policy'):
+                cpupining_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': 'logicalCpuThreadPinningPolicy',
+                    'hpa-attribute-value': str({'value': str(
+                        extra_specs['hw:cpu_thread_policy'])})})
+            if extra_specs.has_key('hw:cpu_policy'):
+                cpupining_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key':'logicalCpuPinningPolicy',
+                    'hpa-attribute-value': str({'value': str(
+                        extra_specs['hw:cpu_policy'])})})
+
+        return cpupining_capability
+
+    def _get_cputopology_capabilities(self, extra_specs):
+        cputopology_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        if (extra_specs.has_key('hw:cpu_sockets') or
+                extra_specs.has_key('hw:cpu_cores') or
+                extra_specs.has_key('hw:cpu_threads')):
+            cputopology_capability['hpa-capability-id'] = str(feature_uuid)
+            cputopology_capability['hpa-feature'] = 'cpuTopology'
+            cputopology_capability['architecture'] = 'generic'
+            cputopology_capability['hpa-version'] = 'v1'
+
+            cputopology_capability['hpa-feature-attributes'] = []
+            if extra_specs.has_key('hw:cpu_sockets'):
+                cputopology_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': 'numCpuSockets',
+                    'hpa-attribute-value':str({'value': str(
+                        extra_specs['hw:cpu_sockets'])})})
+            if extra_specs.has_key('hw:cpu_cores'):
+                cputopology_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': 'numCpuCores',
+                    'hpa-attribute-value':str({'value': str(
+                        extra_specs['hw:cpu_cores'])})})
+            if extra_specs.has_key('hw:cpu_threads'):
+                cputopology_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': 'numCpuThreads',
+                    'hpa-attribute-value':str({'value': str(
+                        extra_specs['hw:cpu_threads'])})})
+
+        return cputopology_capability
+
+    def _get_hugepages_capabilities(self, extra_specs):
+        hugepages_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        if extra_specs.has_key('hw:mem_page_size'):
+            hugepages_capability['hpa-capability-id'] = str(feature_uuid)
+            hugepages_capability['hpa-feature'] = 'hugePages'
+            hugepages_capability['architecture'] = 'generic'
+            hugepages_capability['hpa-version'] = 'v1'
+
+            hugepages_capability['hpa-feature-attributes'] = []
+            if extra_specs['hw:mem_page_size'] == 'large':
+                hugepages_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': 'memoryPageSize',
+                    'hpa-attribute-value':str({'value': '2', 'unit': 'MB'})})
+            elif extra_specs['hw:mem_page_size'] == 'small':
+                hugepages_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': 'memoryPageSize',
+                    'hpa-attribute-value':str({'value': '4', 'unit': 'KB'})})
+            elif extra_specs['hw:mem_page_size'] == 'any':
+                logger.info("Currently HPA feature memoryPageSize "
+                            "did not support 'any' page!!")
+            else :
+                hugepages_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': 'memoryPageSize',
+                    'hpa-attribute-value':str({'value': str(
+                        extra_specs['hw:mem_page_size']), 'unit': 'KB'})})
+
+        return hugepages_capability
+
+    def _get_numa_capabilities(self, extra_specs):
+        numa_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        if extra_specs.has_key('hw:numa_nodes'):
+            numa_capability['hpa-capability-id'] = str(feature_uuid)
+            numa_capability['hpa-feature'] = 'numa'
+            numa_capability['architecture'] = 'generic'
+            numa_capability['hpa-version'] = 'v1'
+
+            numa_capability['hpa-feature-attributes'] = []
+            numa_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'numaNodes',
+                'hpa-attribute-value':str({'value': str(
+                    extra_specs['hw:numa_nodes'])})})
+
+            for num in range(0, int(extra_specs['hw:numa_nodes'])):
+                numa_cpu_node = "hw:numa_cpus.%s" % num
+                numa_mem_node = "hw:numa_mem.%s" % num
+                numacpu_key = "numaCpu-%s" % num
+                numamem_key = "numaMem-%s" % num
+
+                if (extra_specs.has_key(numa_cpu_node) and
+                        extra_specs.has_key(numa_mem_node)):
+                    numa_capability['hpa-feature-attributes'].append({
+                        'hpa-attribute-key': numacpu_key,
+                        'hpa-attribute-value':str({'value': str(
+                            extra_specs[numa_cpu_node])})})
+                    numa_capability['hpa-feature-attributes'].append({
+                        'hpa-attribute-key': numamem_key,
+                        'hpa-attribute-value':str({'value': str(
+                            extra_specs[numa_mem_node]),'unit':'MB'})})
+
+        return numa_capability
+
+    def _get_storage_capabilities(self, flavor):
+        storage_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        storage_capability['hpa-capability-id'] = str(feature_uuid)
+        storage_capability['hpa-feature'] = 'localStorage'
+        storage_capability['architecture'] = 'generic'
+        storage_capability['hpa-version'] = 'v1'
+
+        storage_capability['hpa-feature-attributes'] = []
+        storage_capability['hpa-feature-attributes'].append({
+            'hpa-attribute-key': 'diskSize',
+            'hpa-attribute-value':str({'value': str(
+                flavor['disk']), 'unit':'GB'})})
+        storage_capability['hpa-feature-attributes'].append({
+            'hpa-attribute-key': 'swapMemSize',
+            'hpa-attribute-value':str({'value': str(
+                flavor['swap']), 'unit':'MB'})})
+        storage_capability['hpa-feature-attributes'].append({
+            'hpa-attribute-key': 'ephemeralDiskSize',
+            'hpa-attribute-value':str({'value': str(
+                flavor['OS-FLV-EXT-DATA:ephemeral']), 'unit':'GB'})})
+        return storage_capability
+
+    def _get_instruction_set_capabilities(self, extra_specs):
+        instruction_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        if extra_specs.has_key('hw:capabilities:cpu_info:features'):
+            instruction_capability['hpa-capability-id'] = str(feature_uuid)
+            instruction_capability['hpa-feature'] = 'instructionSetExtensions'
+            instruction_capability['architecture'] = 'Intel64'
+            instruction_capability['hpa-version'] = 'v1'
+
+            instruction_capability['hpa-feature-attributes'] = []
+            instruction_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'instructionSetExtensions',
+                'hpa-attribute-value':str({'value': str(
+                    extra_specs['hw:capabilities:cpu_info:features'])})})
+        return instruction_capability
+
+    def _get_pci_passthrough_capabilities(self, extra_specs):
+        instruction_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        if extra_specs.has_key('pci_passthrough:alias'):
+            value1 = extra_specs['pci_passthrough:alias'].split(':')
+            value2 = value1[0].split('-')
+
+            instruction_capability['hpa-capability-id'] = str(feature_uuid)
+            instruction_capability['hpa-feature'] = 'pciePassthrough'
+            instruction_capability['architecture'] = str(value2[2])
+            instruction_capability['hpa-version'] = 'v1'
+
+
+            instruction_capability['hpa-feature-attributes'] = []
+            instruction_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'pciCount',
+                'hpa-attribute-value':str({'value': str(value1[1])})})
+            instruction_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'pciVendorId',
+                'hpa-attribute-value':str({'value': str(value2[3])})})
+            instruction_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'pciDeviceId',
+                'hpa-attribute-value':str({'value': str(value2[4])})})
+
+        return instruction_capability
+
+    def _get_ovsdpdk_capabilities(self):
+        ovsdpdk_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        if not self._vim_info:
+            self._vim_info = self.get_vim(get_all=True)
+        cloud_extra_info_str = self._vim_info.get('cloud_extra_info')
+        if cloud_extra_info_str:
+            cloud_dpdk_info = cloud_extra_info_str.get("ovsDpdk")
+            if cloud_dpdk_info:
+                ovsdpdk_capability['hpa-capability-id'] = str(feature_uuid)
+                ovsdpdk_capability['hpa-feature'] = 'ovsDpdk'
+                ovsdpdk_capability['architecture'] = 'Intel64'
+                ovsdpdk_capability['hpa-version'] = 'v1'
+
+                ovsdpdk_capability['hpa-feature-attributes'] = []
+                ovsdpdk_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': str(cloud_dpdk_info.get("libname")),
+                    'hpa-attribute-value':str({'value': str(
+                        cloud_dpdk_info.get("libversion"))})})
+        return ovsdpdk_capability
