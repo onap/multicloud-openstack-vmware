@@ -744,7 +744,14 @@ class AAIClient(object):
 
         if not self._vim_info:
             self._vim_info = self.get_vim(get_all=True)
-        cloud_extra_info_str = self._vim_info.get('cloud_extra_info')
+        cloud_extra_info_str = self._vim_info.get('cloud-extra-info')
+        if not isinstance(cloud_extra_info_str, dict):
+            try:
+                cloud_extra_info_str = json.loads(cloud_extra_info_str)
+            except Exception as ex:
+                logger.error("Can not convert cloud extra info %s %s" % (
+                             str(ex), cloud_extra_info_str))
+                return {}
         if cloud_extra_info_str:
             cloud_dpdk_info = cloud_extra_info_str.get("ovsDpdk")
             if cloud_dpdk_info:
