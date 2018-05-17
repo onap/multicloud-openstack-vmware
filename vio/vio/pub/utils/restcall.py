@@ -540,10 +540,11 @@ class AAIClient(object):
         basic_capability['hpa-feature-attributes'] = []
         basic_capability['hpa-feature-attributes'].append({
             'hpa-attribute-key': 'numVirtualCpu',
-            'hpa-attribute-value': str({'value': str(flavor['vcpus'])})})
+            'hpa-attribute-value': json.dumps(
+                {'value': str(flavor['vcpus'])})})
         basic_capability['hpa-feature-attributes'].append({
             'hpa-attribute-key': 'virtualMemSize',
-            'hpa-attribute-value': str({'value': str(
+            'hpa-attribute-value': json.dumps({'value': str(
                 flavor['ram']), 'unit': 'MB'})})
 
         return basic_capability
@@ -563,12 +564,12 @@ class AAIClient(object):
             if extra_specs.get('hw:cpu_thread_policy'):
                 cpupining_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': 'logicalCpuThreadPinningPolicy',
-                    'hpa-attribute-value': str({'value': str(
+                    'hpa-attribute-value': json.dumps({'value': str(
                         extra_specs['hw:cpu_thread_policy'])})})
             if extra_specs.get('hw:cpu_policy'):
                 cpupining_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': 'logicalCpuPinningPolicy',
-                    'hpa-attribute-value': str({'value': str(
+                    'hpa-attribute-value': json.dumps({'value': str(
                         extra_specs['hw:cpu_policy'])})})
 
         return cpupining_capability
@@ -589,17 +590,17 @@ class AAIClient(object):
             if extra_specs.get('hw:cpu_sockets'):
                 cputopology_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': 'numCpuSockets',
-                    'hpa-attribute-value': str({'value': str(
+                    'hpa-attribute-value': json.dumps({'value': str(
                         extra_specs['hw:cpu_sockets'])})})
             if extra_specs.get('hw:cpu_cores'):
                 cputopology_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': 'numCpuCores',
-                    'hpa-attribute-value': str({'value': str(
+                    'hpa-attribute-value': json.dumps({'value': str(
                         extra_specs['hw:cpu_cores'])})})
             if extra_specs.get('hw:cpu_threads'):
                 cputopology_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': 'numCpuThreads',
-                    'hpa-attribute-value': str({'value': str(
+                    'hpa-attribute-value': json.dumps({'value': str(
                         extra_specs['hw:cpu_threads'])})})
 
         return cputopology_capability
@@ -618,19 +619,22 @@ class AAIClient(object):
             if extra_specs['hw:mem_page_size'] == 'large':
                 hugepages_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': 'memoryPageSize',
-                    'hpa-attribute-value': str({'value': '2', 'unit': 'MB'})})
+                    'hpa-attribute-value': json.dumps(
+                        {'value': '2', 'unit': 'MB'})})
             elif extra_specs['hw:mem_page_size'] == 'small':
                 hugepages_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': 'memoryPageSize',
-                    'hpa-attribute-value': str({'value': '4', 'unit': 'KB'})})
+                    'hpa-attribute-value': json.dumps(
+                        {'value': '4', 'unit': 'KB'})})
             elif extra_specs['hw:mem_page_size'] == 'any':
                 logger.info("Currently HPA feature memoryPageSize "
                             "did not support 'any' page!!")
             else:
                 hugepages_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': 'memoryPageSize',
-                    'hpa-attribute-value': str({'value': str(
-                        extra_specs['hw:mem_page_size']), 'unit': 'KB'})})
+                    'hpa-attribute-value': json.dumps({'value': str(
+                        extra_specs['hw:mem_page_size']), 'unit': 'KB'})
+                    })
 
         return hugepages_capability
 
@@ -647,8 +651,9 @@ class AAIClient(object):
             numa_capability['hpa-feature-attributes'] = []
             numa_capability['hpa-feature-attributes'].append({
                 'hpa-attribute-key': 'numaNodes',
-                'hpa-attribute-value': str({'value': str(
-                    extra_specs['hw:numa_nodes'])})})
+                'hpa-attribute-value': json.dumps({'value': str(
+                    extra_specs['hw:numa_nodes'])})
+                })
 
             for num in range(0, int(extra_specs['hw:numa_nodes'])):
                 numa_cpu_node = "hw:numa_cpus.%s" % num
@@ -660,12 +665,14 @@ class AAIClient(object):
                         extra_specs.get(numa_mem_node)):
                     numa_capability['hpa-feature-attributes'].append({
                         'hpa-attribute-key': numacpu_key,
-                        'hpa-attribute-value': str({'value': str(
-                            extra_specs[numa_cpu_node])})})
+                        'hpa-attribute-value': json.dumps({'value': str(
+                            extra_specs[numa_cpu_node])})
+                        })
                     numa_capability['hpa-feature-attributes'].append({
                         'hpa-attribute-key': numamem_key,
-                        'hpa-attribute-value': str({'value': str(
-                            extra_specs[numa_mem_node]), 'unit': 'MB'})})
+                        'hpa-attribute-value': json.dumps({'value': str(
+                            extra_specs[numa_mem_node]), 'unit': 'MB'})
+                        })
 
         return numa_capability
 
@@ -681,18 +688,19 @@ class AAIClient(object):
         storage_capability['hpa-feature-attributes'] = []
         storage_capability['hpa-feature-attributes'].append({
             'hpa-attribute-key': 'diskSize',
-            'hpa-attribute-value': str({'value': str(
-                flavor['disk']), 'unit': 'GB'})})
-        if flavor.get("swap"):
-            storage_capability['hpa-feature-attributes'].append({
-                'hpa-attribute-key': 'swapMemSize',
-                'hpa-attribute-value': str({'value': str(
-                    flavor['swap']), 'unit': 'MB'})})
-        if flavor.get("OS-FLV-EXT-DATA:ephemeral"):
-            storage_capability['hpa-feature-attributes'].append({
-                'hpa-attribute-key': 'ephemeralDiskSize',
-                'hpa-attribute-value': str({'value': str(
-                    flavor['OS-FLV-EXT-DATA:ephemeral']), 'unit': 'GB'})})
+            'hpa-attribute-value': json.dumps({'value': str(
+                flavor['disk']), 'unit': 'GB'})
+            })
+        storage_capability['hpa-feature-attributes'].append({
+            'hpa-attribute-key': 'swapMemSize',
+            'hpa-attribute-value': json.dumps({'value': str(
+                flavor.get('swap', 0)), 'unit': 'MB'})
+            })
+        storage_capability['hpa-feature-attributes'].append({
+            'hpa-attribute-key': 'ephemeralDiskSize',
+            'hpa-attribute-value': json.dumps({'value': str(
+                flavor.get('OS-FLV-EXT-DATA:ephemeral', 0)), 'unit': 'GB'})
+            })
         return storage_capability
 
     def _get_instruction_set_capabilities(self, extra_specs):
@@ -708,8 +716,10 @@ class AAIClient(object):
             instruction_capability['hpa-feature-attributes'] = []
             instruction_capability['hpa-feature-attributes'].append({
                 'hpa-attribute-key': 'instructionSetExtensions',
-                'hpa-attribute-value': str({'value': str(
-                    extra_specs['hw:capabilities:cpu_info:features'])})})
+                'hpa-attribute-value': json.dumps(
+                    {'value': extra_specs[
+                        'hw:capabilities:cpu_info:features']})
+                })
         return instruction_capability
 
     def _get_pci_passthrough_capabilities(self, extra_specs):
@@ -728,13 +738,16 @@ class AAIClient(object):
             instruction_capability['hpa-feature-attributes'] = []
             instruction_capability['hpa-feature-attributes'].append({
                 'hpa-attribute-key': 'pciCount',
-                'hpa-attribute-value': str({'value': str(value1[1])})})
+                'hpa-attribute-value': json.dumps({'value': value1[1]})
+                })
             instruction_capability['hpa-feature-attributes'].append({
                 'hpa-attribute-key': 'pciVendorId',
-                'hpa-attribute-value': str({'value': str(value2[3])})})
+                'hpa-attribute-value': json.dumps({'value': value2[3]})
+                })
             instruction_capability['hpa-feature-attributes'].append({
                 'hpa-attribute-key': 'pciDeviceId',
-                'hpa-attribute-value': str({'value': str(value2[4])})})
+                'hpa-attribute-value': json.dumps({'value': value2[4]})
+                })
 
         return instruction_capability
 
@@ -763,6 +776,7 @@ class AAIClient(object):
                 ovsdpdk_capability['hpa-feature-attributes'] = []
                 ovsdpdk_capability['hpa-feature-attributes'].append({
                     'hpa-attribute-key': str(cloud_dpdk_info.get("libname")),
-                    'hpa-attribute-value': str({'value': str(
-                        cloud_dpdk_info.get("libversion"))})})
+                    'hpa-attribute-value': json.dumps(
+                        {'value': cloud_dpdk_info.get("libversion")})
+                    })
         return ovsdpdk_capability
