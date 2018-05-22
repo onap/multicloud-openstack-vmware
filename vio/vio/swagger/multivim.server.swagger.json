@@ -256,13 +256,6 @@
                     "type": "string",
                     "description": "flavor uuid to start server"
                 },
-                "contextArray": {
-                    "type": "array",
-                    "description": "list of injected files",
-                    "items": {
-                       "$ref": "#/definitions/VimServerContextInfo"
-                    }
-                },
                 "volumeArray": {
                     "type": "array",
                     "description": "list of volumes attached to a server",
@@ -316,19 +309,6 @@
                 "value": {
                     "type": "string",
                     "description": "value "
-                }
-            }
-        },
-        "VimServerContextInfo": {
-            "type": "object",
-            "properties": {
-                "fileName": {
-                    "type": "string",
-                    "description": "Injected file name"
-                },
-                "fileData": {
-                    "type": "string",
-                    "description": "Injected file content "
                 }
             }
         },
