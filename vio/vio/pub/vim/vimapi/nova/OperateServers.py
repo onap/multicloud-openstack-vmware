@@ -95,26 +95,16 @@ class OperateServers(OperateNova):
                         'delete_on_termination': False
                     }
                 )
-        inject_files = create_req.get('contextArray', [])
+        inject_files = create_req.get("contextArray", [])
         if inject_files:
-            user_data = []
-            strUserData = ""
-            user_data.append("#cloud-config\n")
-            for f in inject_files:
-                user_data.append("write_files:\n")
-                user_data.append("-   encoding: b64\n")
-                user_data.append("    content: " +
-                                 f["source_data_base64"] + "\n")
-                user_data.append("    owner: root:root\n")
-                user_data.append("    path: " + f["dest_path"] + "\n")
-                user_data.append("    permissions: '0644'\n")
-                user_data.append("\n")
-            if userdata:
-                user_data.append("runcmd:\n")
-                user_data.append("-   " + userdata + "\n")
-
-            strUserData.join(user_data)
-            req["user_data"] = strUserData
+            req["personality"] = []
+            for i in inject_files:
+                req["personality"].append(
+                    {
+                        "path": i["dest_path"],
+                        "contents": i["source_data_base64"]
+                    }
+                )
 
         return cc.create_server(**req)
 
