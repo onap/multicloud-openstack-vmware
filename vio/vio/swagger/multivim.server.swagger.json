@@ -319,19 +319,6 @@
                 }
             }
         },
-        "VimServerContextInfo": {
-            "type": "object",
-            "properties": {
-                "fileName": {
-                    "type": "string",
-                    "description": "Injected file name"
-                },
-                "fileData": {
-                    "type": "string",
-                    "description": "Injected file content "
-                }
-            }
-        },
         "VimServerVolumeInfo": {
             "type": "object",
             "properties": {
