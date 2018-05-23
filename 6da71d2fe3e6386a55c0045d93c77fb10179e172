@@ -22,6 +22,30 @@
       "revId": "6da71d2fe3e6386a55c0045d93c77fb10179e172",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_7c8d102a",
+        "filename": "vio/vio/pub/vim/vimapi/nova/OperateServers.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1899
+      },
+      "writtenOn": "2018-05-23T04:41:34Z",
+      "side": 0,
+      "message": "It\u0027s not proper setting static values in \u0027contextArray\u0027 context. \nActually,   All content are analysed  into specific format passing to\n\u0027userdata\u0027 finally.",
+      "parentUuid": "5a93c517_1c1bac1d",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 57
+      },
+      "revId": "6da71d2fe3e6386a55c0045d93c77fb10179e172",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
