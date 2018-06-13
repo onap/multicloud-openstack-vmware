@@ -59,6 +59,14 @@ class TestFakeNovaServer(unittest.TestCase):
         resp = self.view.get(req, "abcd")
         self.assertEqual(200, resp.status_code)
 
+    def test_list_servers_unauth(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": "invalid"
+        }
+        resp = self.view.get(req, "abcd")
+        self.assertEqual(401, resp.status_code)
+
 
 class TestFakeNovaHypervisors(unittest.TestCase):
 
