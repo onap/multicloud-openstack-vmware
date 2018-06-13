@@ -164,6 +164,20 @@ class TestFakeNovaServer(unittest.TestCase):
         self.assertEqual(405, resp.status_code)
 
 
+class TestFakeNovaHypervisorUptime(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeNovaHypervisorsUptime()
+
+    def test_get_hypervisor_uptime(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        resp = self.view.get(req, "tenant1", "hypervisor1")
+        self.assertEqual(200, resp.status_code)
+
+
 class TestFakeNovaHypervisors(unittest.TestCase):
 
     def setUp(self):
