@@ -249,6 +249,15 @@ class TestFakeFlavorDetail(unittest.TestCase):
         resp = self.view.get(req, "abcd", "1234")
         self.assertEqual(200, resp.status_code)
 
+    def test_get_flavors_detail(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        resp = self.view.get(req, "abcd", "detail")
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(6, len(resp.data["flavors"]))
+
 
 class TestFakeFlavorList(unittest.TestCase):
 
