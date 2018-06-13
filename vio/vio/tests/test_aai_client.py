@@ -243,3 +243,28 @@ class TestAAIClient(unittest.TestCase):
         }
         self.view.update_vim(content)
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa(self, mock_call):
+        self.view._get_hpa_basic_capabilities = mock.MagicMock()
+        self.view._get_hpa_basic_capabilities.return_value = {"hpa": "basic"}
+        self.view._get_cpupinning_capabilities = mock.MagicMock()
+        self.view._get_cpupinning_capabilities.return_value = {"hpa": "basic"}
+        self.view._get_cputopology_capabilities = mock.MagicMock()
+        self.view._get_cputopology_capabilities.return_value = {"hpa": "basic"}
+        self.view._get_hugepages_capabilities = mock.MagicMock()
+        self.view._get_hugepages_capabilities.return_value = {"hpa": "basic"}
+        self.view._get_numa_capabilities = mock.MagicMock()
+        self.view._get_numa_capabilities.return_value = {"hpa": "basic"}
+        self.view._get_storage_capabilities = mock.MagicMock()
+        self.view._get_storage_capabilities.return_value = {"hpa": "basic"}
+        self.view._get_instruction_set_capabilities = mock.MagicMock()
+        self.view._get_instruction_set_capabilities.return_value = {
+            "hpa": "basic"}
+        self.view._get_pci_passthrough_capabilities = mock.MagicMock()
+        self.view._get_pci_passthrough_capabilities.return_value = {
+            "hpa": "basic"}
+        self.view._get_ovsdpdk_capabilities = mock.MagicMock()
+        self.view._get_ovsdpdk_capabilities.return_value = {"hpa": "basic"}
+        ret = self.view._get_hpa_capabilities({"extra_specs": {}})
+        self.assertEqual([{"hpa": "basic"}]*9, ret)
