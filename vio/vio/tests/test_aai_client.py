@@ -192,6 +192,21 @@ class TestAAIClient(unittest.TestCase):
         mock_call.assert_called_once()
 
     @mock.patch.object(restcall, "call_req")
+    def test_del_hpa(self, mock_call):
+        mock_call.return_value = [0]
+        rsp = {
+            "flavor-id": "id1",
+            "hpa-capabilities": {
+                "hpa-capability": [{
+                    "resource-version": "v1",
+                    "hpa-capability-id": "id2"
+                }]
+            }
+        }
+        self.view._del_hpa(rsp)
+        mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
     def test_del_vim(self, mock_call):
         resp = {
             "resource-version": "1"
