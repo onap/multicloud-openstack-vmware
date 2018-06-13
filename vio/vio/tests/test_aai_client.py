@@ -167,3 +167,14 @@ class TestAAIClient(unittest.TestCase):
         }
         self.view._del_azs(rsp)
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_del_vim(self, mock_call):
+        resp = {
+            "resource-version": "1"
+        }
+        self.view.get_vim = mock.MagicMock()
+        self.view.get_vim.return_value = resp
+        mock_call.return_value = [0, "", "", ""]
+        self.view.delete_vim()
+        mock_call.assert_called_once()
