@@ -286,3 +286,13 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_cpupinning_capabilities(extra)
         self.assertEqual(len(ret["hpa-feature-attributes"]), 2)
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_cputopo(self, mock_call):
+        extra = {
+            "hw:cpu_sockets": 2,
+            "hw:cpu_cores": 2,
+            "hw:cpu_threads": 4
+        }
+        ret = self.view._get_cputopology_capabilities(extra)
+        self.assertEqual(len(ret["hpa-feature-attributes"]), 3)
