@@ -349,3 +349,11 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_storage_capabilities(extra)
         self.assertEqual(3, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_instru(self, mock_call):
+        extra = {
+            "hw:capabilities:cpu_info:features": "avx",
+        }
+        ret = self.view._get_instruction_set_capabilities(extra)
+        self.assertEqual(1, len(ret["hpa-feature-attributes"]))
