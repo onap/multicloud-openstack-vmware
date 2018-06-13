@@ -45,3 +45,8 @@ class TestAPIv2Controller(unittest.TestCase):
         }
         mock_kv3.return_value = mock.Mock()
         cb._get_vim_auth_session("vmware_vio", "tenant1")
+
+    def test_convert_default_val(self):
+        self.assertEqual(None, cb._convert_default_value("None"))
+        self.assertEqual(True, cb._convert_default_value("true"))
+        self.assertEqual(False, cb._convert_default_value("false"))
