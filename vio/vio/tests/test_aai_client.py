@@ -357,3 +357,11 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_instruction_set_capabilities(extra)
         self.assertEqual(1, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_pci(self, mock_call):
+        extra = {
+            "pci_passthrough:alias": "gpu-nvidia-x86-0011-0022:1",
+        }
+        ret = self.view._get_pci_passthrough_capabilities(extra)
+        self.assertEqual(3, len(ret["hpa-feature-attributes"]))
