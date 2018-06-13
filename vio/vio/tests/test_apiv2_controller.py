@@ -14,6 +14,7 @@ import mock
 import unittest
 
 from keystoneauth1.identity import v2 as keystone_v2
+from keystoneauth1.identity import v3 as keystone_v3
 
 from vio.api_v2.api_router import controller_builder as cb
 from vio.pub.msapi import extsys
@@ -31,4 +32,16 @@ class TestAPIv2Controller(unittest.TestCase):
             "domain": "default"
         }
         mock_kv2.return_value = mock.Mock()
+        cb._get_vim_auth_session("vmware_vio", "tenant1")
+
+    @mock.patch.object(keystone_v3, "Password")
+    @mock.patch.object(extsys, "get_vim_by_id")
+    def test_get_vim_session_v3(self, mock_getvim, mock_kv3):
+        mock_getvim.return_value = {
+            "url": "http://aa/v3",
+            "userName": "admin",
+            "password": "admin",
+            "domain": "default"
+        }
+        mock_kv3.return_value = mock.Mock()
         cb._get_vim_auth_session("vmware_vio", "tenant1")
