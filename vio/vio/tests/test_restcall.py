@@ -76,3 +76,16 @@ class TestRestCall(unittest.TestCase):
         ret = restcall.call_req("http://onap.org/", "user", "pass",
                                 restcall.rest_no_auth, "vim", "GET")
         self.assertEqual(expect_ret, ret)
+
+    @mock.patch("traceback.format_exc")
+    @mock.patch("sys.exc_info")
+    @mock.patch("httplib2.Http.request")
+    def test_call_req_response_not_ready(self, mock_req, mock_sys,
+                                         mock_traceback):
+        mock_sys.return_value = "httplib.ResponseNotReady"
+        mock_req.side_effect = [Exception("httplib.ResponseNotReady")] * 3
+        expect_ret = [1, "Unable to connect to http://onap.org/vim", "", ""]
+        ret = restcall.call_req("http://onap.org/", "user", "pass",
+                                restcall.rest_no_auth, "vim", "GET")
+        self.assertEqual(expect_ret, ret)
+        self.assertEqual(3, mock_req.call_count)
