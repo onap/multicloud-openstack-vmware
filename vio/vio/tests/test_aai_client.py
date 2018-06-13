@@ -341,3 +341,11 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_numa_capabilities(extra)
         self.assertEqual(3, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_storage(self, mock_call):
+        extra = {
+            "disk": 10,
+        }
+        ret = self.view._get_storage_capabilities(extra)
+        self.assertEqual(3, len(ret["hpa-feature-attributes"]))
