@@ -10,6 +10,7 @@
 
 import mock
 import unittest
+import urllib2
 
 from vio.pub.utils import restcall
 
@@ -89,3 +90,12 @@ class TestRestCall(unittest.TestCase):
                                 restcall.rest_no_auth, "vim", "GET")
         self.assertEqual(expect_ret, ret)
         self.assertEqual(3, mock_req.call_count)
+
+    @mock.patch("httplib2.Http.request")
+    def test_call_req_url_err(self, mock_req):
+        urlerr = urllib2.URLError("urlerror")
+        mock_req.side_effect = [urlerr]
+        expect_ret = [2, str(urlerr), "", ""]
+        ret = restcall.call_req("http://onap.org/", "user", "pass",
+                                restcall.rest_no_auth, "vim", "GET")
+        self.assertEqual(expect_ret, ret)
