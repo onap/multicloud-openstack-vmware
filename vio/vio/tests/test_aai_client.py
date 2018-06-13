@@ -277,3 +277,12 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_hpa_basic_capabilities(flavor)
         self.assertEqual(len(ret["hpa-feature-attributes"]), 2)
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_cpupin(self, mock_call):
+        extra = {
+            "hw:cpu_policy": "cpu_policy",
+            "hw:cpu_thread_policy": "thread_policy"
+        }
+        ret = self.view._get_cpupinning_capabilities(extra)
+        self.assertEqual(len(ret["hpa-feature-attributes"]), 2)
