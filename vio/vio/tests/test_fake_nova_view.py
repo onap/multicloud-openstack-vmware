@@ -163,6 +163,24 @@ class TestFakeNovaServer(unittest.TestCase):
         resp = self.view.post(req, "abcd", Server)
         self.assertEqual(405, resp.status_code)
 
+    def test_create_server(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        req.body = json.dumps({
+            "server": {
+                "name": "new_name"
+            }
+        })
+        resp = self.view.post(req, "abcd")
+        self.assertEqual(202, resp.status_code)
+        server_id = resp.data['server']['id']
+        self.assertEqual(
+            "BUILDING", fakeResponse.serverMapps[server_id]['status'])
+        self.assertEqual(
+            "new_name", fakeResponse.serverMapps[server_id]['name'])
+
 
 class TestFakeNovaHypervisorUptime(unittest.TestCase):
 
