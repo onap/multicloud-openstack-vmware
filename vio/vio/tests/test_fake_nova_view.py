@@ -152,6 +152,17 @@ class TestFakeNovaServer(unittest.TestCase):
         self.assertEqual(
             "REBOOTING", fakeResponse.serverMapps[Server]['status'])
 
+    def test_operate_server_unsupport(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        req.body = json.dumps({
+            "invalid": {}
+        })
+        resp = self.view.post(req, "abcd", Server)
+        self.assertEqual(405, resp.status_code)
+
 
 class TestFakeNovaHypervisors(unittest.TestCase):
 
