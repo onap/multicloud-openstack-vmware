@@ -13,6 +13,7 @@
 import mock
 import unittest
 
+from vio.pub.exceptions import VimDriverVioException
 from vio.pub.utils import restcall
 
 
@@ -178,3 +179,13 @@ class TestAAIClient(unittest.TestCase):
         mock_call.return_value = [0, "", "", ""]
         self.view.delete_vim()
         mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
+    def test_del_vim_fail(self, mock_call):
+        resp = {
+            "resource-version": "1"
+        }
+        self.view.get_vim = mock.MagicMock()
+        self.view.get_vim.return_value = resp
+        mock_call.return_value = [1, "", "", ""]
+        self.assertRaises(VimDriverVioException, self.view.delete_vim)
