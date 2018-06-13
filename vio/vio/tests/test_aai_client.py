@@ -323,3 +323,11 @@ class TestAAIClient(unittest.TestCase):
         ret = self.view._get_hugepages_capabilities(extra)
         self.assertIn(
             "8", ret["hpa-feature-attributes"][0]["hpa-attribute-value"])
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_hugepage_any(self, mock_call):
+        extra = {
+            "hw:mem_page_size": "any",
+        }
+        ret = self.view._get_hugepages_capabilities(extra)
+        self.assertEqual(0, len(ret["hpa-feature-attributes"]))
