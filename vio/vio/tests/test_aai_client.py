@@ -296,3 +296,12 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_cputopology_capabilities(extra)
         self.assertEqual(len(ret["hpa-feature-attributes"]), 3)
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_hugepage_large(self, mock_call):
+        extra = {
+            "hw:mem_page_size": "large"
+        }
+        ret = self.view._get_hugepages_capabilities(extra)
+        self.assertIn(
+            "2", ret["hpa-feature-attributes"][0]["hpa-attribute-value"])
