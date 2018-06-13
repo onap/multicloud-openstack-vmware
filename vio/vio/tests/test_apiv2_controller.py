@@ -50,3 +50,12 @@ class TestAPIv2Controller(unittest.TestCase):
         self.assertEqual(None, cb._convert_default_value("None"))
         self.assertEqual(True, cb._convert_default_value("true"))
         self.assertEqual(False, cb._convert_default_value("false"))
+
+    def test_property_exist(self):
+        res = {
+            "pp": "dd"
+        }
+        self.assertEqual(True, cb._property_exists(res, "pp", required=False))
+        self.assertEqual(False, cb._property_exists(res, "dd", required=False))
+        self.assertRaises(
+            Exception, cb._property_exists, res, "dd", required=True)
