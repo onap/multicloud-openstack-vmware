@@ -10,6 +10,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
+import json
 import mock
 import unittest
 
@@ -28,6 +29,9 @@ class TestFakeNovaServer(unittest.TestCase):
 
     def setUp(self):
         self.view = views.FakeNovaServer()
+
+    def tearDown(self):
+        fakeResponse.serverMapps[Server]['status'] = "ACTIVE"
 
     @mock.patch.object(fakeResponse, "show_serverDetail")
     def test_get_server(self, mock_show_serverDetail):
@@ -66,6 +70,19 @@ class TestFakeNovaServer(unittest.TestCase):
         }
         resp = self.view.get(req, "abcd")
         self.assertEqual(401, resp.status_code)
+
+    def test_operate_server_stop(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        req.body = json.dumps({
+            "os-stop": {}
+        })
+        resp = self.view.post(req, "abcd", Server)
+        self.assertEqual(202, resp.status_code)
+        self.assertEqual(
+            "POWERING_OFF", fakeResponse.serverMapps[Server]['status'])
 
 
 class TestFakeNovaHypervisors(unittest.TestCase):
