@@ -40,6 +40,15 @@ class TestFakeProjects(unittest.TestCase):
         resp = self.view.get(req, "1234abcd")
         self.assertEqual(200, resp.status_code)
 
+    def test_list_projects(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        resp = self.view.get(req)
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(3, len(resp.data['projects']))
+
 
 class TestFakeToken(unittest.TestCase):
 
