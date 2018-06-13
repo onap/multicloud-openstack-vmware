@@ -98,6 +98,20 @@ class TestFakeNovaServer(unittest.TestCase):
         self.assertEqual(
             "POWERING_ON", fakeResponse.serverMapps[Server]['status'])
 
+    def test_operate_server_resume(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        req.body = json.dumps({
+            "resume": {}
+        })
+        fakeResponse.serverMapps[Server]['status'] = "SUSPENDED"
+        resp = self.view.post(req, "abcd", Server)
+        self.assertEqual(202, resp.status_code)
+        self.assertEqual(
+            "ACTIVE", fakeResponse.serverMapps[Server]['status'])
+
 
 class TestFakeNovaHypervisors(unittest.TestCase):
 
