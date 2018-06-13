@@ -331,3 +331,13 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_hugepages_capabilities(extra)
         self.assertEqual(0, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_numa(self, mock_call):
+        extra = {
+            "hw:numa_nodes": 1,
+            "hw:numa_cpus.0": 1,
+            "hw:numa_mem.0": 1024,
+        }
+        ret = self.view._get_numa_capabilities(extra)
+        self.assertEqual(3, len(ret["hpa-feature-attributes"]))
