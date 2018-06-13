@@ -62,6 +62,28 @@ class TestAAIClient(unittest.TestCase):
         mock_call.assert_called_once()
 
     @mock.patch.object(restcall, "call_req")
+    def test_add_flavors_with_hpa(self, mock_call):
+        flavors = {
+            "flavors": [{
+                "name": "onap.small",
+                "id": "1",
+                "vcpus": 1,
+                "ram": 512,
+                "disk": 10,
+                "ephemeral": 0,
+                "swap": 0,
+                "is_public": True,
+                "links": [{"href": "http://fake-url"}],
+                "is_disabled": False,
+                "extra_specs": {},
+            }]
+        }
+        self.view._get_ovsdpdk_capabilities = mock.MagicMock()
+        self.view._get_ovsdpdk_capabilities.return_value = {}
+        self.view.add_flavors(flavors)
+        mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
     def test_add_images(self, mock_call):
         images = {
             "images": [{
