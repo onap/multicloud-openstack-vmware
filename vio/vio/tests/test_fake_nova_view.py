@@ -139,6 +139,62 @@ class TestFakeNovaServer(unittest.TestCase):
         self.assertEqual(
             "ACTIVE", fakeResponse.serverMapps[Server]['status'])
 
+    def test_operate_server_reboot(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        req.body = json.dumps({
+            "reboot": {}
+        })
+        resp = self.view.post(req, "abcd", Server)
+        self.assertEqual(202, resp.status_code)
+        self.assertEqual(
+            "REBOOTING", fakeResponse.serverMapps[Server]['status'])
+
+    def test_operate_server_unsupport(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        req.body = json.dumps({
+            "invalid": {}
+        })
+        resp = self.view.post(req, "abcd", Server)
+        self.assertEqual(405, resp.status_code)
+
+    def test_create_server(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        req.body = json.dumps({
+            "server": {
+                "name": "new_name"
+            }
+        })
+        resp = self.view.post(req, "abcd")
+        self.assertEqual(202, resp.status_code)
+        server_id = resp.data['server']['id']
+        self.assertEqual(
+            "BUILDING", fakeResponse.serverMapps[server_id]['status'])
+        self.assertEqual(
+            "new_name", fakeResponse.serverMapps[server_id]['name'])
+
+
+class TestFakeNovaHypervisorUptime(unittest.TestCase):
+
+    def setUp(self):
+        self.view = views.FakeNovaHypervisorsUptime()
+
+    def test_get_hypervisor_uptime(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        resp = self.view.get(req, "tenant1", "hypervisor1")
+        self.assertEqual(200, resp.status_code)
+
 
 class TestFakeNovaHypervisors(unittest.TestCase):
 
@@ -210,6 +266,15 @@ class TestFakeFlavorDetail(unittest.TestCase):
         }
         resp = self.view.get(req, "abcd", "1234")
         self.assertEqual(200, resp.status_code)
+
+    def test_get_flavors_detail(self):
+        req = mock.Mock()
+        req.META = {
+            "HTTP_X_AUTH_TOKEN": Token
+        }
+        resp = self.view.get(req, "abcd", "detail")
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(6, len(resp.data["flavors"]))
 
 
 class TestFakeFlavorList(unittest.TestCase):
