@@ -10,6 +10,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
+import json
 import mock
 import unittest
 
@@ -365,3 +366,13 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_pci_passthrough_capabilities(extra)
         self.assertEqual(3, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_dpdk(self, mock_call):
+        self.view.get_vim = mock.MagicMock()
+        self.view.get_vim.return_value = {
+            "cloud-extra-info": json.dumps({'ovsDpdk': {
+                'libname': 'generic', 'libversion': '17.04'}})
+        }
+        ret = self.view._get_ovsdpdk_capabilities()
+        self.assertEqual(1, len(ret["hpa-feature-attributes"]))
