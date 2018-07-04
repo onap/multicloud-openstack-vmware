@@ -296,3 +296,72 @@ class TestAAIClient(unittest.TestCase):
         }
         ret = self.view._get_cputopology_capabilities(extra)
         self.assertEqual(len(ret["hpa-feature-attributes"]), 3)
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_hugepage_large(self, mock_call):
+        extra = {
+            "hw:mem_page_size": "large"
+        }
+        ret = self.view._get_hugepages_capabilities(extra)
+        self.assertIn(
+            "2", ret["hpa-feature-attributes"][0]["hpa-attribute-value"])
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_hugepage_small(self, mock_call):
+        extra = {
+            "hw:mem_page_size": "small"
+        }
+        ret = self.view._get_hugepages_capabilities(extra)
+        self.assertIn(
+            "4", ret["hpa-feature-attributes"][0]["hpa-attribute-value"])
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_hugepage_int(self, mock_call):
+        extra = {
+            "hw:mem_page_size": 8,
+        }
+        ret = self.view._get_hugepages_capabilities(extra)
+        self.assertIn(
+            "8", ret["hpa-feature-attributes"][0]["hpa-attribute-value"])
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_hugepage_any(self, mock_call):
+        extra = {
+            "hw:mem_page_size": "any",
+        }
+        ret = self.view._get_hugepages_capabilities(extra)
+        self.assertEqual(0, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_numa(self, mock_call):
+        extra = {
+            "hw:numa_nodes": 1,
+            "hw:numa_cpus.0": 1,
+            "hw:numa_mem.0": 1024,
+        }
+        ret = self.view._get_numa_capabilities(extra)
+        self.assertEqual(3, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_storage(self, mock_call):
+        extra = {
+            "disk": 10,
+        }
+        ret = self.view._get_storage_capabilities(extra)
+        self.assertEqual(3, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_instru(self, mock_call):
+        extra = {
+            "hw:capabilities:cpu_info:features": "avx",
+        }
+        ret = self.view._get_instruction_set_capabilities(extra)
+        self.assertEqual(1, len(ret["hpa-feature-attributes"]))
+
+    @mock.patch.object(restcall, "call_req")
+    def test_get_hpa_pci(self, mock_call):
+        extra = {
+            "pci_passthrough:alias": "gpu-nvidia-x86-0011-0022:1",
+        }
+        ret = self.view._get_pci_passthrough_capabilities(extra)
+        self.assertEqual(3, len(ret["hpa-feature-attributes"]))
