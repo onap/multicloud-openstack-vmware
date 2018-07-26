@@ -1639,7 +1639,9 @@ def create_instance(token, json=None):
     uid = str(uuid4())
     data = {
         "server": {
-            "id": uid,
+	    # It's safe to using inner vm id,
+	    # Avoid data sharing in multiprocess.	
+            "id": InitialServer,
             "links": [
                 {
                     "href": "http://openstack.example.com/v2/"
