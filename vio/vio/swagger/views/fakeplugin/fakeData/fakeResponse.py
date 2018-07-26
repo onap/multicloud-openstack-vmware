@@ -3,7 +3,6 @@ from vio.pub.config.config import MSB_SERVICE_PORT
 from vio.pub.config.config import MSB_SERVICE_IP
 
 from collections import defaultdict
-from uuid import uuid4
 from datetime import datetime
 from datetime import timedelta
 import copy
@@ -33,7 +32,7 @@ serverMapps[InitialServer] = \
     {
     "name": "new-server-test",
     "tenantid": Tenantid,
-    "status": "ACTIVE",
+    "status": "BUILDING",
     'createTime': (datetime.now()).strftime("%Y-%m-%d %H:%M:%S"),
     "turnStatusTime": datetime.now()
     }
@@ -1636,7 +1635,9 @@ def create_instance(token, json=None):
     except Exception:
         return {"error": {"message": "invalidate data", "code": 403}}
 
-    uid = str(uuid4())
+    # It's safe to using inner vm id,
+    # Avoid data sharing in multiprocess.
+    uid = InitialServer
     data = {
         "server": {
             "id": uid,
