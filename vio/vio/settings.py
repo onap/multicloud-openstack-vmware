@@ -85,6 +85,22 @@ LOGGING_CONFIG = None
 LOGGING_FILE = os.path.join(BASE_DIR, 'vio/pub/config/log.yml')
 config.yamlConfig(filepath=LOGGING_FILE, watchDog=True)
 
+#cache
+REDIS_HOST = os.getenv("REDIS_HOST","127.0.0.1")
+REDIS_PORT = os.getenv("REDIS_PORT","6379")
+# note: Should keep same timout with keystone token
+# expired time
+CACHE_TIMEOUT = 3600*2
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 
 if 'test' in sys.argv:
     from vio.pub.config import config

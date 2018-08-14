@@ -222,15 +222,19 @@ class TokenView(BaseClient):
                         res[2] = MSB_ADDRESS + "/multicloud-vio/v0/" + \
                             vimid + "/" + i['name'] + "/" + tenantid
                     j['url'] = "http:" + "//" + res[2]
+
+
+            logger.info("vimid(%(vimid)s) service enpoints %(endpoint)s ", {
+                    "vimid": vimid, "endpoint": vimEndpoints})
+            tokenInfo['token']['value'] = resHeader['X-Subject-Token']
+            catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
+
         except Exception as e:
             logging.exception("error %s" % e)
             return Response(data={'error': str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        logger.info("vimid(%(vimid)s) service enpoints %(endpoint)s ", {
-                    "vimid": vimid, "endpoint": vimEndpoints})
-        tokenInfo['token']['value'] = resHeader['X-Subject-Token']
-        catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
+
         Res = Response(data=tokenInfo, status=status.HTTP_200_OK)
         Res['X-Subject-Token'] = resHeader['X-Subject-Token']
         return Res
@@ -366,14 +370,16 @@ def _keystoneV2Token(url, vimid=None, create_req=None):
                                 "/multicloud-vio/v0/" + vimid + \
                                 "/" + cal["name"] + "/"+tenantid
 
+
+        logger.info("vimid(%(vimid)s) service enpoints %(endpoint)s ", {
+                    "vimid": vimid, "endpoint": vimEndpoints})
+        catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
+
     except Exception as e:
         logging.exception("error %s" % e)
         return Response(data={'error': str(e)},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    logger.info("vimid(%(vimid)s) service enpoints %(endpoint)s ", {
-                    "vimid": vimid, "endpoint": vimEndpoints})
 
-    catalog.storeEndpoint(vimid=vimid, endpoints=vimEndpoints)
     Res = Response(data=tokenInfo, status=status.HTTP_200_OK)
     return Res

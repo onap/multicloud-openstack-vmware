@@ -13,8 +13,10 @@
 import inspect
 import json
 from collections import defaultdict
+from django.core.cache import cache
+from vio.settings import CACHE_TIMEOUT
 from rest_framework import status
-
+from vio.pub import exceptions
 
 keystoneV2Json = \
     {
@@ -52,16 +54,16 @@ class Catalogs(object):
     def __init__(self):
         self.ct = defaultdict(dict)
 
+
     def storeEndpoint(self, vimid, endpoints):
-        if vimid in self.ct:
-            self.ct[vimid].update(endpoints)
-        else:
-            self.ct.setdefault(vimid, endpoints)
+        cache.set(vimid,endpoints,CACHE_TIMEOUT)
 
     def getEndpointBy(self, vimid, serverType, interface='public'):
 
-        vim = self.ct.get(vimid)
-        return vim.get(serverType).get(interface, "") if vim else ""
+        if cache.has_key(vimid):
+            vim = cache.get(vimid)
+            return vim.get(serverType).get(interface, "")
+        return None
 
 
 def verifyKeystoneV2(param):
