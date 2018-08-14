@@ -14,6 +14,7 @@ import mock
 import unittest
 
 from vio.pub.msapi import extsys
+from vio.pub.utils.syscomm import catalog
 from vio.swagger.views.proxyplugin.httpclient import BaseClient
 from vio.swagger.views.proxyplugin.identity import views
 
@@ -94,13 +95,15 @@ class TestTokenView(unittest.TestCase):
 
     @mock.patch("requests.post")
     @mock.patch.object(extsys, "get_vim_by_id")
-    def test_post_v3(self, mock_getvim,  mock_post):
+    @mock.patch.object(catalog, "storeEndpoint")
+    def test_post_v3(self, mock_catalog, mock_getvim,  mock_post):
         req = mock.Mock()
         req.get_full_path.return_value = "identity/v3/auth/tokens"
         req.body = "{}"
         mock_getvim.return_value = {
             "url": "http://onap.org/identity/v3/auth/tokens"
         }
+
         res = mock.Mock()
         res.status_code = 200
         res.headers = [("X-Subject-Token", "fake-token")]
@@ -127,7 +130,8 @@ class TestTokenView(unittest.TestCase):
 
     @mock.patch("requests.post")
     @mock.patch.object(extsys, "get_vim_by_id")
-    def test_post_v2(self, mock_getvim,  mock_post):
+    @mock.patch.object(catalog, "storeEndpoint")
+    def test_post_v2(self, mock_catalog, mock_getvim,  mock_post):
         req = mock.Mock()
         req.get_full_path.return_value = "identity/v2.0/tokens"
         req.body = """{
@@ -198,7 +202,8 @@ class TestTokenV2View(unittest.TestCase):
 
     @mock.patch("requests.post")
     @mock.patch.object(extsys, "get_vim_by_id")
-    def test_post(self, mock_getvim,  mock_post):
+    @mock.patch.object(catalog, "storeEndpoint")
+    def test_post(self, mock_catalog, mock_getvim,  mock_post):
         req = mock.Mock()
         req.get_full_path.return_value = "identity/v2.0/tokens"
         req.body = """{

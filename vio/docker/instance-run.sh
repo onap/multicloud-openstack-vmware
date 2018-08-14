@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+service redis-server start
+
 cd ./vio
 ./run.sh
 
