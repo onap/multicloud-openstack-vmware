@@ -73,16 +73,18 @@ class BaseClient(APIView):
         headers = {}
         preUrl = catalog.getEndpointBy(
             vimid, serverType=self.serverType, interface="public")
+
         token = request.META.get('HTTP_X_AUTH_TOKEN', "")
         tail = "/" + tail if tail else ""
         tenantid = "/" + tenantid if tenantid else ""
-        endPointURL = preUrl + tenantid + tail
+        endPointURL = preUrl + tenantid + tail if preUrl else ""
+
         headers["X-Auth-Token"] = token
         headers["X-Subject-Token"] = token
         headers['Content-Type'] = request.META.get(
             "CONTENT_TYPE", "application/json")
 
-        if method == "GET":
+        if method == "GET" and preUrl is not None:
             # append parameters in url path
             query = ""
             for k, v in request.GET.items():
@@ -105,6 +107,10 @@ class BaseClient(APIView):
 
         try:
             try:
+                # Authenticated failed If it cann't get
+                # endpoint from cache
+                if url == "":
+                    return Response(data="Unauthenticated", status=401)
                 logger.info("%(method)s Request to %(url)s ",
                             {'url': url, 'method': method})
                 resp = self.session.request(
