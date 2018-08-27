@@ -22,4 +22,4 @@ logger = logging.getLogger(__name__)
 
 def login(data):
 
-    print data
+    print(data)

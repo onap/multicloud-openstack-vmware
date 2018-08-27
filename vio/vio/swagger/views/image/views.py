@@ -83,6 +83,18 @@ class GetDeleteImageView(APIView):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class GetDeleteImageViewV1(GetDeleteImageView):
+    def get(self, request, cloud_owner, cloud_region, tenantid, imageid):
+        vimid = cloud_owner + '_' + cloud_region
+        return super(GetDeleteImageViewV1, self).get(
+            request, vimid, tenantid, imageid)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, imageid):
+        vimid = cloud_owner + '_' + cloud_region
+        return super(GetDeleteImageViewV1, self).delete(
+            request, vimid, tenantid, imageid)
+
+
 class CreateListImagesView(APIView):
 
     def get(self, request, vimid, tenantid):
@@ -154,6 +166,18 @@ class CreateListImagesView(APIView):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class CreateListImagesViewV1(CreateListImagesView):
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        vimid = cloud_owner + '_' + cloud_region
+        return super(CreateListImagesViewV1, self).get(
+            request, vimid, tenantid)
+
+    def post(self, request, cloud_owner, cloud_region, tenantid):
+        vimid = cloud_owner + '_' + cloud_region
+        return super(CreateListImagesViewV1, self).post(
+            request, vimid, tenantid)
+
+
 class CreateImageFileView(APIView):
 
     def post(self, request, vimid, tenantid):
@@ -209,6 +233,13 @@ class CreateImageFileView(APIView):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class CreateImageFileViewV1(CreateImageFileView):
+    def post(self, request, cloud_owner, cloud_region, tenantid):
+        vimid = cloud_owner + '_' + cloud_region
+        return super(CreateImageFileViewV1, self).post(
+            request, vimid, tenantid)
+
+
 class GetImageFileView(APIView):
 
     def post(self, request, vimid, tenantid, imageid):
@@ -257,3 +288,10 @@ class GetImageFileView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GetImageFileViewV1(GetImageFileView):
+    def post(self, request, cloud_owner, cloud_region, tenantid, imageid):
+        vimid = cloud_owner + '_' + cloud_region
+        return super(GetImageFileViewV1, self).post(
+            request, vimid, tenantid, imageid)
