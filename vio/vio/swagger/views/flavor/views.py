@@ -99,6 +99,16 @@ class FlavorsView(APIView):
         return Response(data=rsp, status=status.HTTP_200_OK)
 
 
+class FlavorsViewV1(FlavorsView):
+    def post(self, request, cloud_owner, cloud_region, tenantid):
+        return super(FlavorsViewV1, self).post(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        return super(FlavorsViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+
 class FlavorView(APIView):
 
     def get(self, request, vimid, tenantid, flavorid):
@@ -152,3 +162,13 @@ class FlavorView(APIView):
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FlavorViewV1(FlavorView):
+    def get(self, request, cloud_owner, cloud_region, tenantid, flavorid):
+        return super(FlavorViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid, flavorid)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, flavorid):
+        return super(FlavorViewV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, tenantid, flavorid)

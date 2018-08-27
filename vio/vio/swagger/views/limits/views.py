@@ -51,3 +51,9 @@ class LimitsView(APIView):
         rsp.update(nova_utils.server_limits_formatter(server_limits))
 
         return Response(data=rsp, status=status.HTTP_200_OK)
+
+
+class LimitsViewV1(LimitsView):
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        return super(LimitsViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid)
