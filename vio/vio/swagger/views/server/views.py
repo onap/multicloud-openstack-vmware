@@ -109,6 +109,16 @@ class ListServersView(APIView):
         return Response(data=rsp, status=status.HTTP_200_OK)
 
 
+class ListServersViewV1(ListServersView):
+    def post(self, request, cloud_owner, cloud_region, tenantid):
+        return super(ListServersViewV1, self).post(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        return super(ListServersViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+
 class GetServerView(APIView):
 
     def get(self, request, vimid, tenantid, serverid):
@@ -163,3 +173,13 @@ class GetServerView(APIView):
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class GetServerViewV1(GetServerView):
+    def get(self, request, cloud_owner, cloud_region, tenantid, serverid):
+        return super(GetServerViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid, serverid)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, serverid):
+        return super(GetServerViewV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, tenantid, serverid)

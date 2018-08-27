@@ -69,3 +69,9 @@ class HostView(APIView):
                'host': nova_utils.hypervisor_formatter(hv)}
 
         return Response(data=rsp, status=status.HTTP_200_OK)
+
+
+class HostViewV1(HostView):
+    def get(self, request, cloud_owner, cloud_region, tenantid, hostname):
+        return super(HostViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid, hostname)

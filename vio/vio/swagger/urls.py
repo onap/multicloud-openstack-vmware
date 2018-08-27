@@ -38,6 +38,10 @@ from vio.swagger.views.image.views import CreateImageFileViewV1
 from vio.swagger.views.image.views import GetImageFileViewV1
 from vio.swagger.views.volume.views import CreateListVolumeViewV1
 from vio.swagger.views.volume.views import GetDeleteVolumeViewV1
+from vio.swagger.views.server.views import ListServersViewV1, GetServerViewV1
+from vio.swagger.views.flavor.views import FlavorsViewV1, FlavorViewV1
+from vio.swagger.views.limits.views import LimitsViewV1
+from vio.swagger.views.hypervisor.views import HostViewV1
 
 # proxy
 from vio.swagger.views.proxyplugin.identity.views import TokenView
@@ -194,6 +198,30 @@ urlpatterns = [
         r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z_-]+)/'
         r'volumes/(?P<volumeid>[0-9a-zA-Z_-]+)$',
         GetDeleteVolumeViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z]+)/'
+        r'servers$',
+        ListServersViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z]+)/'
+        r'servers/(?P<serverid>[0-9a-zA-Z_-]+)$',
+        GetServerViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z]+)/'
+        r'flavors$',
+        FlavorsViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z]+)/'
+        r'flavors/(?P<flavorid>[0-9a-zA-Z_-]+)$',
+        FlavorViewV1.as_view()),
+    url(r'^api/multicloud-vio/v0/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z]+)/'
+        r'limits$',
+        LimitsViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z]+)/'
+        r'hosts/(?P<hostname>[0-9a-zA-Z_-]+)$',
+        HostViewV1.as_view()),
 
     # fake urls
     url(r'^api/multicloud-vio/v0/vmware_fake/identity/v3',
