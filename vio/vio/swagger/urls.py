@@ -36,6 +36,8 @@ from vio.swagger.views.image.views import CreateListImagesViewV1
 from vio.swagger.views.image.views import GetDeleteImageViewV1
 from vio.swagger.views.image.views import CreateImageFileViewV1
 from vio.swagger.views.image.views import GetImageFileViewV1
+from vio.swagger.views.volume.views import CreateListVolumeViewV1
+from vio.swagger.views.volume.views import GetDeleteVolumeViewV1
 
 # proxy
 from vio.swagger.views.proxyplugin.identity.views import TokenView
@@ -184,6 +186,14 @@ urlpatterns = [
         r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z_-]+)/'
         r'images/file/(?P<imageid>[0-9a-zA-Z_-]+)$',
         GetImageFileViewV1.as_view()),
+    url(r'^api/multicloud-vio/v0/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z_-]+)/'
+        r'volumes$',
+        CreateListVolumeViewV1.as_view()),
+    url(r'^api/multicloud-vio/v0/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z_-]+)/'
+        r'volumes/(?P<volumeid>[0-9a-zA-Z_-]+)$',
+        GetDeleteVolumeViewV1.as_view()),
 
     # fake urls
     url(r'^api/multicloud-vio/v0/vmware_fake/identity/v3',
