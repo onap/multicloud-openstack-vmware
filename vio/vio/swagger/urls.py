@@ -31,6 +31,12 @@ from vio.swagger.views.network.views import DeleteNetworkView
 from vio.swagger.views.subnet.views import CreateSubnetView, DeleteSubnetView
 from vio.swagger.views.port.views import CreatePortView, DeletePortView
 
+# V1 API
+from vio.swagger.views.image.views import CreateListImagesViewV1
+from vio.swagger.views.image.views import GetDeleteImageViewV1
+from vio.swagger.views.image.views import CreateImageFileViewV1
+from vio.swagger.views.image.views import GetImageFileViewV1
+
 # proxy
 from vio.swagger.views.proxyplugin.identity.views import TokenView
 from vio.swagger.views.proxyplugin.identity.views import TokenV2View
@@ -160,6 +166,24 @@ urlpatterns = [
         r'(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
         r'(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortView.as_view()),
+
+    # V1 urls
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z_-]+)/'
+        r'images$',
+        CreateListImagesViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z_-]+)/'
+        r'images/(?P<imageid>[0-9a-zA-Z_-]+)$',
+        GetDeleteImageViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z_-]+)/'
+        r'images/file$',
+        CreateImageFileViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z_-]+)/'
+        r'images/file/(?P<imageid>[0-9a-zA-Z_-]+)$',
+        GetImageFileViewV1.as_view()),
 
     # fake urls
     url(r'^api/multicloud-vio/v0/vmware_fake/identity/v3',

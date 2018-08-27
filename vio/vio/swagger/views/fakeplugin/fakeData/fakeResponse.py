@@ -1673,7 +1673,7 @@ def _serverStatus(serverid):
 
     startTime = serverMapps[serverid]['turnStatusTime']
     currentTime = datetime.now()
-    print currentTime - startTime
+    print(currentTime - startTime)
     if currentTime - startTime >= timedelta(seconds=10):
         if serverMapps[serverid]['status'] == "SPAWNING" \
                 or serverMapps[serverid]['status'] == "BUILDING":
