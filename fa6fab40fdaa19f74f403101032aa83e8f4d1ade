@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_806e0e2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-27T18:50:42Z",
+      "side": 1,
+      "message": "nit: this description paragraph is duplicating the title",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "fa6fab40fdaa19f74f403101032aa83e8f4d1ade",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_4078f6f1",
+        "filename": "vio/vio/swagger/urls.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-27T18:50:42Z",
+      "side": 1,
+      "message": "shouldn\u0027t need to be v1?",
+      "range": {
+        "startLine": 171,
+        "startChar": 30,
+        "endLine": 171,
+        "endChar": 32
+      },
+      "revId": "fa6fab40fdaa19f74f403101032aa83e8f4d1ade",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_6073b215",
+        "filename": "vio/vio/swagger/views/image/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-27T18:50:42Z",
+      "side": 1,
+      "message": "nit: it\u0027s not necessary to declare vim variable so this code can be implemented as the follows and it\u0027s still readable:\n\n    return super(GetDeleteImageViewV1, self).get(\n         request, cloud_owner + \u0027_\u0027 + cloud_region, tenantid, imageid)",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 46
+      },
+      "revId": "fa6fab40fdaa19f74f403101032aa83e8f4d1ade",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0062fe3d",
+        "filename": "vio/vio/swagger/views/image/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-27T18:50:42Z",
+      "side": 1,
+      "message": "ditto: line 88",
+      "revId": "fa6fab40fdaa19f74f403101032aa83e8f4d1ade",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_2065ba44",
+        "filename": "vio/vio/swagger/views/image/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-27T18:50:42Z",
+      "side": 1,
+      "message": "ditto: line 88",
+      "revId": "fa6fab40fdaa19f74f403101032aa83e8f4d1ade",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_c05ba685",
+        "filename": "vio/vio/swagger/views/image/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-27T18:50:42Z",
+      "side": 1,
+      "message": "ditto: line 88",
+      "revId": "fa6fab40fdaa19f74f403101032aa83e8f4d1ade",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_e05ee275",
+        "filename": "vio/vio/swagger/views/image/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-27T18:50:42Z",
+      "side": 1,
+      "message": "ditto: line 88",
+      "revId": "fa6fab40fdaa19f74f403101032aa83e8f4d1ade",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_8055ae51",
+        "filename": "vio/vio/swagger/views/image/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-27T18:50:42Z",
+      "side": 1,
+      "message": "ditto: line 88",
+      "revId": "fa6fab40fdaa19f74f403101032aa83e8f4d1ade",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
