@@ -71,6 +71,16 @@ class GetDeleteVolumeView(APIView):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class GetDeleteVolumeViewV1(GetDeleteVolumeView):
+    def get(self, request, cloud_owner, cloud_region, tenantid, volumeid):
+        return super(GetDeleteVolumeViewV1, self).get(
+            request, cloud_owner + '_' + cloud_region, tenantid, volumeid)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, volumeid):
+        return super(GetDeleteVolumeViewV1, self).delete(
+            request, cloud_owner + '_' + cloud_region, tenantid, volumeid)
+
+
 class CreateListVolumeView(APIView):
 
     def get(self, request, vimid, tenantid):
@@ -146,3 +156,13 @@ class CreateListVolumeView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class CreateListVolumeViewV1(CreateListVolumeView):
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        return super(CreateListVolumeViewV1, self).get(
+            request, cloud_owner + '_' + cloud_region, tenantid)
+
+    def post(self, request, cloud_owner, cloud_region, tenantid):
+        return super(CreateListVolumeViewV1, self).post(
+            request, cloud_owner + '_' + cloud_region, tenantid)
