@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_d3d5b9b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-28T15:46:36Z",
+      "side": 1,
+      "message": "nit: s/api/API",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "568dc67486be272b6b679dbd1b6c4b5dac7d2923",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_73dce5e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-28T15:46:36Z",
+      "side": 1,
+      "message": "nit: s/api/API",
+      "range": {
+        "startLine": 9,
+        "startChar": 45,
+        "endLine": 9,
+        "endChar": 48
+      },
+      "revId": "568dc67486be272b6b679dbd1b6c4b5dac7d2923",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_b3d27dd0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-28T15:46:36Z",
+      "side": 1,
+      "message": "s/update/updates",
+      "range": {
+        "startLine": 9,
+        "startChar": 11,
+        "endLine": 9,
+        "endChar": 17
+      },
+      "revId": "568dc67486be272b6b679dbd1b6c4b5dac7d2923",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d3ecd991",
+        "filename": "vio/vio/swagger/views/flavor/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-28T15:46:36Z",
+      "side": 1,
+      "message": "is this means that it\u0027s possible to create a list of Flavors? Shouldn\u0027t this method needs to be defined in FlavorViewV1 class?",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 64
+      },
+      "revId": "568dc67486be272b6b679dbd1b6c4b5dac7d2923",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_33fd0d3b",
+        "filename": "vio/vio/swagger/views/server/views.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-08-28T15:46:36Z",
+      "side": 1,
+      "message": "Same comment than FlavorsViewV1.post() method, this means that is possible to create multiple servers in a single request. is this the desired behavior?",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 64
+      },
+      "revId": "568dc67486be272b6b679dbd1b6c4b5dac7d2923",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
