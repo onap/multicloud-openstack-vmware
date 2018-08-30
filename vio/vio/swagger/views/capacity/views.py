@@ -121,3 +121,9 @@ class CapacityCheck(APIView):
                 return Response(data={'result': True},
                                 status=status.HTTP_200_OK)
         return Response(data={'result': False}, status=status.HTTP_200_OK)
+
+
+class CapacityCheckV1(CapacityCheck):
+    def post(self, request, cloud_owner, cloud_region):
+        return super(CapacityCheckV1, self).post(
+            request, cloud_owner + "_" + cloud_region)

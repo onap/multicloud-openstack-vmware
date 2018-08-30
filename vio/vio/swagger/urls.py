@@ -59,14 +59,14 @@ from vio.swagger.views.proxyplugin.dns.views import DesignateServer
 from vio.swagger.views.proxyplugin.dns.views import DesignateVersionLink
 
 # Registry
-from vio.swagger.views.registry.views import Registry
-from vio.swagger.views.registry.views import UnRegistry
+from vio.swagger.views.registry.views import Registry, RegistryV1
+from vio.swagger.views.registry.views import UnRegistry, UnRegistryV1
 
 # Capacity Check
-from vio.swagger.views.capacity.views import CapacityCheck
+from vio.swagger.views.capacity.views import CapacityCheck, CapacityCheckV1
 
 # Extensions
-from vio.swagger.views.extensions.views import Extensions
+from vio.swagger.views.extensions.views import Extensions, ExtensionsV1
 
 # fake
 from vio.swagger.views.fakeplugin.identity.views import FakeProjects
@@ -313,10 +313,19 @@ urlpatterns = [
         Registry.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)$',
         UnRegistry.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-z-A-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-z-A-Z\-\_]+)/registry$',
+        RegistryV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-z-A-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-z-A-Z\-\_]+)$',
+        UnRegistryV1.as_view()),
 
     # CapacityCheck
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/capacity_check$',
         CapacityCheck.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-z-A-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-z-A-Z\-\_]+)/capacity_check$',
+        CapacityCheckV1.as_view()),
 
     #   proxy
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/identity/v3',
@@ -380,10 +389,12 @@ urlpatterns = [
         DesignateServer.as_view()),
 
     # Extensions
-    url(
-        (r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)'
-         r'/extensions$'),
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)'
+        r'/extensions$',
         Extensions.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-z-A-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-z-A-Z\-\_]+)/extensions$',
+        ExtensionsV1.as_view()),
 
 ]
 
