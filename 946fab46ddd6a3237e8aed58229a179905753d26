@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_52e99ae4",
+        "filename": "vio/vio/swagger/urls.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2018-08-30T03:41:45Z",
+      "side": 1,
+      "message": "In v1, vmware_fake will be decouple to vmware/fake",
+      "range": {
+        "startLine": 199,
+        "startChar": 36,
+        "endLine": 199,
+        "endChar": 47
+      },
+      "revId": "946fab46ddd6a3237e8aed58229a179905753d26",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
