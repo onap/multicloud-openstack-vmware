@@ -75,6 +75,16 @@ class CreateSubnetView(APIView):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class CreateSubnetViewV1(CreateSubnetView):
+    def post(self, request, cloud_owner, cloud_region, tenantid):
+        return super(CreateSubnetViewV1, self).post(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        return super(CreateSubnetViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+
 class DeleteSubnetView(APIView):
 
     def get(self, request, vimid, tenantid, subnetid):
@@ -104,3 +114,13 @@ class DeleteSubnetView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class DeleteSubnetViewV1(DeleteSubnetView):
+    def get(self, request, cloud_owner, cloud_region, tenantid, subnetid):
+        return super(DeleteSubnetViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid, subnetid)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, subnetid):
+        return super(DeleteSubnetViewV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, tenantid, subnetid)
