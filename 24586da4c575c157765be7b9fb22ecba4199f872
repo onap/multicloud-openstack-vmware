@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_1d1b3374",
+        "filename": "vio/vio/swagger/urls.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2018-08-30T07:31:22Z",
+      "side": 1,
+      "message": "and these?",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 32
+      },
+      "revId": "24586da4c575c157765be7b9fb22ecba4199f872",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
