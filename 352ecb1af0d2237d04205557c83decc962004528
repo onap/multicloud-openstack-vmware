@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_1dab3376",
+        "filename": "vio/vio/swagger/multivim.server.swagger.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1389
+      },
+      "writtenOn": "2018-08-30T08:32:17Z",
+      "side": 1,
+      "message": "Blank should be deleted",
+      "range": {
+        "startLine": 280,
+        "startChar": 13,
+        "endLine": 280,
+        "endChar": 25
+      },
+      "revId": "352ecb1af0d2237d04205557c83decc962004528",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
