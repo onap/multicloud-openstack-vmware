@@ -158,6 +158,12 @@ class Registry(APIView):
         return Response(data="", status=status.HTTP_200_OK)
 
 
+class RegistryV1(Registry):
+    def post(self, request, cloud_owner, cloud_region):
+        return super(RegistryV1, self).post(
+            request, cloud_owner + "_" + cloud_region)
+
+
 class UnRegistry(APIView):
 
     def delete(self, request, vimid):
@@ -170,3 +176,9 @@ class UnRegistry(APIView):
             return Response(data=e.message,
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data="", status=status.HTTP_204_NO_CONTENT)
+
+
+class UnRegistryV1(UnRegistry):
+    def delete(self, request, cloud_owner, cloud_region):
+        return super(UnRegistryV1, self).delete(
+            request, cloud_owner, cloud_region)

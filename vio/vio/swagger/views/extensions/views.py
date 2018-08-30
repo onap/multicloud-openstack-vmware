@@ -23,3 +23,9 @@ class Extensions(APIView):
     def get(self, request, vimid):
         return Response(data={'extensions': []},
                         status=status.HTTP_200_OK)
+
+
+class ExtensionsV1(Extensions):
+    def get(self, request, cloud_owner, cloud_region):
+        return super(ExtensionsV1, self).get(
+            request, cloud_owner, cloud_region)
