@@ -74,6 +74,16 @@ class CreateNetworkView(APIView):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class CreateNetworkViewV1(CreateNetworkView):
+    def post(self, request, cloud_owner, cloud_region, tenantid):
+        return super(CreateNetworkViewV1, self).post(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        return super(CreateNetworkViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+
 class DeleteNetworkView(APIView):
 
     def get(self, request, vimid, tenantid, networkid):
@@ -119,3 +129,13 @@ class DeleteNetworkView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class DeleteNetworkViewV1(DeleteNetworkView):
+    def get(self, request, cloud_owner, cloud_region, tenantid, networkid):
+        return super(DeleteNetworkViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid, networkid)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, networkid):
+        return super(DeleteNetworkViewV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, tenantid, networkid)

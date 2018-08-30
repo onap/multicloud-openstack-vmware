@@ -75,6 +75,16 @@ class CreatePortView(APIView):
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class CreatePortViewV1(CreatePortView):
+    def post(self, request, cloud_owner, cloud_region, tenantid):
+        return super(CreatePortViewV1, self).post(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        return super(CreatePortViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid)
+
+
 class DeletePortView(APIView):
 
     def get(self, request, vimid, tenantid, portid):
@@ -104,3 +114,13 @@ class DeletePortView(APIView):
             else:
                 return Response(data={'error': str(e)},
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class DeletePortViewV1(DeletePortView):
+    def get(self, request, cloud_owner, cloud_region, tenantid, portid):
+        return super(DeletePortViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid, portid)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, portid):
+        return super(DeletePortViewV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, tenantid, portid)

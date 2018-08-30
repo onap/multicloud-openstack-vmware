@@ -42,6 +42,12 @@ from vio.swagger.views.server.views import ListServersViewV1, GetServerViewV1
 from vio.swagger.views.flavor.views import FlavorsViewV1, FlavorViewV1
 from vio.swagger.views.limits.views import LimitsViewV1
 from vio.swagger.views.hypervisor.views import HostViewV1
+from vio.swagger.views.service.views import HostsViewV1
+from vio.swagger.views.network.views import CreateNetworkViewV1
+from vio.swagger.views.network.views import DeleteNetworkViewV1
+from vio.swagger.views.subnet.views import CreateSubnetViewV1
+from vio.swagger.views.subnet.views import DeleteSubnetViewV1
+from vio.swagger.views.port.views import CreatePortViewV1, DeletePortViewV1
 
 # proxy
 from vio.swagger.views.proxyplugin.identity.views import TokenView
@@ -219,9 +225,36 @@ urlpatterns = [
         r'limits$',
         LimitsViewV1.as_view()),
     url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z]+)/hosts$',
+        HostsViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
         r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z]+)/'
         r'hosts/(?P<hostname>[0-9a-zA-Z_-]+)$',
         HostViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/'
+        r'networks$',
+        CreateNetworkViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1(?P<cloud_owner>[0-9a-zA-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/'
+        r'networks/(?P<networkid>[0-9a-zA-Z\-\_]+)$',
+        DeleteNetworkViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/'
+        r'subnets$',
+        CreateSubnetViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/'
+        r'subnets/(?P<subnetid>[0-9a-zA-Z\-\_]+)$',
+        DeleteSubnetViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/'
+        r'ports$',
+        CreatePortViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/'
+        r'ports/(?P<portid>[0-9a-zA-Z\-\_]+)$',
+        DeletePortViewV1.as_view()),
 
     # fake urls
     url(r'^api/multicloud-vio/v0/vmware_fake/identity/v3',

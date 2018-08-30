@@ -53,3 +53,9 @@ class HostsView(APIView):
                'hosts': hosts}
 
         return Response(data=rsp, status=status.HTTP_200_OK)
+
+
+class HostsViewV1(HostsView):
+    def get(self, request, cloud_owner, cloud_region, tenantid):
+        return super(HostsViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid)
