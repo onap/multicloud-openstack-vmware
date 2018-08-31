@@ -60,3 +60,9 @@ class ListTenantsView(APIView):
             tenant['name'] = project.name
             rsp['tenants'].append(tenant)
         return Response(data=rsp, status=status.HTTP_200_OK)
+
+
+class ListTenantsViewV1(ListTenantsView):
+    def get(self, request, cloud_owner, cloud_region):
+        return super(ListTenantsViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region)
