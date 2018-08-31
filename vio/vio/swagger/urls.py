@@ -65,6 +65,21 @@ from vio.swagger.views.proxyplugin.heat.views import HeatServer
 from vio.swagger.views.proxyplugin.dns.views import DesignateServer
 from vio.swagger.views.proxyplugin.dns.views import DesignateVersionLink
 
+# proxy V1
+from vio.swagger.views.proxyplugin.identity.views import TokenViewV1
+from vio.swagger.views.proxyplugin.identity.views import TokenV2ViewV1
+from vio.swagger.views.proxyplugin.identity.views import IdentityServerV1
+from vio.swagger.views.proxyplugin.identity.views import IdentityVersionLinkV1
+from vio.swagger.views.proxyplugin.nova.views import ComputeServerV1
+from vio.swagger.views.proxyplugin.image.views import ImageServerV1
+from vio.swagger.views.proxyplugin.image.views import ImageVersionLinkV1
+from vio.swagger.views.proxyplugin.neutron.views import NetWorkServerV1
+from vio.swagger.views.proxyplugin.neutron.views import NetworkVersionLinkV1
+from vio.swagger.views.proxyplugin.volumn.views import VolumeServerV1
+from vio.swagger.views.proxyplugin.heat.views import HeatServerV1
+from vio.swagger.views.proxyplugin.dns.views import DesignateServerV1
+from vio.swagger.views.proxyplugin.dns.views import DesignateVersionLinkV1
+
 # Registry
 from vio.swagger.views.registry.views import Registry, RegistryV1
 from vio.swagger.views.registry.views import UnRegistry, UnRegistryV1
@@ -419,6 +434,66 @@ urlpatterns = [
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)/'
         r'designate/(?P<other>(.*))$',
         DesignateServer.as_view()),
+
+    # proxy V1
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/identity/v3',
+        TokenViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/identity/v2.0$',
+        TokenV2ViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/identity/v2.0/tokens$',
+        TokenV2ViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/identity$',
+        IdentityVersionLinkV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/identity/(?P<other>(.*))$',
+        IdentityServerV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/glance$',
+        ImageVersionLinkV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/glance/(?P<other>(.*))$',
+        ImageServerV1.as_view()),
+    url(
+        r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/'
+        r'cinder/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        VolumeServerV1.as_view()),
+    url(
+        r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/'
+        r'cinderv2/(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        VolumeServerV1.as_view()),
+    url(
+        r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/cinderv3/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        VolumeServerV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/neutron$',
+        NetworkVersionLinkV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/neutron/(?P<other>(.*))$',
+        NetWorkServerV1.as_view()),
+    url(
+        r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/heat/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        HeatServerV1.as_view()),
+    url(
+        r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/nova/'
+        r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)/(?P<other>(.*))$',
+        ComputeServerV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/designate$',
+        DesignateVersionLinkV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/designate/(?P<other>(.*))$',
+        DesignateServerV1.as_view()),
 
     # Extensions
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-z-A-Z\-\_]+)'

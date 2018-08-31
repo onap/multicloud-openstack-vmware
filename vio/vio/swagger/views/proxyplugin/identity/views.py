@@ -64,6 +64,15 @@ class IdentityVersionLink(BaseClient):
         return Response(data=res, status=status.HTTP_200_OK)
 
 
+class IdentityVersionLinkV1(IdentityVersionLink):
+
+    serverType = 'keystone'
+
+    def get(self, request, cloud_owner, cloud_region):
+        return super(IdentityVersionLinkV1, self).get(
+            request, cloud_owner + "_" + cloud_region)
+
+
 class IdentityServer(BaseClient):
 
     serverType = 'keystone'
@@ -94,6 +103,31 @@ class IdentityServer(BaseClient):
 
         return self.send(request=request, method="HEAD",
                          vimid=vimid, other=other)
+
+
+class IdentityServerV1(IdentityServer):
+
+    serverType = 'keystone'
+
+    def get(self, request, cloud_owner, cloud_region, other=None):
+        return super(IdentityServerV1, self).get(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def post(self, request, cloud_owner, cloud_region, other):
+        return super(IdentityServerV1, self).post(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def patch(self, request, cloud_owner, cloud_region, other):
+        return super(IdentityServerV1, self).patch(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def put(self, request, cloud_owner, cloud_region, other):
+        return super(IdentityServerV1, self).put(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def head(self, request, cloud_owner, cloud_region, other):
+        return super(IdentityServerV1, self).head(
+            request, cloud_owner + "_" + cloud_region, other)
 
 
 class TokenView(BaseClient):
@@ -238,6 +272,23 @@ class TokenView(BaseClient):
         return Res
 
 
+class TokenViewV1(TokenView):
+
+    serverType = 'identity'
+
+    def get(self, request, cloud_owner, cloud_region):
+        return super(TokenViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region)
+
+    def post(self, request, cloud_owner, cloud_region):
+        return super(TokenViewV1, self).post(
+            request, cloud_owner + "_" + cloud_region)
+
+    def delete(self, request, cloud_owner, cloud_region):
+        return super(TokenViewV1, self).delete(
+            request, cloud_owner + "_" + cloud_region)
+
+
 class TokenV2View(BaseClient):
 
     serverType = "identity"
@@ -292,6 +343,19 @@ class TokenV2View(BaseClient):
         return _keystoneV2Token(url=url_path,
                                 vimid=vimid,
                                 create_req=create_req)
+
+
+class TokenV2ViewV1(TokenV2View):
+
+    serverType = 'identity'
+
+    def get(self, request, cloud_owner, cloud_region):
+        return super(TokenV2ViewV1, self).get(
+            request, cloud_owner + "_" + cloud_region)
+
+    def post(self, request, cloud_owner, cloud_region):
+        return super(TokenV2ViewV1, self).post(
+            request, cloud_owner + "_" + cloud_region)
 
 
 def _keystoneV2Token(url, vimid=None, create_req=None):

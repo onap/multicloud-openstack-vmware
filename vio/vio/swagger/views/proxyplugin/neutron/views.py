@@ -53,6 +53,15 @@ class NetworkVersionLink(BaseClient):
         return Response(data=res, status=status.HTTP_200_OK)
 
 
+class NetworkVersionLinkV1(NetworkVersionLink):
+
+    serverType = 'neutron'
+
+    def get(self, request, cloud_owner, cloud_region):
+        return super(NetworkVersionLinkV1, self).get(
+            request, cloud_owner + "_" + cloud_region)
+
+
 class NetWorkServer(BaseClient):
 
     serverType = "neutron"
@@ -83,3 +92,28 @@ class NetWorkServer(BaseClient):
 
         return self.send(request=request, method="DELETE",
                          vimid=vimid, other=other)
+
+
+class NetWorkServerV1(NetWorkServer):
+
+    serverType = 'neutron'
+
+    def get(self, request, cloud_owner, cloud_region, other=None):
+        return super(NetWorkServerV1, self).get(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def post(self, request, cloud_owner, cloud_region, other):
+        return super(NetWorkServerV1, self).post(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def patch(self, request, cloud_owner, cloud_region, other):
+        return super(NetWorkServerV1, self).patch(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def put(self, request, cloud_owner, cloud_region, other):
+        return super(NetWorkServerV1, self).put(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def delete(self, request, cloud_owner, cloud_region, other):
+        return super(NetWorkServerV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, other)
