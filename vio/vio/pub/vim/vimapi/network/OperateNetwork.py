@@ -90,7 +90,11 @@ class OperateNetwork(BaseNet):
         network = self.auth(vim_info, tenantid)
         body = translate(self.keys_mapping, body)
         net = network.network_create(**body)
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {
+            "vimName": vim_info['name'],
+            "vimId": vim_info['vimId'],
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         resp = self._convert(net)
         resp.update(vim_dict)
         return resp
@@ -101,7 +105,11 @@ class OperateNetwork(BaseNet):
         net = network.network_get(networkid)
         if net is None:
             return net
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {
+            "vimName": vim_info['name'],
+            "vimId": vim_info['vimId'],
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         resp = self._convert(net)
         resp.update(vim_dict)
         return resp
@@ -115,7 +123,11 @@ class OperateNetwork(BaseNet):
         vim_info = self.get_vim_info(vimid)
         network = self.auth(vim_info, tenantid)
         resp = network.networks_get(**query)
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {
+            "vimName": vim_info['name'],
+            "vimId": vim_info['vimId'],
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         networks = {'networks': []}
         if resp:
             for net in resp:
