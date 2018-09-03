@@ -68,7 +68,11 @@ class OperatePort(BaseNet):
         else:
             body['fixed_ips'] = [{'subnet_id': body.pop('subnetId')}]
         port = network.port_create(**body)
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {
+            "vimName": vim_info['name'],
+            "vimId": vim_info['vimId'],
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         resp = self._convert(port)
         resp.update(vim_dict)
         return resp
@@ -79,7 +83,11 @@ class OperatePort(BaseNet):
         port = network.port_find(portid, ignore_missing=ignore_missing)
         if port is None:
             return port
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {
+            "vimName": vim_info['name'],
+            "vimId": vim_info['vimId'],
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         resp = self._convert(port)
         resp.update(vim_dict)
         return resp
@@ -94,7 +102,11 @@ class OperatePort(BaseNet):
         network = self.auth(vim_info, tenantid)
         query.update({"project_id": tenantid})
         resp = network.ports_get(**query)
-        vim_dict = {"vimName": vim_info['name'], "vimId": vim_info['vimId']}
+        vim_dict = {
+            "vimName": vim_info['name'],
+            "vimId": vim_info['vimId'],
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         ports = {'ports': []}
         if resp:
             for port in resp:

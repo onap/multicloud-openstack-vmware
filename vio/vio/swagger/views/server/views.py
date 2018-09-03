@@ -45,7 +45,9 @@ class ListServersView(APIView):
                 'url': vim_info['url']}
         rsp = {'vimId': vim_info['vimId'],
                'vimName': vim_info['name'],
-               'tenantId': tenantid}
+               'tenantId': tenantid,
+               'cloud_owner': vim_info.get('cloud_owner'),
+               'cloud_region_id': vim_info.get("cloud_region_id")}
         servers_op = OperateServers.OperateServers()
         server_name = create_req.get('name', None)
         server_id = create_req.get('id', None)
@@ -104,7 +106,9 @@ class ListServersView(APIView):
 
         rsp = {'vimId': vim_info['vimId'],
                'vimName': vim_info['name'],
-               'servers': servers_resp}
+               'servers': servers_resp,
+               'cloud_owner': vim_info.get('cloud_owner'),
+               'cloud_region_id': vim_info.get("cloud_region_id")}
 
         return Response(data=rsp, status=status.HTTP_200_OK)
 
@@ -147,7 +151,9 @@ class GetServerView(APIView):
 
         rsp = {'vimId': vim_info['vimId'],
                'vimName': vim_info['name'],
-               'tenantId': tenantid}
+               'tenantId': tenantid,
+               'cloud_owner': vim_info.get('cloud_owner'),
+               'cloud_region_id': vim_info.get("cloud_region_id")}
         rsp.update(server_dict)
 
         return Response(data=rsp, status=status.HTTP_200_OK)

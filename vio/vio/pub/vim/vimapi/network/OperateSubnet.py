@@ -56,7 +56,9 @@ class OperateSubnet(BaseNet):
         subnet = network.subnet_create(**body)
         vim_dict = {
             "vimName": vim_info['name'], "vimId": vim_info['vimId'],
-            "tenantId": tenantid}
+            "tenantId": tenantid,
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         resp = self._convert(subnet)
         resp.update(vim_dict)
         return resp
@@ -69,7 +71,9 @@ class OperateSubnet(BaseNet):
             return subnet
         vim_dict = {
             "vimName": vim_info['name'], "vimId": vim_info['vimId'],
-            "tenantId": tenantid}
+            "tenantId": tenantid,
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         resp = self._convert(subnet)
         resp.update(vim_dict)
         return resp
@@ -86,7 +90,9 @@ class OperateSubnet(BaseNet):
         resp = network.subnets_get(**query)
         vim_dict = {
             "vimName": vim_info['name'], "vimId": vim_info['vimId'],
-            "tenantId": tenantid}
+            "tenantId": tenantid,
+            'cloud_owner': vim_info.get('cloud_owner'),
+            'cloud_region_id': vim_info.get("cloud_region_id")}
         subnets = {'subnets': []}
         if resp:
             for subnet in resp:

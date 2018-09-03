@@ -31,6 +31,8 @@ def get_vim_by_id(vim_id):
     ret['type'] = ret['cloud-type']
     ret['version'] = ret['cloud-region-version']
     ret['vimId'] = vim_id
+    ret['cloud_owner'] = cloud_owner
+    ret['cloud_region_id'] = cloud_region
     ret['name'] = vim_id
     ret['userName'] = ret['esr-system-info-list'][
         'esr-system-info'][0]['user-name']
