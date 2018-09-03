@@ -25,6 +25,7 @@ from vio.swagger.views.image.views import GetImageFileView
 from vio.swagger.views.volume.views import CreateListVolumeView
 from vio.swagger.views.volume.views import GetDeleteVolumeView
 from vio.swagger.views.server.views import ListServersView, GetServerView
+from vio.swagger.views.server.views import ServerActionView
 from vio.swagger.views.flavor.views import FlavorsView, FlavorView
 from vio.swagger.views.network.views import CreateNetworkView
 from vio.swagger.views.network.views import DeleteNetworkView
@@ -149,6 +150,10 @@ urlpatterns = [
         r'(?P<tenantid>[0-9a-zA-Z]+)/servers/(?P<serverid>[0-9a-zA-Z_-]+)$',
         GetServerView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
+        r'(?P<tenantid>[0-9a-zA-Z]+)/servers/'
+        r'(?P<serverid>[0-9a-zA-Z_-]+)/action$',
+        ServerActionView.as_view()),
+    url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
         r'(?P<tenantid>[0-9a-zA-Z]+)/flavors$',
         FlavorsView.as_view()),
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
@@ -184,6 +189,8 @@ urlpatterns = [
         r'(?P<tenantid>[0-9a-zA-Z\-\_]+)/ports/'
         r'(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortView.as_view()),
+
+
 
     # V1 urls
     url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z_-]+)/'

@@ -162,3 +162,33 @@ class OperateServers(OperateNova):
                  'project_id': project_id}
         project = self.compute(param).delete_server(server_id)
         return project
+
+    def start_server(self, data, project_id, server_id):
+        param = {'username': data['username'],
+                 'user_domain_name': 'default',
+                 'project_domain_name': 'default',
+                 'password': data['password'],
+                 'auth_url': data['url'],
+                 'project_id': project_id}
+        project = self.compute(param).start_server(server_id)
+        return project
+
+    def stop_server(self, data, project_id, server_id):
+        param = {'username': data['username'],
+                 'user_domain_name': 'default',
+                 'project_domain_name': 'default',
+                 'password': data['password'],
+                 'auth_url': data['url'],
+                 'project_id': project_id}
+        project = self.compute(param).stop_server(server_id)
+        return project
+
+    def reboot_server(self, data, project_id, server_id, reboot_type):
+        param = {'username': data['username'],
+                 'user_domain_name': 'default',
+                 'project_domain_name': 'default',
+                 'password': data['password'],
+                 'auth_url': data['url'],
+                 'project_id': project_id}
+        project = self.compute(param).reboot_server(server_id, reboot_type)
+        return project

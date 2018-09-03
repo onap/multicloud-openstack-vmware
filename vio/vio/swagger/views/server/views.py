@@ -183,3 +183,43 @@ class GetServerViewV1(GetServerView):
     def delete(self, request, cloud_owner, cloud_region, tenantid, serverid):
         return super(GetServerViewV1, self).delete(
             request, cloud_owner + "_" + cloud_region, tenantid, serverid)
+
+
+class ServerActionView(APIView):
+
+    def post(self, request, vimid, tenantid, serverid):
+        try:
+            action_req = json.loads(request.body)
+        except Exception as e:
+            return Response(data={'error': 'Fail to decode request body.'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        try:
+            vim_info = extsys.get_vim_by_id(vimid)
+        except VimDriverVioException as e:
+            return Response(data={'error': str(e)}, status=e.status_code)
+        data = {'vimid': vim_info['vimId'],
+                'vimName': vim_info['name'],
+                'username': vim_info['userName'],
+                'password': vim_info['password'],
+                'url': vim_info['url']}
+
+        server_op = OperateServers.OperateServers()
+        try:
+            if 'os-start' in action_req:
+                server_op.start_server(data, tenantid, serverid)
+            elif 'os-stop' in action_req:
+                server_op.stop_server(data, tenantid, serverid)
+            elif 'reboot' in action_req:
+                reboot_type = action_req.get('reboot').get('type')
+                server_op.reboot_server(data, tenantid, serverid, reboot_type)
+            else:
+                return Response(data={'error': 'invalid request body.'},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            if hasattr(e, "http_status"):
+                return Response(data={'error': str(e)}, status=e.http_status)
+            else:
+                return Response(data={'error': str(e)},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(status=status.HTTP_202_ACCEPTED)

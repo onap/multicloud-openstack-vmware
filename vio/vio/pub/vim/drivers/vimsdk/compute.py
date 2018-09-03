@@ -77,6 +77,19 @@ class ComputeClient(base.DriverBase):
         return list(ifaces)
 
     @sdk.translate_exception
+    def start_server(self, server_id):
+        self.conn.compute.start_server(server=server_id)
+
+    @sdk.translate_exception
+    def stop_server(self, server_id):
+        self.conn.compute.stop_server(server=server_id)
+
+    @sdk.translate_exception
+    def reboot_server(self, server_id, reboot_type):
+        self.conn.compute.reboot_server(server=server_id,
+                                        reboot_type=reboot_type)
+
+    @sdk.translate_exception
     def list_flavors(self, **query):
         flavors = self.conn.compute.flavors(**query)
         return flavors
