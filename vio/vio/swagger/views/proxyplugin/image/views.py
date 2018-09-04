@@ -53,6 +53,15 @@ class ImageVersionLink(BaseClient):
         return Response(data=res, status=status.HTTP_300_MULTIPLE_CHOICES)
 
 
+class ImageVersionLinkV1(ImageVersionLink):
+
+    serverType = 'glance'
+
+    def get(self, request, cloud_owner, cloud_region):
+        return super(ImageVersionLinkV1, self).get(
+            request, cloud_owner + "_" + cloud_region)
+
+
 class ImageServer(BaseClient):
 
     serverType = "glance"
@@ -83,3 +92,28 @@ class ImageServer(BaseClient):
 
         return self.send(request=request, method="DELETE",
                          vimid=vimid, other=other)
+
+
+class ImageServerV1(ImageServer):
+
+    serverType = 'glance'
+
+    def get(self, request, cloud_owner, cloud_region, other=None):
+        return super(ImageServerV1, self).get(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def post(self, request, cloud_owner, cloud_region, other):
+        return super(ImageServerV1, self).post(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def patch(self, request, cloud_owner, cloud_region, other):
+        return super(ImageServerV1, self).patch(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def put(self, request, cloud_owner, cloud_region, other):
+        return super(ImageServerV1, self).put(
+            request, cloud_owner + "_" + cloud_region, other)
+
+    def delete(self, request, cloud_owner, cloud_region, other):
+        return super(ImageServerV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, other)

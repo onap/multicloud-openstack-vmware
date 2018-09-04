@@ -38,3 +38,24 @@ class ComputeServer(BaseClient):
 
         return self.send(request=request, method="DELETE", vimid=vimid,
                          tenantid=tenantid, other=other)
+
+
+class ComputeServerV1(ComputeServer):
+
+    serverType = 'nova'
+
+    def get(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(ComputeServerV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)
+
+    def post(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(ComputeServerV1, self).post(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)
+
+    def put(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(ComputeServerV1, self).put(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(ComputeServerV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)

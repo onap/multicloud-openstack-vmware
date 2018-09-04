@@ -45,6 +45,31 @@ class VolumeServer(BaseClient):
                          tenantid=tenantid, other=other)
 
 
+class VolumeServerV1(VolumeServer):
+
+    serverType = 'cinder'
+
+    def get(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(VolumeServerV1, self).get(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)
+
+    def post(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(VolumeServerV1, self).post(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)
+
+    def patch(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(VolumeServerV1, self).patch(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)
+
+    def put(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(VolumeServerV1, self).put(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)
+
+    def delete(self, request, cloud_owner, cloud_region, tenantid, other):
+        return super(VolumeServerV1, self).delete(
+            request, cloud_owner + "_" + cloud_region, tenantid, other)
+
+
 class VolumeServer2(VolumeServer):
     serverType = "cinderv2"
 
