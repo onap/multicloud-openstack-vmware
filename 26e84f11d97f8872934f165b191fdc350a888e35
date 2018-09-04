@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_b4d00720",
+        "filename": "vio/vio/pub/utils/restcall.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-09-04T16:40:41Z",
+      "side": 1,
+      "message": "shouldn\u0027t be better to combine these two lines?",
+      "range": {
+        "startLine": 572,
+        "startChar": 0,
+        "endLine": 576,
+        "endChar": 74
+      },
+      "revId": "26e84f11d97f8872934f165b191fdc350a888e35",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
