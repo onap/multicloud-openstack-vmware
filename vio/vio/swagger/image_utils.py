@@ -36,6 +36,8 @@ def vim_formatter(vim_info, tenantid):
 
     rsp = {}
     rsp['vimId'] = vim_info.get('vimId')
+    rsp['cloud_owner'] = vim_info.get('cloud_owner')
+    rsp['cloud_region_id'] = vim_info.get('cloud_region_id')
     rsp['vimName'] = vim_info.get('name')
     rsp['tenantId'] = tenantid
     return rsp

@@ -53,6 +53,8 @@ class ListTenantsView(APIView):
         rsp['vimId'] = vim_info['vimId']
         rsp['vimName'] = vim_info['name']
         rsp['tenants'] = []
+        rsp['cloud_owner'] = vim_info.get('cloud_owner')
+        rsp['cloud_region_id'] = vim_info.get('cloud_region_id')
 
         for project in projects:
             tenant = {}

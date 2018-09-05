@@ -50,7 +50,9 @@ class HostsView(APIView):
         rsp = {'vimid': vim_info['vimId'],
                'vimName': vim_info['name'],
                'tenantId': tenantid,
-               'hosts': hosts}
+               'hosts': hosts,
+               'cloud_owner': vim_info.get('cloud_owner'),
+               'cloud_region_id': vim_info.get("cloud_region_id")}
 
         return Response(data=rsp, status=status.HTTP_200_OK)
 
