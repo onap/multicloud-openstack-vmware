@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_ad48b55c",
+        "filename": "vio/vio/pub/vim/drivers/vimsdk/heat.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-09-05T17:22:44Z",
+      "side": 1,
+      "message": "nit: s/2017-2018/2018",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 25
+      },
+      "revId": "62cb31c860cc34c2675ab59bfaa413e24a074d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_4d5a412b",
+        "filename": "vio/vio/pub/vim/vimapi/baseclient.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-09-05T17:22:44Z",
+      "side": 1,
+      "message": "What about this?\n\n    if self._heatclient is None:\n        self._heatclient \u003d driver_base.VimDriver().heat(data)\n    return self._heatclient",
+      "range": {
+        "startLine": 64,
+        "startChar": 8,
+        "endLine": 68,
+        "endChar": 31
+      },
+      "revId": "62cb31c860cc34c2675ab59bfaa413e24a074d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ed69cdbe",
+        "filename": "vio/vio/pub/vim/vimapi/heat/OperateStack.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-09-05T17:22:44Z",
+      "side": 1,
+      "message": "nit: s/2017-2018/2018",
+      "range": {
+        "startLine": 1,
+        "startChar": 16,
+        "endLine": 1,
+        "endChar": 25
+      },
+      "revId": "62cb31c860cc34c2675ab59bfaa413e24a074d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0d6769ea",
+        "filename": "vio/vio/pub/vim/vimapi/heat/OperateStack.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-09-05T17:22:44Z",
+      "side": 1,
+      "message": "is this a leftover?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "62cb31c860cc34c2675ab59bfaa413e24a074d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ad5f550e",
+        "filename": "vio/vio/pub/vim/vimapi/heat/OperateStack.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 947
+      },
+      "writtenOn": "2018-09-05T17:22:44Z",
+      "side": 1,
+      "message": "nit: s/OperateStack/StackManager",
+      "range": {
+        "startLine": 32,
+        "startChar": 6,
+        "endLine": 32,
+        "endChar": 18
+      },
+      "revId": "62cb31c860cc34c2675ab59bfaa413e24a074d49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
