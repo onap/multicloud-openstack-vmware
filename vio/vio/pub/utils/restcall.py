@@ -476,6 +476,12 @@ class AAIClient(object):
             logger.debug("basic_capabilities_info: %s" % caps_dict)
             hpa_caps.append(caps_dict)
 
+        # Intent capabilities
+        caps_dict = self._get_intent_capabilities(flavor['extra_specs'])
+        if len(caps_dict) > 0:
+            logger.debug("intent_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
         # cpupining capabilities
         caps_dict = self._get_cpupinning_capabilities(flavor['extra_specs'])
         if len(caps_dict) > 0:
@@ -546,6 +552,34 @@ class AAIClient(object):
             'hpa-attribute-key': 'virtualMemSize',
             'hpa-attribute-value': json.dumps({'value': str(
                 flavor['ram']), 'unit': 'MB'})})
+
+        return basic_capability
+
+    def _get_intent_capabilities(self, extra_specs):
+        basic_capability = {}
+        feature_uuid = uuid.uuid4()
+        cpu_resv = extra_specs.get("quota:cpu_reservation_percent")
+        mem_resv = extra_specs.get("quota:memory_reservation_percent")
+
+        if cpu_resv or mem_resv:
+            basic_capability['hpa-capability-id'] = str(feature_uuid)
+            basic_capability['hpa-feature'] = 'basicCapabilities'
+            basic_capability['architecture'] = 'generic'
+            basic_capability['hpa-version'] = 'v1'
+            intent_key = "Burstable QoS"
+            if cpu_resv == "100" and mem_resv == "100":
+                intent_key = "Guaranteed QoS"
+            basic_capability['hpa-feature-attributes'] = [{
+                'hpa-attribute-key': ('Infrastructure Resource Isolation '
+                                      'for VNF'),
+                'hpa-attribute-value': json.dumps({'value': intent_key})}]
+            if intent_key == "Burstable QoS":
+                intent_value = int(mem_resv) if mem_resv else int(cpu_resv)
+                basic_capability['hpa-feature-attributes'].append({
+                    'hpa-attribute-key': ('Burstable QoS Oversubscription '
+                                          'Percentage'),
+                    'hpa-attribute-value': json.dumps(
+                        {'value': intent_value})})
 
         return basic_capability
 
