@@ -17,6 +17,7 @@ from vio.pub.vim.drivers.vimsdk import image_v2
 from vio.pub.vim.drivers.vimsdk import keystone_v3
 from vio.pub.vim.drivers.vimsdk import cinder_v2
 from vio.pub.vim.drivers.vimsdk import compute
+from vio.pub.vim.drivers.vimsdk import heat
 
 
 class VimDriver(object):
@@ -27,3 +28,4 @@ class VimDriver(object):
         self.glance = image_v2.GlanceClient
         self.cinder = cinder_v2.CinderClient
         self.compute = compute.ComputeClient
+        self.heat = heat.HeatClient
