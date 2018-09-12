@@ -22,7 +22,11 @@ def sdk_param_formatter(data):
     param['username'] = data.get('userName')
     param['password'] = data.get('password')
     param['auth_url'] = data.get('url')
-    param['project_id'] = data.get('tenant')
+    # param['project_id'] = data.get('tenant')
+    if len(data.get("tenant", "")) == 32:
+        param['project_id'] = data.get("tenant")
+    else:
+        param['project_name'] = data.get("tenant")
     param['user_domain_name'] = 'default'
     param['project_domain_name'] = 'default'
     return param
