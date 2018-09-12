@@ -51,6 +51,8 @@ from vio.swagger.views.subnet.views import CreateSubnetViewV1
 from vio.swagger.views.subnet.views import DeleteSubnetViewV1
 from vio.swagger.views.port.views import CreatePortViewV1, DeletePortViewV1
 from vio.swagger.views.tenant.views import ListTenantsViewV1
+from vio.swagger.views.workload.views import CreateStackViewV1
+from vio.swagger.views.workload.views import GetDelStackViewV1
 
 # proxy
 from vio.swagger.views.proxyplugin.identity.views import TokenView
@@ -275,6 +277,13 @@ urlpatterns = [
         r'(?P<cloud_region>[0-9a-zA-Z_-]+)/(?P<tenantid>[0-9a-zA-Z\-\_]+)/'
         r'ports/(?P<portid>[0-9a-zA-Z\-\_]+)$',
         DeletePortViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/infra_workload$',
+        CreateStackViewV1.as_view()),
+    url(r'^api/multicloud-vio/v1/(?P<cloud_owner>[0-9a-zA-Z\-\_]+)/'
+        r'(?P<cloud_region>[0-9a-zA-Z_-]+)/infra_workload/'
+        r'(?P<workload_id>[0-9a-zA-Z\-\_]+)$',
+        GetDelStackViewV1.as_view()),
 
     # fake urls
     url(r'^api/multicloud-vio/v[01]/vmware[_/]fake/neutron/networks$',
