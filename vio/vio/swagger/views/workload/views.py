@@ -25,6 +25,27 @@ from vio.pub.exceptions import VimDriverVioException
 logger = logging.getLogger(__name__)
 
 
+def handle_directives(body):
+    params = {}
+    try:
+        stack_params = body['template_data']['parameters']
+        stack_params_keys = list(stack_params.keys())
+        for oofd in body["oof_directives"]:
+            if oofd["type"] == "vnfc":
+                for dd in oofd["directives"]:
+                    if dd["type"] == "flavor_directives":
+                        for attr in dd["attributes"]:
+                            params[attr[
+                                "attribute_name"]] = attr["attribute_value"]
+    except KeyError as ex:
+        logger.debug("Error handle directives: %s" % str(ex))
+        return {}
+    for k, v in params.items():
+        if k in stack_params_keys:
+            stack_params[k] = v
+    return body
+
+
 class CreateStackViewV1(APIView):
 
     def post(self, request, cloud_owner, cloud_region):
@@ -34,6 +55,7 @@ class CreateStackViewV1(APIView):
             return Response(data={'error': str(e)}, status=e.status_code)
         try:
             body = json.loads(request.body)
+            logger.debug("infra_workload post body: %s" % body)
             template_type = body['template_type']
             if template_type != "heat":
                 return Response(
@@ -41,12 +63,14 @@ class CreateStackViewV1(APIView):
                         "error": "invalid template type %s" % template_type
                         },
                     status=status.HTTP_400_BAD_REQUEST)
+            body = handle_directives(body)
             stack_body = body['template_data']
         except Exception as e:
             return Response(data={'error': 'Fail to decode request body.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         try:
+            logger.debug("create stack input: %s" % stack_body)
             stack_op = OperateStack.OperateStack(vim_info)
             stack = stack_op.create_vim_stack(**stack_body)
             rsp = {
