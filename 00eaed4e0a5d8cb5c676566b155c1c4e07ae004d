@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_d5a778bb",
+        "filename": "vio/vio/swagger/views/workload/views.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 2363
+      },
+      "writtenOn": "2018-09-18T07:05:26Z",
+      "side": 1,
+      "message": "This should be \"flavor_directives\" instead of \"flavor_directive\".",
+      "range": {
+        "startLine": 36,
+        "startChar": 38,
+        "endLine": 36,
+        "endChar": 54
+      },
+      "revId": "00eaed4e0a5d8cb5c676566b155c1c4e07ae004d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
