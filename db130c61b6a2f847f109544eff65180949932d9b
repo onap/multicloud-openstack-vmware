@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_ace06ecd",
+        "filename": "vio/vio/tests/test_infraworkload_view.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 2363
+      },
+      "writtenOn": "2018-09-19T06:10:26Z",
+      "side": 1,
+      "message": "I think this should be \"CREATE_COMPLETE\" instead of \"create_complete\".",
+      "range": {
+        "startLine": 31,
+        "startChar": 47,
+        "endLine": 31,
+        "endChar": 62
+      },
+      "revId": "db130c61b6a2f847f109544eff65180949932d9b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
