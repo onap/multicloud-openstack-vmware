@@ -37,12 +37,11 @@ def handle_directives(body):
                         for attr in dd["attributes"]:
                             params[attr[
                                 "attribute_name"]] = attr["attribute_value"]
+        for k, v in params.items():
+            if k in stack_params_keys:
+                stack_params[k] = v
     except KeyError as ex:
         logger.debug("Error handle directives: %s" % str(ex))
-        return {}
-    for k, v in params.items():
-        if k in stack_params_keys:
-            stack_params[k] = v
     return body
 
 
@@ -117,7 +116,7 @@ class GetDelStackViewV1(APIView):
         try:
             stack_op = OperateStack.OperateStack(vim_info)
             stack_op.delete_vim_stack(workload_id)
-            return Response(status=status.HTTP_202_ACCEPTED)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             if hasattr(e, "http_status"):
                 return Response(data={'error': str(e)}, status=e.http_status)
