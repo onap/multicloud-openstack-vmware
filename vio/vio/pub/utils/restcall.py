@@ -526,6 +526,13 @@ class AAIClient(object):
             logger.debug("pci_passthrough_capabilities_info: %s" % caps_dict)
             hpa_caps.append(caps_dict)
 
+        # SRIOV NIC capabilities
+        caps_dict = self._get_sriov_nic_capabilities(
+            flavor['extra_specs'])
+        if len(caps_dict) > 0:
+            logger.debug("sriov_nic_capabilities_info: %s" % caps_dict)
+            hpa_caps.append(caps_dict)
+
         # ovsdpdk capabilities
         caps_dict = self._get_ovsdpdk_capabilities()
         if len(caps_dict) > 0:
@@ -814,3 +821,36 @@ class AAIClient(object):
                         {'value': cloud_dpdk_info.get("libversion")})
                     })
         return ovsdpdk_capability
+
+    def _get_sriov_nic_capabilities(self, extra_specs):
+        sriov_capability = {}
+        feature_uuid = uuid.uuid4()
+
+        if extra_specs.get('sriov_nic'):
+            value1 = extra_specs['sriov_nic'].split(':')
+            value2 = value1[0].split('-')
+
+            sriov_capability['hpa-capability-id'] = str(feature_uuid)
+            sriov_capability['hpa-feature'] = 'sriovNICNetwork'
+            sriov_capability['architecture'] = str(value2[2])
+            sriov_capability['hpa-version'] = 'v1'
+
+            sriov_capability['hpa-feature-attributes'] = []
+            sriov_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'pciCount',
+                'hpa-attribute-value': json.dumps({'value': value1[1]})
+                })
+            sriov_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'pciVendorId',
+                'hpa-attribute-value': json.dumps({'value': value2[3]})
+                })
+            sriov_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'pciDeviceId',
+                'hpa-attribute-value': json.dumps(value2[4])
+                })
+            sriov_capability['hpa-feature-attributes'].append({
+                'hpa-attribute-key': 'physicalNetwork',
+                'hpa-attribute-value': json.dumps(value2[5])
+                })
+
+        return sriov_capability
