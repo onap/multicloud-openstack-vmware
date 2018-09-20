@@ -570,7 +570,7 @@ class AAIClient(object):
 
         if cpu_resv or mem_resv:
             basic_capability['hpa-capability-id'] = str(feature_uuid)
-            basic_capability['hpa-feature'] = 'basicCapabilities'
+            basic_capability['hpa-feature'] = 'qosIntentCapabilities'
             basic_capability['architecture'] = 'generic'
             basic_capability['hpa-version'] = 'v1'
             intent_key = "Burstable QoS"
