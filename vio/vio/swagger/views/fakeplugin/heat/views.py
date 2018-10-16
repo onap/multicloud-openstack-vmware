@@ -101,3 +101,34 @@ class FakeHeatService(APIView):
                             status=data['error']['code'])
 
         return Response(data=data, status=status.HTTP_204_NO_CONTENT)
+
+
+class FakeInfraWorkloadAPIGet(APIView):
+
+    def get(self, request, workload_id):
+        if workload_id != "fdae10c6-664c-48e2-9e86-7bc2d7e42c26":
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        data = {
+            "template_type": "heat",
+            "workload_id": "fdae10c6-664c-48e2-9e86-7bc2d7e42c26",
+        }
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    def delete(self, request, workload_id):
+        if workload_id != "fdae10c6-664c-48e2-9e86-7bc2d7e42c26":
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FakeInfraWorkloadAPIPost(APIView):
+
+    def post(self, request):
+        data = {
+            "template_type": "heat",
+            "workload_id": "fdae10c6-664c-48e2-9e86-7bc2d7e42c26",
+        }
+
+        return Response(data=data, status=status.HTTP_200_OK)
