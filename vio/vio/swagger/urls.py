@@ -119,6 +119,8 @@ from vio.swagger.views.fakeplugin.neutron.views import FakeNeutronNetwork
 from vio.swagger.views.fakeplugin.heat.views import FakeHeatResources
 from vio.swagger.views.fakeplugin.heat.views import FakeHeatService
 from vio.swagger.views.fakeplugin.heat.views import FakeHeatServicePreview
+from vio.swagger.views.fakeplugin.heat.views import FakeInfraWorkloadAPIGet
+from vio.swagger.views.fakeplugin.heat.views import FakeInfraWorkloadAPIPost
 
 
 urlpatterns = [
@@ -215,6 +217,11 @@ urlpatterns = [
         r'(?P<tenantid>[0-9a-z-A-Z\-\_]+)'
         r'/stacks/(?P<stackName>[0-9a-z-A-Z\-\_]+)'
         r'/(?P<stackID>[0-9a-z-A-Z\-\_]+)$', FakeHeatService.as_view()),
+    url(r'api/multicloud-vio/v[01]/vmware[_/]fake/infra_workload$',
+        FakeInfraWorkloadAPIPost.as_view()),
+    url(r'api/multicloud-vio/v[01]/vmware[_/]fake/infra_workload$'
+        r'/(?P<workload_id>[0-9a-z-A-Z\-\_]+)$',
+        FakeInfraWorkloadAPIGet.as_view()),
 
     # vio
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
