@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Bin Yang <bin.yang@windriver.com>
+Submitted-by: Bin Yang <bin.yang@windriver.com>
+Submitted-at: Thu, 18 Oct 2018 00:47:57 +0000
+Reviewed-on: https://gerrit.onap.org/r/70636
+Project: multicloud/openstack/vmware
+Branch: refs/heads/master
