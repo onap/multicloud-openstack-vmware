@@ -249,6 +249,8 @@ class TestAAIClient(unittest.TestCase):
     def test_get_hpa(self, mock_call):
         self.view._get_hpa_basic_capabilities = mock.MagicMock()
         self.view._get_hpa_basic_capabilities.return_value = {"hpa": "basic"}
+        self.view._get_intent_capabilities = mock.MagicMock()
+        self.view._get_intent_capabilities.return_value = {"hpa": "basic"}
         self.view._get_cpupinning_capabilities = mock.MagicMock()
         self.view._get_cpupinning_capabilities.return_value = {"hpa": "basic"}
         self.view._get_cputopology_capabilities = mock.MagicMock()
@@ -268,7 +270,7 @@ class TestAAIClient(unittest.TestCase):
         self.view._get_ovsdpdk_capabilities = mock.MagicMock()
         self.view._get_ovsdpdk_capabilities.return_value = {"hpa": "basic"}
         ret = self.view._get_hpa_capabilities({"extra_specs": {}})
-        self.assertEqual([{"hpa": "basic"}]*9, ret)
+        self.assertEqual([{"hpa": "basic"}]*10, ret)
 
     @mock.patch.object(restcall, "call_req")
     def test_get_hpa_basic(self, mock_call):
