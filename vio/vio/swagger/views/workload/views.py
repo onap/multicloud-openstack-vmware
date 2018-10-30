@@ -64,7 +64,7 @@ class CreateStackViewV1(APIView):
                     status=status.HTTP_400_BAD_REQUEST)
             body = handle_directives(body)
             stack_body = body['template_data']
-        except Exception as e:
+        except Exception:
             return Response(data={'error': 'Fail to decode request body.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

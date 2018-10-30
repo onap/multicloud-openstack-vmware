@@ -26,7 +26,7 @@ class FlavorsView(APIView):
     def post(self, request, vimid, tenantid):
         try:
             create_req = json.loads(request.body)
-        except Exception as e:
+        except Exception:
             return Response(data={'error': 'Fail to decode request body.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

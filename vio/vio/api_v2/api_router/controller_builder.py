@@ -23,7 +23,7 @@ from vio.pub import exceptions
 from vio.pub.msapi import extsys
 
 
-OBJ_IN_ARRAY = "(\w+)\[(\d+)\]\.(\w+)"
+OBJ_IN_ARRAY = r"(\w+)\[(\d+)\]\.(\w+)"
 
 
 def _get_vim_auth_session(vim_id, tenant_id):

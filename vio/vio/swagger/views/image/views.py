@@ -130,7 +130,7 @@ class CreateListImagesView(APIView):
 
         try:
             req_body = json.loads(request.body)
-        except Exception as e:
+        except Exception:
             return Response(data={'error': 'Fail to decode request body.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         vim_rsp = image_utils.vim_formatter(vim_info, tenantid)
@@ -246,14 +246,14 @@ class GetImageFileView(APIView):
 
         try:
             req_body = json.loads(request.body)
-        except Exception as e:
+        except Exception:
             return Response(data={'error': 'Fail to decode request body.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         vim_rsp = image_utils.vim_formatter(vim_info, tenantid)
         image_instance = OperateImage.OperateImage(vim_info)
         try:
             image = image_instance.find_vim_image(imageid)
-        except Exception as e:
+        except Exception:
             return Response(data={'error': 'the image does not exist'},
                             status=status.HTTP_404_NOT_FOUND)
 
