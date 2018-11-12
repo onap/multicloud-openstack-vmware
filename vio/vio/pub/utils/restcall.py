@@ -826,9 +826,10 @@ class AAIClient(object):
         sriov_capability = {}
         feature_uuid = uuid.uuid4()
 
-        if extra_specs.get('sriov_nic'):
-            value1 = extra_specs['sriov_nic'].split(':')
-            value2 = value1[0].split('-')
+        if extra_specs.get('aggregate_instance_extra_specs:sriov_nic'):
+            value1 = extra_specs[
+                'aggregate_instance_extra_specs:sriov_nic'].split(':')
+            value2 = value1[0].split('-', 5)
 
             sriov_capability['hpa-capability-id'] = str(feature_uuid)
             sriov_capability['hpa-feature'] = 'sriovNICNetwork'
