@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_37bb1710",
+        "filename": "vio/docker/build_image.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1889
+      },
+      "writtenOn": "2018-11-13T03:27:04Z",
+      "side": 1,
+      "message": "The Dockerfile should be refactor to fetch the snapshot of specific version , not the latest: multicloud-openstack-vmware\u0026v\u003dLATEST\u0026e\u003dzip",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 57
+      },
+      "revId": "62e1a5802862cf49262920be4ba37301667e37c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
