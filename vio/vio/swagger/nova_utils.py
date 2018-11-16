@@ -21,7 +21,7 @@ def server_formatter(server, interfaces=[]):
         "availabilityZone": server.availability_zone,
         "flavorId": server.flavor_id or server.flavor['id'],
         "volumeArray": [],
-        "metadata": [],
+        "metadata": {},
         "securityGroups": [],
         # TODO finish following attributes
         "serverGroup": "",
@@ -55,8 +55,9 @@ def server_formatter(server, interfaces=[]):
             'volumeId': r['volumeArray'][0]['volumeId']
         }
     if server.metadata:
-        r["metadata"] = [{'keyName': k, 'value': v}
-                         for k, v in six.iteritems(server.metadata)]
+        # r["metadata"] = [{'keyName': k, 'value': v}
+        #                  for k, v in six.iteritems(server.metadata)]
+        r["metadata"] = server.metadata
     if server.security_groups:
         r["securityGroups"] = [i['name'] for i in server.security_groups]
     return r

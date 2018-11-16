@@ -59,9 +59,12 @@ class OperateServers(OperateNova):
         az = create_req.get('availabilityZone', None)
         if az:
             req['availability_zone'] = az
-        md = create_req.get('metadata', [])
+        # md = create_req.get('metadata', [])
+        # if md:
+        #     req['metadata'] = {n['keyName']: n['value'] for n in md}
+        md = create_req.get('metadata', {})
         if md:
-            req['metadata'] = {n['keyName']: n['value'] for n in md}
+            req['metadata'] = md
         userdata = create_req.get('userdata', None)
         if userdata:
             req['user_data'] = base64.encodestring(userdata)
