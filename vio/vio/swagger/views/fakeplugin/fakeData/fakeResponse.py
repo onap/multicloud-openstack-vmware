@@ -381,7 +381,7 @@ def keystone_token(teanatid=None):
 
 def keystone_tokenV2():
 
-        data = \
+    data = \
             {
                 "access": {
                     "token": {
@@ -664,7 +664,7 @@ def keystone_tokenV2():
                 }
             }
 
-        return data
+    return data
 
 
 def list_projects(token=None):
