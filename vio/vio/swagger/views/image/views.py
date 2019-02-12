@@ -261,7 +261,7 @@ class GetImageFileView(APIView):
             image_data = image_instance.download_vim_image(image)
 
             imagePath = req_body.get('imagePath')
-            if imagePath[-1:] is not '/':
+            if imagePath[-1:] != '/':
                 imagePath += '/'
             file_name = "%s%s.%s" % (imagePath, image.name, image.disk_format)
             image_file = open(file_name, 'w+')
