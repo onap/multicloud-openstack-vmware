@@ -64,7 +64,7 @@ DOCKER_REPOSITORY="nexus3.onap.org:10003"
 ORG="onap"
 PROJECT="multicloud"
 IMAGE="vio-vesagent"
-VERSION="${VERSION//[^0-9.]/}"
+# VERSION="${VERSION//[^0-9.]/}"
 IMAGE_NAME="${DOCKER_REPOSITORY}/${ORG}/${PROJECT}/${IMAGE}"
 
 if [ $HTTP_PROXY ]; then
