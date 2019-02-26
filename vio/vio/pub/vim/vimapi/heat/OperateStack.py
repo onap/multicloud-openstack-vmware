@@ -40,7 +40,7 @@ class OperateStack(baseclient):
 
     def get_vim_stacks(self, **query):
         stacks = self.heat(self.param).stack_list(**query)
-        return stacks
+        return [st for st in stacks]
 
     def create_vim_stack(self, **body):
         stack = self.heat(self.param).stack_create(**body)

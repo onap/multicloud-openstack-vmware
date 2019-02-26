@@ -24,11 +24,11 @@ RUN  cd /opt/ && \
     wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware&a=multicloud-openstack-vmware&v=1.3.0-SNAPSHOT&e=zip' && \
     unzip multicloud-vio.zip && \
     rm -rf multicloud-vio.zip && \
-    pip install -r vio/requirements.txt && \
-    chown onap:onap -R vio/
+    pip install -r /opt/vio/requirements.txt && \
+    chown onap:onap -R /opt/vio/
 
 USER onap
 
-WORKDIR /opt
+WORKDIR /opt/vio
 # ENTRYPOINT vio/docker/docker-entrypoint.sh
 CMD ["/bin/sh", "-c", "/opt/vio/run.sh"]

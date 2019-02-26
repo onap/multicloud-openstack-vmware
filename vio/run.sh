@@ -13,18 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-sed -i "s/MSB_SERVICE_IP =.*/MSB_SERVICE_IP = \"${MSB_ADDR}\"/g" vio/pub/config/config.py
-sed -i "s/MSB_SERVICE_PORT =.*/MSB_SERVICE_PORT = \"${MSB_PORT}\"/g" vio/pub/config/config.py
-sed -i "s/AAI_ADDR =.*/AAI_ADDR = \"${AAI_ADDR}\"/g" vio/pub/config/config.py
-sed -i "s/AAI_PORT =.*/AAI_PORT = \"${AAI_PORT}\"/g" vio/pub/config/config.py
-sed -i "s/AAI_SCHEMA_VERSION =.*/AAI_SCHEMA_VERSION = \"${AAI_SCHEMA_VERSION}\"/g" vio/pub/config/config.py
-sed -i "s/AAI_USERNAME =.*/AAI_USERNAME = \"${AAI_USERNAME}\"/g" vio/pub/config/config.py
-sed -i "s/AAI_PASSWORD =.*/AAI_PASSWORD = \"${AAI_PASSWORD}\"/g" vio/pub/config/config.py
-sed -i "s/MR_ADDR =.*/MR_ADDR = \"${MR_ADDR}\"/g" vio/pub/config/config.py
-sed -i "s/MR_PORT =.*/MR_PORT = \"${MR_PORT}\"/g" vio/pub/config/config.py
+sed -i "s/MSB_SERVICE_IP =.*/MSB_SERVICE_IP = \"${MSB_ADDR}\"/g" /opt/vio/vio/pub/config/config.py
+sed -i "s/MSB_SERVICE_PORT =.*/MSB_SERVICE_PORT = \"${MSB_PORT}\"/g" /opt/vio/vio/pub/config/config.py
+sed -i "s/AAI_ADDR =.*/AAI_ADDR = \"${AAI_ADDR}\"/g" /opt/vio/vio/pub/config/config.py
+sed -i "s/AAI_PORT =.*/AAI_PORT = \"${AAI_PORT}\"/g" /opt/vio/vio/pub/config/config.py
+sed -i "s/AAI_SCHEMA_VERSION =.*/AAI_SCHEMA_VERSION = \"${AAI_SCHEMA_VERSION}\"/g" /opt/vio/vio/pub/config/config.py
+sed -i "s/AAI_USERNAME =.*/AAI_USERNAME = \"${AAI_USERNAME}\"/g" /opt/vio/vio/pub/config/config.py
+sed -i "s/AAI_PASSWORD =.*/AAI_PASSWORD = \"${AAI_PASSWORD}\"/g" /opt/vio/vio/pub/config/config.py
+sed -i "s/MR_ADDR =.*/MR_ADDR = \"${MR_ADDR}\"/g" /opt/vio/vio/pub/config/config.py
+sed -i "s/MR_PORT =.*/MR_PORT = \"${MR_PORT}\"/g" /opt/vio/vio/pub/config/config.py
 
 
 logDir="/var/log/onap/multicloud/vio"
+mkdir -p $logDir
 
 if [ "$WEB_FRAMEWORK" == "pecan" ]
 then
