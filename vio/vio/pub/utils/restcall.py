@@ -222,6 +222,22 @@ class AAIClient(object):
                      content=json.dumps(body),
                      headers=self.default_headers)
 
+    def add_vservers(self, content):
+        for server in content['servers']:
+            resource = ("/vservers/vserver/%s" % server['id'])
+            body = {
+                'vserver-name': server['name'],
+                'vserver-name2': server['name'],
+                "vserver-id": server['id'],
+                "vserver-selflink": server['link'],
+                "prov-status": server['status']
+            }
+            logger.debug("Add server to cloud region: %s" % body)
+            call_req(self.base_url, self.username, self.password,
+                     rest_no_auth, resource, "PUT",
+                     content=json.dumps(body),
+                     headers=self.default_headers)
+
     def add_flavors(self, content):
         for flavor in content['flavors']:
             resource = ("/cloud-infrastructure/cloud-regions/cloud-region/"

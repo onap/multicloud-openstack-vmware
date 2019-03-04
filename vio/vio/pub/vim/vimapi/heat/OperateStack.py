@@ -53,3 +53,7 @@ class OperateStack(baseclient):
     def delete_vim_stack(self, stack_id):
         stack = self.heat(self.param).stack_delete(stack_id)
         return stack
+
+    def get_stack_resources(self, stack_id):
+        resources = self.heat(self.param).stack_resources(stack_id)
+        return [res for res in resources]
