@@ -1,4 +1,4 @@
-FROM python:2
+FROM python:2-slim
 
 ENV MSB_ADDR "127.0.0.1"
 ENV MSB_PORT "80"
@@ -12,20 +12,20 @@ ENV MR_PORT "3904"
 
 EXPOSE 9004
 
-RUN apt-get update && \
-    apt-get install -y unzip && \
-    apt-get install -y curl && \
-    apt-get install -y wget && \
-    apt-get install -y redis-server
-
 RUN groupadd -r onap && useradd -r -g onap onap
 
-RUN  cd /opt/ && \
+RUN apt-get update && \
+    apt-get install -y unzip wget curl gcc && \
+    cd /opt/ && \
     wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware&a=multicloud-openstack-vmware&v=1.3.0-SNAPSHOT&e=zip' && \
     unzip multicloud-vio.zip && \
     rm -rf multicloud-vio.zip && \
     pip install -r /opt/vio/requirements.txt && \
-    chown onap:onap -R /opt/vio/
+    mkdir -p /var/log/onap/multicloud/vio && \
+    chmod a+rw /var/log/onap/multicloud/vio && \
+    chown onap:onap -R /opt/vio/ && \
+    apt-get --purge remove -y unzip gcc && \
+    apt-get -y autoremove
 
 USER onap
 
