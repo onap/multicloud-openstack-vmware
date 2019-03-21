@@ -121,6 +121,7 @@ from vio.swagger.views.fakeplugin.heat.views import FakeHeatService
 from vio.swagger.views.fakeplugin.heat.views import FakeHeatServicePreview
 from vio.swagger.views.fakeplugin.heat.views import FakeInfraWorkloadAPIGet
 from vio.swagger.views.fakeplugin.heat.views import FakeInfraWorkloadAPIPost
+from vio.swagger.views.fakeplugin.execute.views import FakeExecute
 
 
 urlpatterns = [
@@ -222,6 +223,8 @@ urlpatterns = [
     url(r'api/multicloud-vio/v[01]/vmware[_/]fake/infra_workload$'
         r'/(?P<workload_id>[0-9a-z-A-Z\-\_]+)$',
         FakeInfraWorkloadAPIGet.as_view()),
+    url(r'api/multicloud-vio/v[01]/vmware[_/]fake/extensions/execute$',
+        FakeExecute.as_view()),
 
     # vio
     url(r'^api/multicloud-vio/v0/(?P<vimid>[0-9a-zA-Z_-]+)/'
