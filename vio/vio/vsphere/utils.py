@@ -1,3 +1,15 @@
+# Copyright (c) 2019 VMware, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at:
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
 from pyVim import connect
 from pyVmomi import vim
 
@@ -6,6 +18,7 @@ import os
 import yaml
 
 vcontent = None
+service_instance = None
 
 
 def get_obj(content, vimtype, name):
@@ -54,6 +67,9 @@ def wait_for_task(task):
 
 def GetClient():
     global vcontent
+    # if  vcontent is not None:
+    #     return vcontent
+    global service_instance
     if vcontent is not None:
         return vcontent
     vsphere_conf_path = os.getenv("VSPHERE_CONF", "/opt/etc/vsphere.yml")
@@ -92,3 +108,44 @@ def CloneVM(src, dst, power_on=False, wait=True):
 
 def DeployOVA(src, datacenter, resource_pool, datastore):
     pass
+
+
+def vmdk_metadata(vmdk_path):
+    ret = {}
+    with open(vmdk_path, "rb") as f:
+        # import ipdb; ipdb.set_trace()
+        for i in range(30):
+            try:
+                line = f.readline()
+                if not line:
+                    break
+                text = line.decode()
+                text = text.strip("\n")
+                for k in ["version", "CID", "parentCID"]:
+                    if text.startswith(k):
+                        ret[k] = text.split("=")[-1]
+                if text.startswith("ddb.adapterType"):
+                    ret["adapterType"] = text.split('"')[1]
+                elif text.startswith("createType"):
+                    ret["createType"] = text.split('"')[1]
+                elif text.startswith("ddb.virtualHWVersion"):
+                    ret["virtualHWVersion"] = text.split('"')[1]
+                elif text.startswith("ddb.thinProvisioned"):
+                    ret["thinProvisioned"] = text.split('"')[1]
+                elif text.startswith("ddb.deletable"):
+                    ret["deletable"] = text.split('"')[1]
+                elif text.startswith("ddb.longContentID"):
+                    ret["longContentID"] = text.split('"')[1]
+                elif text.startswith("R"):
+                    splits = text.split(" ")
+                    ret["rwMode"] = splits[0]
+                    ret["size"] = splits[1]
+                    ret["diskType"] = splits[2]
+                # print(text)
+                # print(ret)
+            except UnicodeDecodeError:
+                continue
+            except Exception as ex:
+                print(i, str(ex))
+            # import ipdb; ipdb.set_trace()
+    return ret
