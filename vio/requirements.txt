@@ -36,3 +36,4 @@ pyvmomi
 pyvim
 fire
 requests
+paramiko
