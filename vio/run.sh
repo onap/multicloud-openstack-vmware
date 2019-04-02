@@ -32,7 +32,12 @@ then
     python multivimbroker/scripts/api.py
 else
     # nohup python manage.py runserver 0.0.0.0:9004 2>&1 &
-    nohup uwsgi --http :9004 --module vio.wsgi --master --processes 4 &
+    if [ ${SSL_ENABLED} = "true" ]; then
+        nohup uwsgi --https :9004,/opt/vio/cert.crt,/opt/vio/cert.key --module vio.wsgi --master --processes 4 &
+
+    else
+        nohup uwsgi --http :9004 --module vio.wsgi --master --processes 4 &
+    fi
     nohup python -m vio.event_listener.server 2>&1 &
 
     while [ ! -f  $logDir/vio.log ]; do

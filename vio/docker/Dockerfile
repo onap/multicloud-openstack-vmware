@@ -15,7 +15,7 @@ EXPOSE 9004
 RUN groupadd -r onap && useradd -r -g onap onap
 
 RUN apt-get update && \
-    apt-get install -y unzip wget curl gcc && \
+    apt-get install -y unzip wget curl gcc libssl-dev && \
     cd /opt/ && \
     wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware&a=multicloud-openstack-vmware&v=1.3.0-SNAPSHOT&e=zip' && \
     unzip multicloud-vio.zip && \
