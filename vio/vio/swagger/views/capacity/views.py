@@ -21,6 +21,7 @@ from vio.pub.exceptions import VimDriverVioException
 from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.nova import OperateHypervisor
 from vio.pub.vim.vimapi.nova import OperateLimits
+from vio.pub.vim.vimapi.nova import OperateNova
 
 from cinderclient import client
 
@@ -69,16 +70,16 @@ class CapacityCheck(APIView):
             return False
         return True
 
-    def post(self, request, vimid):
+    def _post_handler(self, request, vimid):
         try:
             requirement = json.loads(request.body)
         except ValueError as ex:
-            return Response(data={'error': str(ex)},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return {'error': str(ex),
+                    "status_code": status.HTTP_400_BAD_REQUEST}
         try:
             vim_info = extsys.get_vim_by_id(vimid)
         except VimDriverVioException as e:
-            return Response(data={'error': str(e)}, status=e.status_code)
+            return {'error': str(e), "status_code": e.status_code}
         auth_info = {
             "username": vim_info['userName'],
             "password": vim_info['password'],
@@ -92,38 +93,86 @@ class CapacityCheck(APIView):
             nova_limits = servers_op.get_limits(auth_info, None)
         except Exception as e:
             logger.exception("get nova limits error %(e)s", {"e": e})
-            return Response(data={'error': str(e)}, status=e.status_code)
+            return {'error': str(e), "status_code": e.status_code}
         if not self._check_nova_limits(nova_limits, requirement):
-            return Response(
-                data={'result': False}, status=status.HTTP_200_OK)
+            return {'result': False, "status_code": status.HTTP_200_OK}
         # check cinder limits
         cinder = client.Client(
-            "2", auth_info['username'], auth_info['password'],
+            "3", auth_info['username'], auth_info['password'],
             auth_info['project_name'], auth_info['url'], insecure=True)
         try:
             limits = cinder.limits.get().to_dict()
         except Exception as e:
             logger.exception("get cinder limits error %(e)s", {"e": e})
-            return Response(data={'error': str(e)}, status=e.status_code)
+            return {'error': str(e), "status_code": e.status_code}
         if not self._check_cinder_limits(limits, requirement):
-            return Response(
-                data={'result': False}, status=status.HTTP_200_OK)
+            return {'result': False, "status_code": status.HTTP_200_OK}
+        # Get Availability zones info
+        nova_op = OperateNova.OperateAZ()
+        try:
+            azs = nova_op.list_availability_zones(auth_info, details=True)
+        except Exception as e:
+            logger.exception("get availability_zones error %(e)s", {"e": e})
+            return {'error': str(e), "status_code": e.status_code}
+        availability_zones = []
+        for az in azs:
+            if az.name == "internal":
+                continue
+            availability_zones.append({
+                "availability-zone-name": az.name,
+                "hosts": az.hosts,
+                "vCPUTotal": 0,
+                "vCPUAvail": 0,
+                "MemoryTotal": 0,
+                "MemoryAvail": 0,
+                "StorageTotal": 0,
+                "StorageAvail": 0,
+            })
         # check hypervisor resources
         hypervisor_op = OperateHypervisor.OperateHypervisor()
         try:
             hypervisors = hypervisor_op.list_hypervisors(auth_info)
         except Exception as e:
             logger.exception("get hypervisors error %(e)s", {"e": e})
-            return Response(data={'error': str(e)}, status=e.status_code)
+            return {'error': str(e), "status_code": e.status_code}
+        ret = {'result': False, "status_code": status.HTTP_200_OK}
+        # import ipdb; ipdb.set_trace()
         for hypervisor in hypervisors:
+            if hypervisor.status != "enabled":
+                continue
             hyper = hypervisor_op.get_hypervisor(auth_info, hypervisor.id)
-            if self._check_capacity(hyper.to_dict(), requirement):
-                return Response(data={'result': True},
-                                status=status.HTTP_200_OK)
-        return Response(data={'result': False}, status=status.HTTP_200_OK)
+            hyper_dict = hyper.to_dict()
+            for az in availability_zones:
+                if az['hosts'].get(hyper_dict["service_details"]['host']):
+                    az['vCPUTotal'] += hyper_dict["vcpus"]
+                    az['vCPUAvail'] += hyper_dict["vcpus"] - hyper_dict[
+                        "vcpus_used"]
+                    az['MemoryTotal'] += hyper_dict["memory_size"]
+                    az['MemoryAvail'] += hyper_dict["memory_free"]
+                    az['StorageTotal'] += hyper_dict["local_disk_size"]
+                    az['StorageAvail'] += hyper_dict["local_disk_free"]
+            if self._check_capacity(hyper_dict, requirement):
+                ret["result"] = True
+        if ret["result"]:
+            for az in availability_zones:
+                del az["hosts"]
+            ret["AZs"] = availability_zones
+        return ret
+
+    def post(self, request, vimid):
+        ret = self._post_handler(request, vimid)
+        status_code = ret["status_code"]
+        del ret["status_code"]
+        if ret.get("AZs"):
+            del ret["AZs"]
+        return Response(data=ret, status=status_code)
 
 
 class CapacityCheckV1(CapacityCheck):
     def post(self, request, cloud_owner, cloud_region):
-        return super(CapacityCheckV1, self).post(
-            request, cloud_owner + "_" + cloud_region)
+        # import ipdb; ipdb.set_trace()
+        vimid = cloud_owner + "_" + cloud_region
+        ret = self._post_handler(request, vimid)
+        status_code = ret["status_code"]
+        del ret["status_code"]
+        return Response(data=ret, status=status_code)

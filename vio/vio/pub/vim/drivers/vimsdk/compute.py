@@ -142,3 +142,7 @@ class ComputeClient(base.DriverBase):
     @sdk.translate_exception
     def list_hypervisors(self, **query):
         return self.conn.compute.hypervisors(**query)
+
+    @sdk.translate_exception
+    def availability_zones(self, **query):
+        return self.conn.compute.availability_zones(**query)

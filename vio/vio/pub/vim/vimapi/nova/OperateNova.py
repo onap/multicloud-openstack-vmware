@@ -37,3 +37,9 @@ class OperateNova(baseclient):
         compute = self.compute(param)
         func = getattr(compute, op)
         return func(**kwargs)
+
+
+class OperateAZ(OperateNova):
+
+    def list_availability_zones(self, data, **kwargs):
+        return self.request('availability_zones', data, **kwargs)
