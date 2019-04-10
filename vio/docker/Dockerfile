@@ -1,4 +1,4 @@
-FROM python:2-slim
+FROM python:2-alpine
 
 ENV MSB_ADDR "127.0.0.1"
 ENV MSB_PORT "80"
@@ -12,10 +12,10 @@ ENV MR_PORT "3904"
 
 EXPOSE 9004
 
-RUN groupadd -r onap && useradd -r -g onap onap
+RUN addgroup -S onap && adduser -S -G onap onap
 
-RUN apt-get update && \
-    apt-get install -y unzip wget curl gcc libssl-dev && \
+RUN apk update && \
+    apk add uwsgi unzip wget curl gcc make libc-dev libffi-dev openssl-dev && \
     cd /opt/ && \
     wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware&a=multicloud-openstack-vmware&v=1.3.0-SNAPSHOT&e=zip' && \
     unzip multicloud-vio.zip && \
@@ -24,8 +24,7 @@ RUN apt-get update && \
     mkdir -p /var/log/onap/multicloud/vio && \
     chmod a+rw /var/log/onap/multicloud/vio && \
     chown onap:onap -R /opt/vio/ && \
-    apt-get --purge remove -y unzip gcc && \
-    apt-get -y autoremove
+    apk del -y unzip gcc make libc-dev libffi-dev openssl-dev
 
 USER onap
 
