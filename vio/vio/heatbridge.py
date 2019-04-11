@@ -41,9 +41,10 @@ def heat_bridge(vim_info, stack_id):
         if instance is None:
             logger.info("can not find server %s" % res.physical_resource_id)
             continue
+        slink = ""
         for link in instance.links:
             if link['rel'] == "self":
-                slink = link['rel']
+                slink = link['href']
                 break
         ret['servers'].append({
             "name": instance.name,
