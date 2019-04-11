@@ -96,6 +96,19 @@ class TestAAIClient(unittest.TestCase):
         mock_call.assert_called_once()
 
     @mock.patch.object(restcall, "call_req")
+    def test_add_servers(self, mock_call):
+        servers = {
+            "servers": [{
+                "name": "server-name",
+                "id": "server-id",
+                "link": "/instances/server-id",
+                "status": "ACTIVE",
+            }]
+        }
+        self.view.add_vservers(servers)
+        mock_call.assert_called_once()
+
+    @mock.patch.object(restcall, "call_req")
     def test_add_networks(self, mock_call):
         networks = {
             "networks": [{
