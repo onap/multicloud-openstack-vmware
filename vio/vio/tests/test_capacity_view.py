@@ -19,7 +19,7 @@ from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.nova import OperateHypervisor
 from vio.pub.vim.vimapi.nova import OperateLimits
 from vio.pub.vim.vimapi.nova import OperateNova
-from vio.swagger.views.capacity.views import CapacityCheck
+from vio.swagger.views.capacity.views import CapacityCheck, CapacityCheckV1
 
 from cinderclient import client
 
@@ -32,6 +32,9 @@ class CapacityCheckTest(unittest.TestCase):
 
     def setUp(self):
         self.view = CapacityCheck()
+
+    def _vim_id(self):
+        return ["vmware_nova"]
 
     @mock.patch.object(OperateNova, "OperateAZ")
     @mock.patch.object(OperateHypervisor, "OperateHypervisor")
@@ -65,7 +68,8 @@ class CapacityCheckTest(unittest.TestCase):
         cclient.limits.get.return_value = climits
         mock_cinder.return_value = cclient
 
-        nazs = [mock.Mock(name="nova", hosts={"compute01": {}})]
+        nazs = [mock.Mock(name="nova", hosts={"compute01": {
+            "name": "compute01"}})]
         nclient = mock.Mock()
         nclient.list_availability_zones.return_value = nazs
         mock_az.return_value = nclient
@@ -80,14 +84,16 @@ class CapacityCheckTest(unittest.TestCase):
             "vcpus_used": 1,
             "memory_size": 128*1024,
             "memory_used": 4*1024,
+            "memory_free": 64*1024,
             "local_disk_size": 5000,
-            "local_disk_used": 100
+            "local_disk_used": 100,
+            "local_disk_free": 3000,
         }
         ophypervisor.get_hypervisor.return_value = hyper
         mock_hypervisor.return_value = ophypervisor
-        resp = self.view.post(req, "openstack_regionone")
+        resp = self.view.post(req, *self._vim_id())
         self.assertEqual(status.HTTP_200_OK, resp.status_code)
-        self.assertEqual({"result": True}, resp.data)
+        self.assertTrue(resp.data["result"])
 
     @mock.patch.object(OperateLimits, "OperateLimits")
     @mock.patch.object(extsys, "get_vim_by_id")
@@ -107,7 +113,7 @@ class CapacityCheckTest(unittest.TestCase):
         oplimits.get_limits.return_value = mock.Mock(absolute=absolute)
         mock_limit.return_value = oplimits
 
-        resp = self.view.post(req, "openstack_regionone")
+        resp = self.view.post(req, *self._vim_id())
         self.assertEqual(status.HTTP_200_OK, resp.status_code)
         self.assertEqual({"result": False}, resp.data)
 
@@ -115,5 +121,14 @@ class CapacityCheckTest(unittest.TestCase):
         req = mock.Mock()
         req.body = "hello world"
 
-        resp = self.view.post(req, "openstack_regionone")
+        resp = self.view.post(req, *self._vim_id())
         self.assertEqual(status.HTTP_400_BAD_REQUEST, resp.status_code)
+
+
+class CapacityCheckV1Test(CapacityCheckTest):
+
+    def setUp(self):
+        self.view = CapacityCheckV1()
+
+    def _vim_id(self):
+        return ["vmware", "nova"]
