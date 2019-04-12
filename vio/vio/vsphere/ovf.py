@@ -20,7 +20,7 @@ import requests
 
 # from pyVim import connect
 from pyVmomi import vim
-from pyVmomi.VmomiSupport import long
+# from pyVmomi.VmomiSupport import long
 
 from vio.vsphere import utils
 
