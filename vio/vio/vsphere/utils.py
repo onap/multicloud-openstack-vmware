@@ -49,7 +49,7 @@ def get_objs(content, vimtype):
     container = content.viewManager.CreateContainerView(
         content.rootFolder, vimtype, True)
     for c in container.view:
-        obj.update({c: c.name})
+        obj.update({c.name: c})
     return obj
 
 
@@ -73,7 +73,7 @@ def GetClient():
     if vcontent is not None:
         return vcontent
     vsphere_conf_path = os.getenv("VSPHERE_CONF", "/opt/etc/vsphere.yml")
-    vsphere_conf = yaml.load(open(vsphere_conf_path, "r"))['vsphere']
+    vsphere_conf = yaml.safe_load(open(vsphere_conf_path, "r"))['vsphere']
     # vsphere_conf = json.load(open(vsphere_conf_path, "r"))['vsphere']
     host = vsphere_conf['host']
     username = vsphere_conf['username']
