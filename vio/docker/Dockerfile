@@ -15,8 +15,7 @@ EXPOSE 9004
 RUN apt-get update && \
     apt-get install -y unzip && \
     apt-get install -y curl && \
-    apt-get install -y wget && \
-    apt-get install -y redis-server
+    apt-get install -y wget
 
 
 RUN  cd /opt/ && \
