@@ -29,5 +29,4 @@ RUN apk update && \
 USER onap
 
 WORKDIR /opt/vio
-# ENTRYPOINT vio/docker/docker-entrypoint.sh
 CMD ["/bin/sh", "-c", "/opt/vio/run.sh"]
