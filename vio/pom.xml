@@ -16,13 +16,12 @@
     <parent>
         <groupId>org.onap.oparent</groupId>
         <artifactId>oparent</artifactId>
-        <version>1.2.0</version>
-        <relativePath>../oparent</relativePath>
+        <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.onap.multicloud.openstack.vmware</groupId>
     <artifactId>multicloud-openstack-vmware</artifactId>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>multicloud-openstack-vmware</name>
     <description>multicloud openstack vmware vio</description>

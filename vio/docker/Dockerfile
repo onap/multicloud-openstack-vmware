@@ -17,7 +17,7 @@ RUN addgroup -S onap && adduser -S -G onap onap
 RUN apk update && \
     apk add uwsgi unzip wget curl gcc make libc-dev libffi-dev openssl-dev && \
     cd /opt/ && \
-    wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware&a=multicloud-openstack-vmware&v=1.3.2-SNAPSHOT&e=zip' && \
+    wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware&a=multicloud-openstack-vmware&v=1.4.0-SNAPSHOT&e=zip' && \
     unzip multicloud-vio.zip && \
     rm -rf multicloud-vio.zip && \
     pip install -r /opt/vio/requirements.txt && \
