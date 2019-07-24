@@ -24,7 +24,7 @@ RUN apk update && \
     mkdir -p /var/log/onap/multicloud/vio && \
     chmod a+rw /var/log/onap/multicloud/vio && \
     chown onap:onap -R /opt/vio/ && \
-    apk del -y unzip gcc make libc-dev libffi-dev openssl-dev
+    apk del unzip gcc make libc-dev libffi-dev openssl-dev
 
 USER onap
 
