@@ -45,7 +45,6 @@ echo "MVN_PROJECT_VERSION is             [$MVN_PROJECT_VERSION]"
 run_tox_test()
 {
   set -x
-  cd vio
   CURDIR=$(pwd)
   TOXINIS=$(find . -name "tox.ini")
   cd ..
@@ -58,7 +57,7 @@ run_tox_test()
     pip install --upgrade pip
     pip install --upgrade tox argparse
     pip freeze
-    cd vio
+    cd ${CURDIR}
     tox -e cover
     deactivate
     cd ..
