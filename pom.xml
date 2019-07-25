@@ -23,9 +23,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.onap.multicloud.openstack.vmware</groupId>
     <artifactId>multicloud-openstack-vmware-root</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>multicloud-openstack-vmware</name>
+    <name>multicloud-openstack-vmware-root</name>
     <description>multicloud openstack vmware</description>
     <modules>
         <module>vio</module>
