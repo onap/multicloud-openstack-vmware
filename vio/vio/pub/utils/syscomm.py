@@ -70,29 +70,40 @@ def verifyKeystoneV2(param):
 
 
 # comapare two json by key
+# def _walk_json(data, data2):
+#     if isinstance(data, dict) and isinstance(data2, dict):
+#         if set(list(data.keys())) != set(list(data2.keys())):
+#             return False
+#         else:
+#             v1 = list(data.values())
+#             v2 = list(data2.values())
+#             v1 = sorted(v1)
+#             v2 = sorted(v2)
+#             if len(v1) != len(v2):
+#                 return False
+#             for (i, j) in zip(v1, v2):
+#                 # continue compare key
+#                 if isinstance(i, dict) and isinstance(j, dict):
+#                     if not _walk_json(i, j):
+#                         return False
+#                 # ignore value
+#                 else:
+#                     continue
+
+#             return True
+
+#     return False
+def ordered(obj):
+    if isinstance(obj, dict):
+        return sorted((k, ordered(v)) for k, v in obj.items())
+    if isinstance(obj, list):
+        return sorted(ordered(x) for x in obj)
+    else:
+        return obj
+
+
 def _walk_json(data, data2):
-    if isinstance(data, dict) and isinstance(data2, dict):
-        if set(data.keys()) != set(data2.keys()):
-            return False
-        else:
-            v1 = data.values()
-            v2 = data2.values()
-            v1.sort()
-            v2.sort()
-            if len(v1) != len(v2):
-                return False
-            for (i, j) in zip(v1, v2):
-                # continue compare key
-                if isinstance(i, dict) and isinstance(j, dict):
-                    if not _walk_json(i, j):
-                        return False
-                # ignore value
-                else:
-                    continue
-
-            return True
-
-    return False
+    return ordered(data) == ordered(data2)
 
 
 def keystoneVersion(url, version="v3"):

@@ -127,7 +127,7 @@ def _convert_mc_res_to_vim_res(mc_resource, res_properties):
 
 def _build_api_controller(api_meta):
     # Assume that only one path
-    path, path_meta = api_meta['paths'].items()[0]
+    path, path_meta = list(api_meta['paths'].items())[0]
     # url path is behind third slash. The first is vimid, the second is
     # tenantid.
     path = path.split("/")[3]
@@ -137,7 +137,7 @@ def _build_api_controller(api_meta):
     resource_url = path_meta["vim_path"][delimiter:]
 
     # Assume there is only one resource.
-    name, resource_meta = api_meta['definitions'].items()[0]
+    name, resource_meta = list(api_meta['definitions'].items())[0]
     resource_properties = resource_meta['properties']
 
     controller_meta = {}

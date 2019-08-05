@@ -126,7 +126,7 @@ def deploy_ovf(si, vmdk_path, ovf_path, datacenter, cluster, datastore):
                                            spec_params)
     if default_ovf:
         import_spec.importSpec.configSpec.deviceChange[
-            1].device.capacityInKB = long(vmdk_meta['size'])
+            1].device.capacityInKB = int(vmdk_meta['size'])
     lease = objs["resource pool"].ImportVApp(import_spec.importSpec,
                                              objs["datacenter"].vmFolder)
     while(True):

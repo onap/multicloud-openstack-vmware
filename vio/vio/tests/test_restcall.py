@@ -10,7 +10,10 @@
 
 import mock
 import unittest
-import urllib2
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
 from vio.pub.utils import restcall
 

@@ -13,7 +13,10 @@ import os
 import shutil
 import logging
 import traceback
-import urllib2
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
 logger = logging.getLogger(__name__)
 

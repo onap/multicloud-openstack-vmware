@@ -43,7 +43,7 @@ class FakeExecute(APIView):
                     del respHeaders[k]
             try:
                 respData = resp.json()
-            except Exception as ex:
+            except Exception:
                 respData = resp.content
         except Exception as ex:
             return Response(
