@@ -119,7 +119,8 @@ def vmdk_metadata(vmdk_path):
                 line = f.readline()
                 if not line:
                     break
-                text = line.decode()
+                # text = line.decode()
+                text = line
                 text = text.strip("\n")
                 for k in ["version", "CID", "parentCID"]:
                     if text.startswith(k):

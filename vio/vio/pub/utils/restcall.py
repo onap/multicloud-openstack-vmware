@@ -10,13 +10,17 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
+import base64
 import sys
 import traceback
 import logging
-import urllib2
 import uuid
 import httplib2
 import json
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
 from vio.pub.config.config import AAI_SCHEMA_VERSION
 from vio.pub.config.config import AAI_SERVICE_URL
@@ -54,8 +58,8 @@ def call_req(base_url, user, passwd, auth_type, resource, method, content='',
             headers['content-type'] = 'application/json'
 
         if user:
-            headers['Authorization'] = 'Basic ' + \
-                ('%s:%s' % (user, passwd)).encode("base64")
+            auth_str = 'Basic %s:%s' % (user, passwd)
+            headers['Authorization'] = base64.encodestring(auth_str.encode())
         ca_certs = None
         for retry_times in range(3):
             http = httplib2.Http(
@@ -69,7 +73,8 @@ def call_req(base_url, user, passwd, auth_type, resource, method, content='',
                     full_url, method=method.upper(), body=content,
                     headers=headers)
                 resp_status = resp['status']
-                resp_body = resp_content.decode('UTF-8')
+                # resp_body = resp_content.decode('UTF-8')
+                resp_body = resp_content
 
                 if resp_status in status_ok_list:
                     ret = [0, resp_body, resp_status, resp]

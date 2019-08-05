@@ -68,7 +68,7 @@ class FakeNovaServer(APIView):
         token = request.META.get("HTTP_X_AUTH_TOKEN", "")
         if serverid:
             data = operator_server(token, serverid,
-                                   action=create_req.keys()[0])
+                                   action=list(create_req.keys())[0])
         # create server
         elif serverid is None:
 

@@ -24,7 +24,7 @@ onappylog>=1.0.8
 oslo_messaging
 
 # for pecan framework
-uwsgi
+# uwsgi
 pecan>=1.2.1
 oslo.concurrency>=3.21.0
 oslo.config>=4.11.0

@@ -13,7 +13,10 @@
 
 import logging
 import threading
-import urllib2
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
 from vio.pub.msapi import extsys
 from vio.pub.vim.vimapi.baseclient import baseclient

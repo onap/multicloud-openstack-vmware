@@ -777,7 +777,7 @@ def get_serverdetail(token):
         return data
     else:
         tmp = copy.deepcopy(serverMapps)
-        for k, v in tmp.iteritems():
+        for k, v in tmp.items():
             try:
                 _serverStatus(k)
             except Exception:
@@ -1003,7 +1003,7 @@ def get_servers(token, tenantid=None):
         return {"error": {"message": "unauthorization", "code": 401}}
 
     data = {"servers": []}
-    for k, v in serverMapps.iteritems():
+    for k, v in serverMapps.items():
         server = {"id": k,
                   "links": [
                       {

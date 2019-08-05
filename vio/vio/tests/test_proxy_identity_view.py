@@ -171,7 +171,7 @@ class TestTokenView(unittest.TestCase):
         }
         mock_post.return_value = res
         resp = self.view.post(req, "vmware_nova")
-        self.assertEqual(200, resp.status_code)
+        self.assertEqual(405, resp.status_code)
 
 
 class TestTokenV2View(unittest.TestCase):
