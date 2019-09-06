@@ -1,4 +1,4 @@
-FROM python:2-alpine
+FROM python:3-alpine
 
 ENV MSB_ADDR "127.0.0.1"
 ENV MSB_PORT "80"
@@ -20,7 +20,7 @@ RUN apk update && \
     wget -q -O multicloud-vio.zip 'https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.multicloud.openstack.vmware&a=multicloud-openstack-vmware&v=1.4.1-SNAPSHOT&e=zip' && \
     unzip multicloud-vio.zip && \
     rm -rf multicloud-vio.zip && \
-    pip install -r /opt/vio/requirements.txt && \
+    pip3 install -r /opt/vio/requirements.txt && \
     mkdir -p /var/log/onap/multicloud/vio && \
     chmod a+rw /var/log/onap/multicloud/vio && \
     chown onap:onap -R /opt/vio/ && \

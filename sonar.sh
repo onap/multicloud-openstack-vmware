@@ -53,7 +53,8 @@ run_tox_test()
     DIR=$(echo "$TOXINI" | rev | cut -f2- -d'/' | rev)
     cd "${CURDIR}/${DIR}"
     rm -rf ./venv-tox ./.tox
-    virtualenv ./venv-tox
+    apt install -y python3-dev
+    virtualenv ./venv-tox --python=python3
     source ./venv-tox/bin/activate
     pip install --upgrade pip
     pip install --upgrade tox argparse
