@@ -1,9 +1,9 @@
 # rest framework
-Django==1.9.13
-djangorestframework==3.6.4
+# Django==1.9.13
+# djangorestframework==3.6.4
 
-# Django==2.2.4
-# djangorestframework==3.10.3
+Django==2.2.4
+djangorestframework==3.10.3
 
 # redis cache
 # redis==2.10.5
