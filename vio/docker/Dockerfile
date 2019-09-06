@@ -1,4 +1,4 @@
-FROM python:2-alpine
+FROM python:3-alpine
 
 ENV MSB_ADDR "127.0.0.1"
 ENV MSB_PORT "80"
