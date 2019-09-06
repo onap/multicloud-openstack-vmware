@@ -1,9 +1,9 @@
 # rest framework
-Django==1.9.13
-djangorestframework==3.6.4
+# Django==1.9.13
+# djangorestframework==3.6.4
 
-# Django==2.2.4
-# djangorestframework==3.10.3
+Django==2.2.4
+djangorestframework==3.10.3
 
 # redis cache
 # redis==2.10.5
@@ -22,7 +22,7 @@ os-client-config==1.29.0
 python-cinderclient==3.5.0
 
 # for onap logging
-onappylog>=1.0.8
+onappylog>=1.0.9
 
 # for event
 oslo_messaging
