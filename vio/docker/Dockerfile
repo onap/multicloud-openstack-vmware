@@ -22,6 +22,7 @@ RUN apk update && \
     unzip multicloud-vio.zip && \
     rm -rf multicloud-vio.zip && \
     pip3 install -r /opt/vio/requirements.txt && \
+    pip3 install -r /opt/vio/pecan-requirements.txt && \
     mkdir -p /var/log/onap/multicloud/vio && \
     chmod a+rw /var/log/onap/multicloud/vio && \
     chown onap:onap -R /opt/vio/ && \
