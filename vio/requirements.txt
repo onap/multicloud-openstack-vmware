@@ -24,8 +24,7 @@ python-cinderclient==3.5.0
 # for onap logging
 onappylog>=1.0.9
 
-# for event
-oslo_messaging
+pecan>=1.2.1
 
 eventlet>=0.20.0
 PyYAML>=3.1.0
