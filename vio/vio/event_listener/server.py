@@ -14,9 +14,9 @@
 
 from oslo_config import cfg
 from oslo_log import log as logging
-from i18n import _LI
+from vio.event_listener.i18n import _LI
 import oslo_messaging
-import ConfigParser
+import configparser
 import json
 import os
 import requests
@@ -47,7 +47,7 @@ instance_usage_audit_period=hour
 
 def getConfig(section, key):
 
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     path = os.path.split(os.path.realpath(__file__))[0] + '/listener.conf'
     config.read(path)
     return config.get(section, key)
