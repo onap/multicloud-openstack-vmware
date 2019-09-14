@@ -1,0 +1,4 @@
+distribution_type: 'maven'
+version: '1.4.1'
+project: 'multicloud-openstack-vmware'
+log_dir: 'multicloud-openstack-vmware-maven-stage-master/141/'
