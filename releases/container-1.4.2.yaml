@@ -1,0 +1,8 @@
+distribution_type: 'container'
+container_release_tag: '1.4.2'
+project: 'multicloud-openstack-vmware'
+log_dir: 'multicloud-openstack-vmware-maven-docker-stage-master/69/'
+ref: 1daada42b7152f227ff09cbf969241c72d3bf7ae
+containers:
+    - name: 'vio'
+      version: '1.4.2-STAGING'
